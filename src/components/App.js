@@ -3,7 +3,7 @@ import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, lo
 import List from './List';
 import Form from './Form';
 import TreeList from './TreeList';
-import { createSubSection } from '../utils/ReadTree';
+import { createSubSection, parseData } from '../utils/ReadTree';
 import { Treebeard } from 'react-treebeard';
 
 /**
@@ -18,7 +18,9 @@ export default class App extends Component {
         this.state = {
             isSaving: false,
             isLoading: true,
+            listLoading: true,
             items: [],
+            
         };
 
         // Bind the functions that are passed around to the component
@@ -31,38 +33,20 @@ export default class App extends Component {
         this.loadTree();
     }
 
-    
 
     loadTree() {
         loadOrganisationUnitsWORKINPROGRESS()
-            .then((data = { id, displayName, children }) => {
-                
-                var newData = createSubSection(data.displayName, data.id);
-            
-                for (var c in data.children) {
-                    var cData = data.children[c];
-                    newData.children.push(
-                        createSubSection(cData.displayName, cData.id))
-
-                    for (var cc in data.children[c].children) {
-                        var ccData = data.children[c].children[cc];
-                        newData.children[c].children.push(
-                            createSubSection(ccData.displayName, ccData.id))
-
-                        for (var ccc in data.children[c].children[cc].children) {
-                           var cccData = data.children[c].children[cc].children[ccc];   
-                           newData.children[c].children[cc].children.push(
-                               createSubSection(cccData.displayName, cccData.id))
-                        }
-                    }
-                }
-
-                this.setState({ 
-                    isLoading: false,
-                    treelist: newData
+            .then(({ id, displayName, children }) => {
+                this.setState({
+                    listLoading: false,
+                    listID: id,
+                    listDN: displayName,
+                    listCH: children,
                 });
             });
     }
+
+    
 
     loadOrganisationUnits() {
         // Loads the organisation units from the api and sets the loading state to false and puts the items onto the component state.
@@ -105,15 +89,34 @@ export default class App extends Component {
         // If the component state is set to isLoading we hide the app and show a loading message
         // Render the app which includes the list component and the form component
         // We hide the form component when we are in the saving state.
-        
-        //console.log("TEST");
-        //console.log(this.state.treelist);
+       
+       
+        if (this.state.listLoading){
+           // Implemented a mock tree if it wasn't fully loaded,
+           // but there seemed to be some problems with then later on refreshing the complete tree..
+           /*const mockData = {
+                name: 'loading...',
+                id: 0,
+                loading: true,
+                toggled: true}*/
+
+            return(
+            <div >
+               Loading...
+            </div>);
+        }
+
+        var dataToTree = parseData({
+            id: this.state.listID,
+            displayName: this.state.listDN,
+            children: this.state.listCH
+        });
 
         return (
             <div className="app">
                 <TreeList 
-                    data = {this.state.treelist}
-                />
+                    data = {dataToTree}
+s                />
 
                 <List
                     onItemClick={this.onItemClick}
