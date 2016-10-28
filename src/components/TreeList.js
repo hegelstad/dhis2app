@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Treebeard } from 'react-treebeard';
 
-const data = {
+
+const data2 = {
     name: 'root',
     toggled: true,
     children: [
@@ -37,6 +38,8 @@ export default class TreeList extends Component {
         super(props);
         this.state = {};
         this.onToggle = this.onToggle.bind(this);
+        const data = this.props.data;
+        console.log(this.props.data);
     }
 
     onToggle(node, toggled){
@@ -49,7 +52,7 @@ export default class TreeList extends Component {
     render(){
         return (
             <Treebeard
-                data={data}
+                data={data2}
                 onToggle={this.onToggle}
             />
         );

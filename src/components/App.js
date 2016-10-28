@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit } from '../api';
+import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsWORKINPROGRESS, process, traverse } from '../api';
 import List from './List';
 import Form from './Form';
 import TreeList from './TreeList';
+import { createSubSection } from '../utils/ReadTree';
+import { Treebeard } from 'react-treebeard';
 
 /**
  * ES2015 class component
@@ -26,6 +28,40 @@ export default class App extends Component {
 
     componentDidMount() {
         this.loadOrganisationUnits();
+        this.loadTree();
+    }
+
+    
+
+    loadTree() {
+        loadOrganisationUnitsWORKINPROGRESS()
+            .then((data = { id, displayName, children }) => {
+                
+                var newData = createSubSection(data.displayName, data.id);
+            
+                for (var c in data.children) {
+                    var cData = data.children[c];
+                    newData.children.push(
+                        createSubSection(cData.displayName, cData.id))
+
+                    for (var cc in data.children[c].children) {
+                        var ccData = data.children[c].children[cc];
+                        newData.children[c].children.push(
+                            createSubSection(ccData.displayName, ccData.id))
+
+                        for (var ccc in data.children[c].children[cc].children) {
+                           var cccData = data.children[c].children[cc].children[ccc];   
+                           newData.children[c].children[cc].children.push(
+                               createSubSection(cccData.displayName, cccData.id))
+                        }
+                    }
+                }
+
+                this.setState({ 
+                    isLoading: false,
+                    treelist: newData
+                });
+            });
     }
 
     loadOrganisationUnits() {
@@ -67,21 +103,22 @@ export default class App extends Component {
 
     render() {
         // If the component state is set to isLoading we hide the app and show a loading message
-        if (this.state.isLoading) {
-            return (
-                <div>Loading data...</div>
-            );
-        }
-
         // Render the app which includes the list component and the form component
         // We hide the form component when we are in the saving state.
+        
+        //console.log("TEST");
+        //console.log(this.state.treelist);
+
         return (
             <div className="app">
-                <TreeList />
+                <TreeList 
+                    data = {this.state.treelist}
+                />
+
                 <List
                     onItemClick={this.onItemClick}
                     items={this.state.items}
-                />
+                />*/
                 {this.state.isSaving ? <div>Saving organisation unit</div> : <Form onSubmit={this.onSubmit} />}
             </div>
         );
