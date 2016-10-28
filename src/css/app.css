@@ -17,28 +17,6 @@ body {
     bottom: 0;
 }
 
-.list {
-    flex: 1;
-    height: 100%;
-    padding: 3rem;
-    overflow-y: scroll;
-}
-
-.list ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.list li {
-    padding: 1rem;
-    margin: 1rem;
-    background: #DDD;
-    border-radius: .5rem;
-    border: solid #CCC 1px;
-    cursor: pointer;
-}
-
 .form {
     background-color: #DDD;
     flex: 1;

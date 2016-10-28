@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit } from '../api';
-import List from './List';
-import Form from './Form';
 import TreeList from './TreeList';
+import WelcomeComponent from './WelcomeComponent';
 
 /**
  * ES2015 class component
@@ -14,6 +13,7 @@ export default class App extends Component {
 
         // Set some initial state variables that are used within the component
         this.state = {
+            isShowingWelcomeScreen: true,
             isSaving: false,
             isLoading: true,
             items: [],
@@ -21,7 +21,7 @@ export default class App extends Component {
 
         // Bind the functions that are passed around to the component
         this.onItemClick = this.onItemClick.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onClear = this.onClear.bind(this);
     }
 
     componentDidMount() {
@@ -54,15 +54,9 @@ export default class App extends Component {
             .then(() => this.loadOrganisationUnits());
     }
 
-    onSubmit(formData) {
-        // Set the component state to saving
-        this.setState({ isSaving: true });
-
-        // Save the organisation unit to the api
-        saveOrganisationUnit(formData)
-            .then(() => this.loadOrganisationUnits())
-            .catch(() => alert(`Could save organisation unit ${item.displayName}`))
-            .then(() => this.setState({ isSaving: false })); // After either success or failure set the isSaving state to false
+    onClear() {
+        // Set the component state to hide the welcome component
+        this.setState({ isShowingWelcomeScreen: false });
     }
 
     render() {
@@ -78,11 +72,9 @@ export default class App extends Component {
         return (
             <div className="app">
                 <TreeList />
-                <List
-                    onItemClick={this.onItemClick}
-                    items={this.state.items}
-                />
-                {this.state.isSaving ? <div>Saving organisation unit</div> : <Form onSubmit={this.onSubmit} />}
+                {this.state.isShowingWelcomeScreen
+                    ? <WelcomeComponent onClear={this.onClear}/>
+                    : <div />}
             </div>
         );
     }
