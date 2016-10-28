@@ -4,11 +4,11 @@ export default class WelcomeComponent extends Component {
     constructor(...args) {
         super(...args);
 
-
         this.onClearClick = this.onClearClick.bind(this);
     }
 
-    onSubmitClick(event) {
+    // Sets the state of isShowingWelcomeScreen to false in App.js
+    onClearClick(event) {
         event.preventDefault();
         this.props.onClear();
     }
@@ -16,9 +16,9 @@ export default class WelcomeComponent extends Component {
     render() {
         return (
             <div className="welcome">
-                <div>
-                    <button id="clear" onClick={this.onClearClick}>Continue</button>
-                </div>
+                <p>Select a region, chiefdom or clinic on the left hand menu to start.</p>
+                <p>You will then be given possible duplicates within your selection.</p>
+                <button id="clear" onClick={this.onClearClick}>Continue</button>
             </div>
         );
     }
