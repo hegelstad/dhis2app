@@ -60,3 +60,13 @@ export function loadOrganisationUnits() {
         // pick the organisationUnits property from the payload
         .then(({ organisationUnits }) => organisationUnits);
 }
+
+
+ export function loadOrganisationUnitsWORKINPROGRESS() {
+
+    return fetch(`${serverUrl}/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName,children[id,displayName,children[id,displayName,children[id,displayName]]]`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then((data = { id, displayName, children }) => data);
+    }
+
