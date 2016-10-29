@@ -37,6 +37,7 @@ export default class App extends Component {
         loadOrganisationUnitsWORKINPROGRESS()
             .then(({ id, displayName, children }) => {
                 this.setState({
+                    isLoading: false,
                     listLoading: false,
                     listID: id,
                     listDN: displayName,
