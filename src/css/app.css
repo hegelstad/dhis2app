@@ -1,42 +1,77 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: monospace;
-}
-
-.app {
-    display: flex;
-    align-items: stretch;
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0;
-    bottom: 0;
-}
-
-.list {
-    flex: 1;
-    height: 100%;
-    padding: 3rem;
-    overflow-y: scroll;
-}
-
-.list ul {
-    margin: 0;
     padding: 0;
-    list-style: none;
+    font-family: monospace;
+    background-color: #FFFAEC;
+    min-height: 100vh;
+    /* flexbox */
+    flex-flow: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.list li {
-    padding: 1rem;
-    margin: 1rem;
-    background: #DDD;
-    border-radius: .5rem;
-    border: solid #CCC 1px;
-    cursor: pointer;
+p {
+    -webkit-margin-before: 0em;
+    margin-before: 0em;
+}
+
+.heading {
+    padding-top: 2em;
+    font-family: 'Lobster', sans-serif;
+    font-size: 3em;
+}
+
+.container {
+    background-color: #F7F5F2;
+    border-radius: 2em;
+    padding: 2em;
+    margin: 2em;
+    margin-bottom: 10em;
+    min-height: 30em;
+    min-width: 30em;
+    /* flexbox */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.left-content {
+    align-self: stretch;
+    margin-right: 3em;
+}
+
+.middle-dividor {
+    height:20em;
+    width:5px;
+    background-color: #FFFAEC;
+}
+
+.right-content {
+    align-self: stretch;
+    min-height: 20em;
+    margin-left: 3em;
+}
+
+.treelist {
+    min-width: 15em;
+    max-height: 30em;
+    overflow: auto;
+}
+
+.component-wrapper {
+    min-width: 50em;
+}
+
+.loading {
+    padding: 2em;
 }
 
 .form {

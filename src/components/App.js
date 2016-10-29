@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsWORKINPROGRESS, process, traverse } from '../api';
-import List from './List';
-import Form from './Form';
+import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsWORKINPROGRESS } from '../api';
 import TreeList from './TreeList';
+import WelcomeComponent from './WelcomeComponent';
 import { createSubSection, parseData } from '../utils/ReadTree';
-import { Treebeard } from 'react-treebeard';
 
 /**
  * ES2015 class component
@@ -16,23 +14,24 @@ export default class App extends Component {
 
         // Set some initial state variables that are used within the component
         this.state = {
+            isShowingWelcomeScreen: true,
             isSaving: false,
             isLoading: true,
             listLoading: true,
             items: [],
-            
+            listID: null,
+            listDN: null,
+            listCH: null
         };
 
         // Bind the functions that are passed around to the component
         this.onItemClick = this.onItemClick.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onClear = this.onClear.bind(this);
     }
 
     componentDidMount() {
-        this.loadOrganisationUnits();
         this.loadTree();
     }
-
 
     loadTree() {
         loadOrganisationUnitsWORKINPROGRESS()
@@ -45,8 +44,6 @@ export default class App extends Component {
                 });
             });
     }
-
-    
 
     loadOrganisationUnits() {
         // Loads the organisation units from the api and sets the loading state to false and puts the items onto the component state.
@@ -74,36 +71,22 @@ export default class App extends Component {
             .then(() => this.loadOrganisationUnits());
     }
 
-    onSubmit(formData) {
-        // Set the component state to saving
-        this.setState({ isSaving: true });
-
-        // Save the organisation unit to the api
-        saveOrganisationUnit(formData)
-            .then(() => this.loadOrganisationUnits())
-            .catch(() => alert(`Could save organisation unit ${item.displayName}`))
-            .then(() => this.setState({ isSaving: false })); // After either success or failure set the isSaving state to false
+    onClear() {
+        // Set the component state to hide the welcome component
+        this.setState({ isShowingWelcomeScreen: false });
     }
 
     render() {
         // If the component state is set to isLoading we hide the app and show a loading message
-        // Render the app which includes the list component and the form component
-        // We hide the form component when we are in the saving state.
-       
-       
-        if (this.state.listLoading){
-           // Implemented a mock tree if it wasn't fully loaded,
-           // but there seemed to be some problems with then later on refreshing the complete tree..
-           /*const mockData = {
-                name: 'loading...',
-                id: 0,
-                loading: true,
-                toggled: true}*/
-
-            return(
-            <div >
-               Loading...
-            </div>);
+        if (this.state.isLoading) {
+            return (
+                <div className="loading">Loading data...</div>
+                /*const mockData = {
+                     name: 'loading...',
+                     id: 0,
+                     loading: true,
+                     toggled: true}*/
+            );
         }
 
         var dataToTree = parseData({
@@ -112,17 +95,24 @@ export default class App extends Component {
             children: this.state.listCH
         });
 
+        // Render the app which includes the list component and the form component
+        // We hide the form component when we are in the saving state.
         return (
-            <div className="app">
-                <TreeList 
-                    data = {dataToTree}
-s                />
-
-                <List
-                    onItemClick={this.onItemClick}
-                    items={this.state.items}
-                />*/
-                {this.state.isSaving ? <div>Saving organisation unit</div> : <Form onSubmit={this.onSubmit} />}
+            <div className="container">
+                <div className="left-content">
+                    <p>Choose an organisation unit:</p>
+                    <div className="treelist">
+                        <TreeList data = {dataToTree}/>
+                    </div>
+                </div>
+                <div className="middle-dividor"></div>
+                <div className="right-content">
+                    <div className="component-wrapper">
+                        {this.state.isShowingWelcomeScreen
+                            ? <WelcomeComponent onClear={this.onClear}/>
+                        : <div ></div>}
+                    </div>
+                </div>
             </div>
         );
     }
