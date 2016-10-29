@@ -19,13 +19,9 @@ export default class WelcomeComponent extends Component {
                 <p>Select a region, chiefdom or clinic on the left hand menu to start.</p>
                 <p>You will then be given possible duplicates within your selection.</p>
                 <p>You will then be given possible duplicates within your selection.</p>
-
                 <p>You will then be given possible duplicates within your selection.</p>
-
                 <p>You will then be given possible duplicates within your selection.</p>
-
                 <p>You will then be given possible duplicates within your selection.</p>
-
                 <p>You will then be given possible duplicates within your selection.</p>
 
                 <button id="clear" onClick={this.onClearClick}>Continue</button>

@@ -63,21 +63,23 @@ export default class App extends Component {
         // If the component state is set to isLoading we hide the app and show a loading message
         if (this.state.isLoading) {
             return (
-                <div>Loading data...</div>
+                <div className="loading">Loading data...</div>
             );
         }
 
         // Render the app which includes the list component and the form component
         // We hide the form component when we are in the saving state.
         return (
-            <div className="app">
+            <div className="container">
                 <div className="left-content">
+                    <p>Choose an organisation unit:</p>
                     <div className="treelist">
                         <TreeList />
                     </div>
                 </div>
+                <div className="middle-dividor"></div>
                 <div className="right-content">
-                    <div className="container">
+                    <div className="component-wrapper">
                         {this.state.isShowingWelcomeScreen
                             ? <WelcomeComponent onClear={this.onClear}/>
                         : <div ></div>}

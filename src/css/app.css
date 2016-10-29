@@ -1,11 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
 * {
     box-sizing: border-box;
 }
 
 body {
-    padding: 10em;
     margin: 0;
+    padding: 0;
     font-family: monospace;
+    background-color: #FFFAEC;
+    min-height: 100vh;
+    /* flexbox */
+    flex-flow: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 p {
@@ -13,7 +22,21 @@ p {
     margin-before: 0em;
 }
 
-.app {
+.heading {
+    padding-top: 2em;
+    font-family: 'Lobster', sans-serif;
+    font-size: 3em;
+}
+
+.container {
+    background-color: #F7F5F2;
+    border-radius: 2em;
+    padding: 2em;
+    margin: 2em;
+    margin-bottom: 10em;
+    min-height: 30em;
+    min-width: 30em;
+    /* flexbox */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -21,20 +44,34 @@ p {
 }
 
 .left-content {
-    flex: 1 0 0;
     align-self: stretch;
+    margin-right: 3em;
 }
 
-.right-content {
-    flex: 1 0 0;
+.middle-dividor {
+    height:20em;
+    width:5px;
+    background-color: #FFFAEC;
+}
+
+.right-content {
+    align-self: stretch;
+    min-height: 20em;
+    margin-left: 3em;
 }
 
 .treelist {
-    width: 20em;
+    min-width: 15em;
+    max-height: 30em;
+    overflow: auto;
 }
 
-.container {
-    padding-left: 5em;
+.component-wrapper {
+    min-width: 50em;
+}
+
+.loading {
+    padding: 2em;
 }
 
 .form {
