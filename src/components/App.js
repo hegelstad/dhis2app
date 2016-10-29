@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit } from '../api';
+import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsWORKINPROGRESS } from '../api';
 import TreeList from './TreeList';
 import WelcomeComponent from './WelcomeComponent';
+import { createSubSection, parseData } from '../utils/ReadTree';
 
 /**
  * ES2015 class component
@@ -16,7 +17,11 @@ export default class App extends Component {
             isShowingWelcomeScreen: true,
             isSaving: false,
             isLoading: true,
+            listLoading: true,
             items: [],
+            listID: null,
+            listDN: null,
+            listCH: null
         };
 
         // Bind the functions that are passed around to the component
@@ -25,7 +30,19 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        this.loadOrganisationUnits();
+        this.loadTree();
+    }
+
+    loadTree() {
+        loadOrganisationUnitsWORKINPROGRESS()
+            .then(({ id, displayName, children }) => {
+                this.setState({
+                    listLoading: false,
+                    listID: id,
+                    listDN: displayName,
+                    listCH: children,
+                });
+            });
     }
 
     loadOrganisationUnits() {
@@ -64,8 +81,19 @@ export default class App extends Component {
         if (this.state.isLoading) {
             return (
                 <div className="loading">Loading data...</div>
+                /*const mockData = {
+                     name: 'loading...',
+                     id: 0,
+                     loading: true,
+                     toggled: true}*/
             );
         }
+
+        var dataToTree = parseData({
+            id: this.state.listID,
+            displayName: this.state.listDN,
+            children: this.state.listCH
+        });
 
         // Render the app which includes the list component and the form component
         // We hide the form component when we are in the saving state.
@@ -74,7 +102,7 @@ export default class App extends Component {
                 <div className="left-content">
                     <p>Choose an organisation unit:</p>
                     <div className="treelist">
-                        <TreeList />
+                        <TreeList data = {dataToTree}/>
                     </div>
                 </div>
                 <div className="middle-dividor"></div>
