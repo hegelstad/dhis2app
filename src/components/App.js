@@ -3,6 +3,7 @@ import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, lo
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
 import WelcomeComponent from './WelcomeComponent';
+import MergeComponent from './MergeComponent';
 
 /**
  * ES2015 class component
@@ -43,9 +44,13 @@ export default class App extends Component {
         node.active = true;
         if(node.children){ node.toggled = toggled; }
         this.setState({ cursor: node });
-        console.log(node.name);
     }
 
+    onClear() {
+        // Set the component state to hide the welcome component
+        this.setState({ isShowingWelcomeScreen: false });
+    }
+    
 /*
     onItemClick(item) {
         // Remove the item from the local list.
@@ -62,11 +67,6 @@ export default class App extends Component {
             .then(() => this.loadOrganisationUnits());
     }
 */
-
-    onClear() {
-        // Set the component state to hide the welcome component
-        this.setState({ isShowingWelcomeScreen: false });
-    }
 
     render() {
         // If the component state is set to isLoading we hide the app and show a loading message
@@ -88,12 +88,12 @@ export default class App extends Component {
                             onToggle={this.onToggle} />
                     </div>
                 </div>
-                <div className="middle-dividor"></div>
+                <div className="middle-dividor" />
                 <div className="right-content">
                     <div className="component-wrapper">
                         {this.state.isShowingWelcomeScreen
                             ? <WelcomeComponent onClear={this.onClear}/>
-                        : <div>placeholder</div>}
+                            : <MergeComponent cursor={this.state.cursor} />}
                     </div>
                 </div>
             </div>
