@@ -62,11 +62,9 @@ export function loadOrganisationUnits() {
 }
 
 
- export function loadOrganisationUnitsWORKINPROGRESS() {
-
-    return fetch(`${serverUrl}/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName,children[id,displayName,children[id,displayName,children[id,displayName]]]`, fetchOptions)
+ export function loadOrganisationUnitsTree() {
+    // Load all of the organisation units and their children with id and displayName
+    return fetch(`${serverUrl}/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
-        .then((data = { id, displayName, children }) => data);
     }
-
