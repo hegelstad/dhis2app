@@ -3,18 +3,38 @@
 }
 
 body {
+    padding: 10em;
     margin: 0;
     font-family: monospace;
 }
 
+p {
+    -webkit-margin-before: 0em;
+    margin-before: 0em;
+}
+
 .app {
     display: flex;
-    align-items: stretch;
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0;
-    bottom: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.left-content {
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.right-content {
+    flex: 1 0 0;
+}
+
+.treelist {
+    width: 20em;
+}
+
+.container {
+    padding-left: 5em;
 }
 
 .form {

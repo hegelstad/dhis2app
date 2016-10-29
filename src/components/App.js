@@ -71,10 +71,18 @@ export default class App extends Component {
         // We hide the form component when we are in the saving state.
         return (
             <div className="app">
-                <TreeList />
-                {this.state.isShowingWelcomeScreen
-                    ? <WelcomeComponent onClear={this.onClear}/>
-                    : <div />}
+                <div className="left-content">
+                    <div className="treelist">
+                        <TreeList />
+                    </div>
+                </div>
+                <div className="right-content">
+                    <div className="container">
+                        {this.state.isShowingWelcomeScreen
+                            ? <WelcomeComponent onClear={this.onClear}/>
+                        : <div ></div>}
+                    </div>
+                </div>
             </div>
         );
     }
