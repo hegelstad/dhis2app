@@ -50,7 +50,7 @@ export default class App extends Component {
         // Set the component state to hide the welcome component
         this.setState({ isShowingWelcomeScreen: false });
     }
-    
+
 /*
     onItemClick(item) {
         // Remove the item from the local list.
