@@ -14,15 +14,20 @@ export default class App extends Component {
         super(props, context);
 
         // Set some initial state variables that are used within the component
+        // Too keep most of this simple we gather most of the state in the root component
+        // We would use Redux as well if so required by the applications constraints, if not it will only slow us down
         this.state = {
             isShowingWelcomeScreen: true,
             isLoading: true,
-            data: null
+            isError: false,
+            errorMessage: "",
+            treeData: null
         };
 
         // Bind the functions that are passed around to the component
         this.onToggle = this.onToggle.bind(this);
         this.onClear = this.onClear.bind(this);
+        this.onRetry = this.onRetry.bind(this);
     }
 
     componentDidMount() {
@@ -34,7 +39,14 @@ export default class App extends Component {
             .then((treeData) => {
                 this.setState({
                     isLoading: false,
-                    data: treeData
+                    treeData: treeData
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    isLoading: false,
+                    isError: true,
+                    errorMessage: "Fetching data failed - check DHIS CORS  "
                 });
             });
     }
@@ -51,22 +63,14 @@ export default class App extends Component {
         this.setState({ isShowingWelcomeScreen: false });
     }
 
-/*
-    onItemClick(item) {
-        // Remove the item from the local list.
-        // This will make it seem like it was deleted while we wait for the actual delete to complete.
+    onRetry() {
         this.setState({
-            items: this.state.items
-                .filter(organisationUnit => item.id !== organisationUnit.id)
+            isLoading: true,
+            isError: false,
+            errorMessage: ""
         });
-
-        // Delete the organisationUnit from the server. If it fails show a message to the user.
-        deleteOrganisationUnit(item)
-            .catch(() => alert(`Could not delete organisation unit ${item.displayName}`))
-            // In all cases (either success or failure) after deleting reload the list.
-            .then(() => this.loadOrganisationUnits());
+        this.loadTree();
     }
-*/
 
     render() {
         // If the component state is set to isLoading we hide the app and show a loading message
@@ -76,14 +80,24 @@ export default class App extends Component {
             );
         }
 
-        // Render the app which includes the treelist and the component container.
+        // If the component state is set to isError we show the current error message
+        if (this.state.isError) {
+            return (
+                <div className="loading">
+                    {this.state.errorMessage}
+                    <button onClick={this.onRetry}>Retry</button>
+                </div>
+            );
+        }
+
+        // If else, we render the app which includes the treelist and the component container
         return (
             <div className="container">
                 <div className="left-content">
                     <p>Choose an organisation unit:</p>
                     <div className="treelist">
                         <Treebeard
-                            data={this.state.data}
+                            data={this.state.treeData}
                             style={style}
                             onToggle={this.onToggle} />
                     </div>

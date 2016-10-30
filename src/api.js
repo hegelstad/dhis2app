@@ -30,6 +30,14 @@ function onlySuccessResponses(response) {
     return Promise.reject(response);
 }
 
+export function loadOrganisationUnitsTree() {
+    // Load all of the organisation units and their children with id and displayName
+    return fetch(`${serverUrl}/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        // Error handling is done in App.js
+    }
+
 export function saveOrganisationUnit(organisationUnit) {
     // POST the payload to the server to save the organisationUnit
     return fetch(`${serverUrl}/organisationUnits`, Object.assign({}, fetchOptions, { method: 'POST', body: JSON.stringify(organisationUnit) }))
@@ -60,11 +68,3 @@ export function loadOrganisationUnits() {
         // pick the organisationUnits property from the payload
         .then(({ organisationUnits }) => organisationUnits);
 }
-
-
- export function loadOrganisationUnitsTree() {
-    // Load all of the organisation units and their children with id and displayName
-    return fetch(`${serverUrl}/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
-        .then(onlySuccessResponses)
-        .then(response => response.json())
-    }
