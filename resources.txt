@@ -6,6 +6,8 @@ React Treebeard: https://github.com/alexcurtis/react-treebeard
 Useful api calls:
 
 List all orgunits, with two levels of children:
-https://play.dhis2.org/dev/api/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName,children[id,displayName,children[id,displayName,children[id,displayName]]]
+old: https://play.dhis2.org/dev/api/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName,children[id,displayName,children[id,displayName,children[id,displayName]]]
+new: https://play.dhis2.org/dev/api/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]
 
-.
+Difference: solved the tree problem more efficiently. Back end supported renaming of fields.
+Todo: Sorting?
