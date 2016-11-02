@@ -21,7 +21,8 @@ export default class App extends Component {
             isLoading: true,
             isError: false,
             errorMessage: "",
-            treeData: null
+            treeData: null,
+            cursor: null
         };
 
         // Bind the functions that are passed around to the component
@@ -37,9 +38,12 @@ export default class App extends Component {
     loadTree() {
         loadOrganisationUnitsTree()
             .then((treeData) => {
+                treeData.toggled = true;
+                treeData.children[0].active = true;
                 this.setState({
                     isLoading: false,
-                    treeData: treeData
+                    treeData: treeData,
+                    cursor: treeData.children[0]
                 });
             })
             .catch(error => {
