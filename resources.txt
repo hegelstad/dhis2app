@@ -10,4 +10,25 @@ old: https://play.dhis2.org/dev/api/24/organisationUnits/ImspTQPwCqd.json?fields
 new: https://play.dhis2.org/dev/api/24/organisationUnits/ImspTQPwCqd.json?fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]
 
 Difference: solved the tree problem more efficiently. Back end supported renaming of fields.
-Todo: Sorting?
+
+
+Todo important:
+
+
+Todo later:
+Notify the user which level they are operating on.
+Sorting the tree.
+
+DHIS WEB API CALLS:
+
+https://play.dhis2.org/demo/api/25/trackedEntityInstances.json?ou=DiszpKrYNg8&program=rvPTrOfjqrS
+https://play.dhis2.org/demo/api/25/organisationUnits/DiszpKrYNg8.json
+https://play.dhis2.org/demo/api/25/programs/rvPTrOfjqrS.json
+https://play.dhis2.org/demo/api/25/programTrackedEntityAttributes/rgyxcA4Qx33.json
+https://play.dhis2.org/demo/api/25/events.json?orgUnit=DiszpKrYNg8&fields=event,enrollment,trackedEntityInstance
+
+https://play.dhis2.org/dev/api/25/events.json?orgUnit=DiszpKrYNg8
+https://play.dhis2.org/dev/api/25/trackedEntityInstances/XnFPsDOVJND.json
+https://play.dhis2.org/dev/api/25/events/eaeUraEvJVH.json
+https://play.dhis2.org/dev/api/25/events/FBUKBDBj6NS.json
+https://play.dhis2.org/dev/api/25/events/V1CerIi3sdL.json
