@@ -5,11 +5,7 @@ import style from '../css/treelist-style.js';
 import WelcomeComponent from './WelcomeComponent';
 import MergeComponent from './MergeComponent';
 
-/**
- * ES2015 class component
- * https://facebook.github.io/react/docs/reusable-components.html#es6-classes-and-react.createclass
- */
-export default class App extends Component {
+class App extends Component {
     constructor(props, context) {
         super(props, context);
 
@@ -37,7 +33,7 @@ export default class App extends Component {
 
     loadTree() {
         loadOrganisationUnitsTree()
-            .then((treeData) => {
+            .then(treeData => {
                 treeData.toggled = true;
                 treeData.children[0].active = true;
                 this.setState({
@@ -118,3 +114,5 @@ export default class App extends Component {
         );
     }
 }
+
+export default App;
