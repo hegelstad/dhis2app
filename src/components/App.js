@@ -4,6 +4,7 @@ import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
 import WelcomeComponent from './WelcomeComponent';
 import MergeComponent from './MergeComponent';
+import { sortChildren as sortTree } from '../utils/sortTree.js';
 
 class App extends Component {
     constructor(props, context) {
@@ -34,15 +35,17 @@ class App extends Component {
     loadTree() {
         loadOrganisationUnitsTree()
             .then(treeData => {
-                treeData.toggled = true;
-                treeData.children[0].active = true;
+                sortTree(treeData); // Sort the tree data to get all regions in the right order.
+                treeData.toggled = true; // Toggle the root node to expand the tree.
+                treeData.children[0].active = true; // Select the first child of the root node to be selected.
                 this.setState({
                     isLoading: false,
                     treeData: treeData,
-                    cursor: treeData.children[0]
+                    cursor: treeData.children[0] // Set the cursor to the node that was set to active.
                 });
             })
             .catch(error => {
+                console.log(error);
                 this.setState({
                     isLoading: false,
                     isError: true,
