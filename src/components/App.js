@@ -33,7 +33,7 @@ class App extends Component {
 
     loadTree() {
         loadOrganisationUnitsTree()
-            .then((treeData) => {
+            .then(treeData => {
                 treeData.toggled = true;
                 treeData.children[0].active = true;
                 this.setState({
