@@ -32,3 +32,19 @@ https://play.dhis2.org/dev/api/25/trackedEntityInstances/XnFPsDOVJND.json
 https://play.dhis2.org/dev/api/25/events/eaeUraEvJVH.json
 https://play.dhis2.org/dev/api/25/events/FBUKBDBj6NS.json
 https://play.dhis2.org/dev/api/25/events/V1CerIi3sdL.json
+
+Relative values:
+ - orgunit (logged in users orgunits)
+ - periods (last five day)
+
+For singleton events:
+
+ - Check values and serial numbers if they are the same.
+ - Limit scope of this mode to clinics.
+ - filter by Period
+
+ For Tracked Entity Instances:
+
+ - Select a program
+ - Not all TEIs have a unique identifier
+ -
