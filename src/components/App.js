@@ -9,7 +9,7 @@ import MergeComponent from './MergeComponent';
  * ES2015 class component
  * https://facebook.github.io/react/docs/reusable-components.html#es6-classes-and-react.createclass
  */
-export default class App extends Component {
+class App extends Component {
     constructor(props, context) {
         super(props, context);
 
@@ -118,3 +118,5 @@ export default class App extends Component {
         );
     }
 }
+
+export default App;
