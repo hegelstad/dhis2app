@@ -2,7 +2,9 @@
  * `serverUrl` contains the api location of the server. You would generally get the baseUrl from the manifest.webapp
  * as described here http://dhis2.github.io/dhis2-docs/master/en/developer/html/apps_creating_apps.html
  *
- * `basicAuth` contains the username and password to send with the request as the basic authentication token. This is only needed when you develop locally and need CORS support (https://developer.mozilla.org/en-US/docs/Web/HTTP).
+ * `basicAuth` contains the username and password to send with the request as
+ * the basic authentication token. This is only needed when you develop locally
+ * and need CORS support (https://developer.mozilla.org/en-US/docs/Web/HTTP).
  * You obviously should not do this for your production apps.
  */
 const serverUrl = 'https://play.dhis2.org/dev/api';
@@ -20,8 +22,9 @@ const fetchOptions = {
 };
 
 /**
- * `fetch` will not reject the promise on the a http request that is not 2xx, as those requests could also return valid responses.
- * We will only treat status codes in the 200 range as successful and reject the other responses.
+ * `fetch` will not reject the promise on the a http request that is not 2xx, as
+ * those requests could also return valid responses. We will only treat status
+ * codes in the 200 range as successful and reject the other responses.
  */
 function onlySuccessResponses(response) {
     if (response.status >= 200 && response.status < 300) {
