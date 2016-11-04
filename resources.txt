@@ -1,7 +1,7 @@
 Modules we are using:
 
-React Treebeard: https://github.com/alexcurtis/react-treebeard
-
+React Treebeard:    https://github.com/alexcurtis/react-treebeard
+React Table:        https://github.com/tannerlinsley/react-table
 
 Useful api calls:
 
