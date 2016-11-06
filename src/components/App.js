@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+// Utils
 import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
+import { sortChildren as sortTree } from '../utils/sortTree.js';
+// Treebeard
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
-import WelcomeComponent from './WelcomeComponent';
-import MergeComponent from './MergeComponent';
-import { sortChildren as sortTree } from '../utils/sortTree.js';
+// Components
+import SingletonComponent from './SingletonComponent';
+import TEIComponent from './TEIComponent';
+import ToggleComponent from './ToggleComponent';
 
 class App extends Component {
     constructor(props, context) {
@@ -14,18 +18,18 @@ class App extends Component {
         // Too keep most of this simple we gather most of the state in the root component
         // We would use Redux as well if so required by the applications constraints, if not it will only slow us down
         this.state = {
-            isShowingWelcomeScreen: true,
             isLoading: true,
             isError: false,
             errorMessage: "",
             treeData: null,
-            cursor: null
+            cursor: null,
+            isToggled: true // defaults to TEI mode. Singleton = false
         };
 
         // Bind the functions that are passed around to the component
         this.onToggle = this.onToggle.bind(this);
-        this.onClear = this.onClear.bind(this);
         this.onRetry = this.onRetry.bind(this);
+        this.onToggleButton = this.onToggleButton.bind(this);
     }
 
     componentDidMount() {
@@ -54,6 +58,7 @@ class App extends Component {
             });
     }
 
+    // Treelist toggle function
     onToggle(node, toggled) {
         if(this.state.cursor) {this.state.cursor.active = false;}
         node.active = true;
@@ -61,11 +66,7 @@ class App extends Component {
         this.setState({ cursor: node });
     }
 
-    onClear() {
-        // Set the component state to hide the welcome component
-        this.setState({ isShowingWelcomeScreen: false });
-    }
-
+    // Retry loading
     onRetry() {
         this.setState({
             isLoading: true,
@@ -73,6 +74,13 @@ class App extends Component {
             errorMessage: ""
         });
         this.loadTree();
+    }
+
+    // Toggle between singleton and TEI modes
+    onToggleButton() {
+        this.setState({
+            isToggled: !this.state.isToggled
+        });
     }
 
     render() {
@@ -93,24 +101,31 @@ class App extends Component {
             );
         }
 
-        // If else, we render the app which includes the treelist and the component container
+        // If else, we render the app which includes the toggle, the treelist and the component container
         return (
             <div className="container">
-                <div className="left-content">
-                    <p>Choose an organisation unit:</p>
-                    <div className="treelist">
-                        <Treebeard
-                            data={this.state.treeData}
-                            style={style}
-                            onToggle={this.onToggle} />
-                    </div>
+                <div className="container-top">
+                    <ToggleComponent
+                        isToggled={this.state.isToggled}
+                        onToggleButton={this.onToggleButton} />
                 </div>
-                <div className="middle-dividor" />
-                <div className="right-content">
-                    <div className="component-wrapper">
-                        {this.state.isShowingWelcomeScreen
-                            ? <WelcomeComponent onClear={this.onClear}/>
-                            : <MergeComponent cursor={this.state.cursor} />}
+                <div className="container-bottom">
+                    <div className="content-left">
+                        <p>Choose an organisation unit:</p>
+                        <div className="treelist">
+                            <Treebeard
+                                data={this.state.treeData}
+                                style={style}
+                                onToggle={this.onToggle} />
+                        </div>
+                    </div>
+                    <div className="middle-dividor" />
+                    <div className="content-right">
+                        <div className="component-wrapper">
+                            {this.state.isToggled
+                                ? <TEIComponent />
+                                : <SingletonComponent cursor={this.state.cursor} />}
+                        </div>
                     </div>
                 </div>
             </div>

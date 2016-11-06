@@ -20,8 +20,8 @@
   "dependencies": {
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "react-bootstrap-toggle": "^1.2.19",
     "react-table": "^3.1.2",
-    "react-toggle-button": "^2.1.0",
     "react-treebeard": "^1.1.4"
   }
 }

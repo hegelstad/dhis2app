@@ -3,7 +3,7 @@
 }
 
 .ReactTable table {
-  width: 100%;
+  width: 50em;
   border-collapse: collapse;
   border: 1px solid rgba(0,0,0,0.1);
   display: block;
@@ -346,10 +346,12 @@
   transform: translateY(50%);
 }
 
-.ReactTable input,.ReactTable select {
-  -webkit-appearance: none;
+.ReactTable input,
+.ReactTable select {
+  /*-webkit-appearance: none; Ruins the checkbox visual dynamics.
   -moz-appearance: none;
   appearance: none;
+  */
   border: 1px solid rgba(0,0,0,0.1);
   background: #fff;
   padding: 5px 7px;
@@ -357,6 +359,12 @@
   border-radius: 3px;
   font-weight: normal;
   outline: none;
+}
+
+.ReactTable select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .ReactTable .select-wrap {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MergeComponent = ({cursor}) => {
+const SingletonComponent = ({cursor}) => {
     if (cursor == null) { // Show a placeholder if the cursor of treebeard is not set
         return <div className="welcome">placeholder</div>;
     } else {
@@ -13,4 +13,4 @@ const MergeComponent = ({cursor}) => {
     }
 }
 
-export default MergeComponent;
+export default SingletonComponent;

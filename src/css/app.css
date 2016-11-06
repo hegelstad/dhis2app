@@ -35,17 +35,48 @@ p {
     margin: 2em;
     margin-bottom: 10em;
     min-height: 40em;
-    min-width: 35em;
+    width: 80em;
     /* flexbox */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.container-top {
+    margin-bottom: 2em;
+}
+
+.singleton-span {
+    margin-left: 7em;
+}
+
+.tei-span {
+
+}
+
+.active {
+    text-shadow: 0px 0px 8px rgba(150, 150, 150, 1);
+}
+
+.container-bottom {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
-.left-content {
+.content-left {
     align-self: stretch;
-    margin-right: 3em;
+    margin-right: 2em;
+    position: relative;
+    bottom: 2em;
+}
+
+.content-right {
+    align-self: stretch;
+    margin-left: 2em;
 }
 
 .middle-dividor {
@@ -54,14 +85,9 @@ p {
     background-color: #FFFAEC;
 }
 
-.right-content {
-    align-self: stretch;
-    margin-left: 3em;
-}
-
 .treelist {
     min-width: 15em;
-    max-height: 33em;
+    height: 30em;
     overflow: auto;
 }
 
