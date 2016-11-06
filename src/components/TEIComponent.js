@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactTable from 'react-table';
 
 const data = [{
-    name: 'Tanner Linsley',
+    name: '0 Tanner Linsley',
     age: 26,
     checked: false,
     friend: {
@@ -10,7 +10,7 @@ const data = [{
         age: 23
     }
 },{
-    name: 'Banner Dansley',
+    name: '1 Banner Dansley',
     age: 19,
     checked: false,
     friend: {
@@ -18,7 +18,7 @@ const data = [{
         age: 30
     }
 },{
-    name: 'Nikolai Hegelstad',
+    name: '2 Nikolai Hegelstad',
     age: 22,
     checked: false,
     friend: {
@@ -26,7 +26,7 @@ const data = [{
         age: 25
     }
 },{
-    name: 'Brad Pitt',
+    name: '3 Brad Pitt',
     age: 40,
     checked: true,
     friend: {
@@ -34,7 +34,7 @@ const data = [{
         age: 30
     }
 },{
-    name: 'Nikolai Hegelstad',
+    name: '4 Nikolai Hegelstad',
     age: 22,
     checked: false,
     friend: {
@@ -42,7 +42,7 @@ const data = [{
         age: 25
     }
 },{
-    name: 'Brad Pitt',
+    name: '5 Brad Pitt',
     age: 40,
     checked: true,
     friend: {
@@ -59,13 +59,13 @@ const columns = [{
   accessor: 'age',
   render: props =>
         <span>
-            {`${props.value} `}
+            {`${props.value} ${data[props.index].checked} `}
             <input
                 type="checkbox"
-                defaultChecked={props.row.checked}
+                defaultChecked={data[props.index].checked}
                 onChange={() => {
-                    props.row.checked = !props.row.checked;
-                    console.log(props.row.checked);
+                    //data[props.index] = !props.row.checked;
+                    console.log(props);
                 }}
             />
         </span> // Custom cell components!
