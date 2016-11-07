@@ -6,7 +6,7 @@ class SingletonComponent extends Component {
     constructor(...args){
         super(...args); 
         this.state = {
-            Program: "None",
+            Program: "",
             ProgramId: ""
         }
         this.handleSelect = this.handleSelect.bind(this);
@@ -31,18 +31,24 @@ class SingletonComponent extends Component {
 
                     <div className="welcome">
                         <p></p>
+
                         <p>name: {this.props.cursor.name}</p>
                         <p>id: {this.props.cursor.id}</p>
+
                         <p></p>
                     </div>
+                    
                     <div>
                         <div className="welcome">
                             { renderDropdown({title: "Programs", list: this.props.data, i: 0, handleSelect: this.handleSelect})}
                         </div>
-                        <p> </p>
-                        <p>Program: {this.state.Program} </p>
-                        <p>Program: {this.state.ProgramId} </p>
 
+                        <p> </p>
+
+                        <div className="selectedProgram">
+                            <p>Program: {this.state.Program} </p>
+                            <p>Program: {this.state.ProgramId} </p>
+                        </div>
                     </div>
                 </div>
 
