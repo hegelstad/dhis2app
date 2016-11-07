@@ -1,27 +1,57 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import {renderDropdown} from './DropdownComponent';
 
 
-const SingletonComponent = ({cursor, data}) => {
-    console.log(data);
-    if (cursor == null) { // Show a placeholder if the cursor of treebeard is not set
-        return <div className="welcome">placeholder</div>;
-    } else {
-        return (
-           <div>
-                <div className="welcome">
-                    { renderDropdown({title: "Programs", list: data, i: 0})}
-                </div>
-
-                <div className="welcome">
-                    <p></p>
-                    <p>name: {cursor.name}</p>
-                    <p>id: {cursor.id}</p>
-                </div>
-            </div>
-
-        );
+class SingletonComponent extends Component {
+    constructor(...args){
+        super(...args); 
+        this.state = {
+            Program: "None",
+            ProgramId: ""
+        }
+        this.handleSelect = this.handleSelect.bind(this);
     }
+
+    handleSelect(evt) {
+        console.log(evt);
+        
+        this.setState({
+            Program: this.props.data[evt].displayName,
+            ProgramId: this.props.data[evt].id
+        });
+        
+    }
+
+    render() {
+        if (this.props.cursor == null) { // Show a placeholder if the cursor of treebeard is not set
+            return <div className="welcome">placeholder</div>;
+        } else {
+            return (
+            <div>
+
+                    <div className="welcome">
+                        <p></p>
+                        <p>name: {this.props.cursor.name}</p>
+                        <p>id: {this.props.cursor.id}</p>
+                        <p></p>
+                    </div>
+                    <div>
+                        <div className="welcome">
+                            { renderDropdown({title: "Programs", list: this.props.data, i: 0, handleSelect: this.handleSelect})}
+                        </div>
+                        <p> </p>
+                        <p>Program: {this.state.Program} </p>
+                        <p>Program: {this.state.ProgramId} </p>
+
+                    </div>
+                </div>
+
+            );
+        }
+    }
+
 }
+
+
 
 export default SingletonComponent;

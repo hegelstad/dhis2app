@@ -93,6 +93,8 @@ class App extends Component {
         });
     }
 
+
+
     render() {
         // If the component state is set to isLoading we hide the app and show a loading message
         if (this.state.isLoading) {
@@ -134,7 +136,9 @@ class App extends Component {
                         <div className="component-wrapper">
                             {this.state.isToggled
                                 ? <TEIComponent />
-                                : <SingletonComponent cursor={this.state.cursor} data={this.state.programdata}/>}
+                                : <SingletonComponent 
+                                        cursor={this.state.cursor} 
+                                        data={this.state.programdata} />}
                         </div>
                     </div>
                 </div>
