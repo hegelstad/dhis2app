@@ -1,14 +1,5 @@
 import React from 'react';
 import {renderDropdown} from './DropdownComponent';
-import { loadPrograms } from '../api';
-
-
-var test =  [
-        {name: "Nikolai"},
-        {name: "Eirik"},
-        {name: "Milena"}
-    ];
-
 
 
 const SingletonComponent = ({cursor, data}) => {
