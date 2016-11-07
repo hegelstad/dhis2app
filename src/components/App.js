@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // Utils
-import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
+import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
 import { sortChildren as sortTree } from '../utils/sortTree.js';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
@@ -23,7 +23,7 @@ class App extends Component {
             errorMessage: "",
             treeData: null,
             cursor: null,
-            isToggled: true // defaults to TEI mode. Singleton = false
+            isToggled: false // defaults to TEI mode. Singleton = false
         };
 
         // Bind the functions that are passed around to the component
@@ -34,7 +34,17 @@ class App extends Component {
 
     componentDidMount() {
         this.loadTree();
+        this.loadProgs();
     }
+
+    loadProgs() {
+        loadPrograms()
+            .then(programdata => {
+                this.setState({
+                    programdata: programdata
+                })
+            });
+}  
 
     loadTree() {
         loadOrganisationUnitsTree()
@@ -124,7 +134,7 @@ class App extends Component {
                         <div className="component-wrapper">
                             {this.state.isToggled
                                 ? <TEIComponent />
-                                : <SingletonComponent cursor={this.state.cursor} />}
+                                : <SingletonComponent cursor={this.state.cursor} data={this.state.programdata}/>}
                         </div>
                     </div>
                 </div>

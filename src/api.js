@@ -39,7 +39,7 @@ export function loadOrganisationUnitsTree() {
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js
-    }
+    } 
 
 export function saveOrganisationUnit(organisationUnit) {
     // POST the payload to the server to save the organisationUnit
@@ -70,4 +70,12 @@ export function loadOrganisationUnits() {
         .then(response => response.json())
         // pick the organisationUnits property from the payload
         .then(({ organisationUnits }) => organisationUnits);
+}
+
+
+export function loadPrograms() {
+    return fetch(`${serverUrl}//25/programs.json`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ programs}) => programs);
 }

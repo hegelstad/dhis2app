@@ -8,7 +8,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: monospace;
-    background-color: #FFFAEC;
+    background-color: #a2c8f9;
     min-height: 100vh;
     /* flexbox */
     flex-flow: column;
