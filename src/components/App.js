@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // Utils
 import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
-import { sortChildren as sortTree } from '../utils/sortTree.js';
+import { sortTree } from '../utils/sortTree.js';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
@@ -39,13 +39,13 @@ class App extends Component {
     loadTree() {
         loadOrganisationUnitsTree()
             .then(treeData => {
-                sortTree(treeData); // Sort the tree data to get all regions in the right order.
-                treeData.toggled = true; // Toggle the root node to expand the tree.
-                treeData.children[0].active = true; // Select the first child of the root node to be selected.
+                sortTree(treeData.organisationUnits); // Sort the tree data to get all regions in the right order.
+                treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
+                treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
                 this.setState({
                     isLoading: false,
-                    treeData: treeData,
-                    cursor: treeData.children[0] // Set the cursor to the node that was set to active.
+                    treeData: treeData.organisationUnits,
+                    cursor: treeData.organisationUnits[0].children[0] // Set the cursor to the node that was set to active.
                 });
             })
             .catch(error => {
@@ -114,8 +114,8 @@ class App extends Component {
                         <p>Choose an organisation unit:</p>
                         <div className="treelist">
                             <Treebeard
-                                data={this.state.treeData}
                                 style={style}
+                                data={this.state.treeData}
                                 onToggle={this.onToggle} />
                         </div>
                     </div>
@@ -123,7 +123,7 @@ class App extends Component {
                     <div className="content-right">
                         <div className="component-wrapper">
                             {this.state.isToggled
-                                ? <TEIComponent />
+                                ? <TEIComponent cursor={this.state.cursor}/>
                                 : <SingletonComponent cursor={this.state.cursor} />}
                         </div>
                     </div>
