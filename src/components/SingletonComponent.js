@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-const SingletonComponent = ({cursor}) => {
-    if (cursor == null) { // Show a placeholder if the cursor of treebeard is not set
-        return <div className="welcome">placeholder</div>;
-    } else {
-        return (
-            <div className="welcome">
-                <p>name: {cursor.name}</p>
-                <p>id: {cursor.id}</p>
-            </div>
-        );
+class SingletonComponent extends Component {
+    constructor(...args) {
+        super(...args);
     }
+
+    render() {
+        if (this.props.cursor == null) { // Show a placeholder if the cursor of treebeard is not set
+            return <div className="welcome">placeholder</div>;
+        } else {
+            return (
+                <div>
+                    <div className="welcome">
+                        <p>name: {this.props.cursor.name}</p>
+                        <p>id: {this.props.cursor.id}</p>
+                   </div>
+                </div>
+            );
+        }
+    }
+
 }
 
 export default SingletonComponent;
