@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import ReactTable from 'react-table';
 import { mockdata } from './TEIComponent.mockdata';
 import { fakeAsyncCall } from '../utils/TEI';
+import ProgramDropdownList from './ProgramDropdownList';
 
 class TEIComponent extends Component {
     constructor(...args) {
         super(...args);
 
-        const columns = [
+        const columns = [ //columns must be defined before state initialization.
                 {
                     header: 'Name',
                     accessor: 'name' // String-based value accessors !
@@ -45,11 +46,25 @@ class TEIComponent extends Component {
                 }
             ]
 
+
         this.state = {
             isComponentHydrating: false,
             data: mockdata,
-            columns: columns
+            columns: columns,
+            program: "",
+            programId: ""
         };
+
+        this.onSelect = this.onSelect.bind(this);
+    }
+
+    onSelect(event) {
+        console.log(event);
+
+        this.setState({
+            program: this.props.programData[event].displayName,
+            programId: this.props.programData[event].id
+        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -102,6 +117,19 @@ class TEIComponent extends Component {
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
                 <div>reversed id: {this.state.id}</div>
+                <br />
+                <ProgramDropdownList
+                    title={"Programs"}
+                    list={this.props.programData}
+                    i={0}
+                    onSelect={this.onSelect}
+                />
+                <br />
+                <br />
+                <div className="selectedProgram">
+                    <div>Program: {this.state.program}</div>
+                    <div>Program: {this.state.programId}</div>
+                </div>
             </div>
         );
     }

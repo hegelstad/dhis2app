@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // Utils
-import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
+import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
 import { sortTree } from '../utils/sortTree.js';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
@@ -18,12 +18,14 @@ class App extends Component {
         // Too keep most of this simple we gather most of the state in the root component
         // We would use Redux as well if so required by the applications constraints, if not it will only slow us down
         this.state = {
-            isLoading: true,
+            isLoadingTree: true,
+            isLoadingPrograms: true,
             isError: false,
             errorMessage: "",
             treeData: null,
+            programData: null,
             cursor: null,
-            isToggled: true // defaults to TEI mode. Singleton = false
+            isToggled: false // defaults to TEI mode. Singleton = false
         };
 
         // Bind the functions that are passed around to the component
@@ -34,6 +36,7 @@ class App extends Component {
 
     componentDidMount() {
         this.loadTree();
+        this.loadProgs();
     }
 
     loadTree() {
@@ -43,7 +46,7 @@ class App extends Component {
                 treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
                 treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
                 this.setState({
-                    isLoading: false,
+                    isLoadingTree: false,
                     treeData: treeData.organisationUnits,
                     cursor: treeData.organisationUnits[0].children[0] // Set the cursor to the node that was set to active.
                 });
@@ -51,9 +54,27 @@ class App extends Component {
             .catch(error => {
                 console.log(error);
                 this.setState({
-                    isLoading: false,
+                    isLoadingTree: false,
                     isError: true,
                     errorMessage: "Fetching data failed - check DHIS CORS  "
+                });
+            });
+    }
+
+    loadProgs() {
+        loadPrograms()
+            .then(programData => {
+                this.setState({
+                    isLoadingPrograms: false,
+                    programData: programData
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({
+                    isLoadingPrograms: false,
+                    isError: true,
+                    errorMessage: "Loading programs failed."
                 });
             });
     }
@@ -69,11 +90,13 @@ class App extends Component {
     // Retry loading
     onRetry() {
         this.setState({
-            isLoading: true,
+            isLoadingTree: true,
+            isLoadingPrograms: true,
             isError: false,
             errorMessage: ""
         });
         this.loadTree();
+        this.loadProgs();
     }
 
     // Toggle between singleton and TEI modes
@@ -85,7 +108,7 @@ class App extends Component {
 
     render() {
         // If the component state is set to isLoading we hide the app and show a loading message
-        if (this.state.isLoading) {
+        if (this.state.isLoadingTree || this.state.isLoadingPrograms) {
             return (
                 <div className="loading">Loading data...</div>
             );
@@ -123,8 +146,12 @@ class App extends Component {
                     <div className="content-right">
                         <div className="component-wrapper">
                             {this.state.isToggled
-                                ? <TEIComponent cursor={this.state.cursor}/>
-                                : <SingletonComponent cursor={this.state.cursor} />}
+                                ? <TEIComponent
+                                    cursor={this.state.cursor}
+                                    programData={this.state.programData}
+                                    />
+                                : <SingletonComponent cursor={this.state.cursor}/>
+                            }
                         </div>
                     </div>
                 </div>
