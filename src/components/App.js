@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // Utils
-import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
+import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree, loadTrackedEntityInstances } from '../api';
 import { sortTree } from '../utils/sortTree.js';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
@@ -9,6 +9,8 @@ import style from '../css/treelist-style.js';
 import SingletonComponent from './SingletonComponent';
 import TEIComponent from './TEIComponent';
 import ToggleComponent from './ToggleComponent';
+import { teiList } from '../utils/TEI';
+
 
 class App extends Component {
     constructor(props, context) {
@@ -37,6 +39,7 @@ class App extends Component {
     componentDidMount() {
         this.loadTree();
         this.loadProgs();
+        this.loadTEIS();
     }
 
     loadTree() {
@@ -78,6 +81,23 @@ class App extends Component {
                 });
             });
     }
+
+    // function for loading in TEIS. NOT SURE WHERE TO PLACE THIS SHIT.
+    loadTEIS() {
+        loadTrackedEntityInstances("DiszpKrYNg8")
+            .then(teis => {
+                teiList(teis);
+            })
+            .catch(error => {
+                console.log(error);
+
+                this.setState({
+                    isError: true,
+                    errorMessage: "Failed to fetch TEIS"
+                });
+            });
+        }
+
 
     // Treelist toggle function
     onToggle(node, toggled) {

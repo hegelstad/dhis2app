@@ -3,6 +3,7 @@ import ReactTable from 'react-table';
 import { mockdata } from './TEIComponent.mockdata';
 import { fakeAsyncCall } from '../utils/TEI';
 import ProgramDropdownList from './ProgramDropdownList';
+import { loadTrackedEntityInstances } from '../api'
 
 class TEIComponent extends Component {
     constructor(...args) {
@@ -93,6 +94,10 @@ class TEIComponent extends Component {
             });
     }
 
+    
+    
+    //loadTEIS(this.props.cursor.id, this.state.programId);
+
     saveData(data) {
         this.setState({
             isComponentHydrating: false,
@@ -104,7 +109,7 @@ class TEIComponent extends Component {
         if (this.state.isComponentHydrating) {
             return <div className="loading">Loading data...</div>;
         }
-
+      
         return (
             <div>
                 <ReactTable

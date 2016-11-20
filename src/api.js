@@ -7,7 +7,7 @@
  * and need CORS support (https://developer.mozilla.org/en-US/docs/Web/HTTP).
  * You obviously should not do this for your production apps.
  */
-const serverUrl = 'https://play.dhis2.org/dev/api';
+const serverUrl = 'https://play.dhis2.org/demo/api';
 const basicAuth = `Basic ${btoa('admin:district')}`;
 
 /**
@@ -77,5 +77,13 @@ export function loadPrograms() {
     return fetch(`${serverUrl}//25/programs.json`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
-        .then(({ programs}) => programs);
+        .then(({ programs }) => programs);
+}
+
+// function loading in TEIS based on program and orgUnit.
+export function loadTrackedEntityInstances(orgUnit) {
+    return fetch(`${serverUrl}/25/trackedEntityInstances.json?ou=${orgUnit}&fields=attributes[value,displayName]`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ trackedEntityInstances }) => trackedEntityInstances);
 }
