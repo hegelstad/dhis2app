@@ -44,11 +44,21 @@ class App extends Component {
             .then(treeData => {
                 sortTree(treeData.organisationUnits); // Sort the tree data to get all regions in the right order.
                 treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
-                treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
+                // If the first element in array has children, mark the first child as active/selected.
+                if (treeData.organisationUnits[0].children[0]) {
+                    treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
+                    this.setState({
+                        cursor: treeData.organisationUnits[0].children[0] // Set the cursor to the node that was set to active.
+                    });
+                } else { // Else, mark the first element as active to avoid a null error.
+                    treeData.organisationUnits[0].active = true; // Select the first child of the root node to be selected.
+                    this.setState({
+                        cursor: treeData.organisationUnits[0] // Set the cursor to the node that was set to active.
+                    });
+                }
                 this.setState({
                     isLoadingTree: false,
-                    treeData: treeData.organisationUnits,
-                    cursor: treeData.organisationUnits[0].children[0] // Set the cursor to the node that was set to active.
+                    treeData: treeData.organisationUnits
                 });
             })
             .catch(error => {
