@@ -14,10 +14,13 @@ export function teiList(OrgUnit) {
         Function finding duplicates within a given org unit.
         TODO: Return the duplicates as a list. 
     */
-
+    (console.log(OrgUnit))
+    var duplicates = [];
     // First for loop is for the person to be checked against the second loop
     for (let tei1 = 0; tei1 < OrgUnit.length; tei1++){
         var entry = OrgUnit[tei1].attributes;
+        var first_id = OrgUnit[tei1].trackedEntityInstance;
+
         var firstName = "";
         var lastName = "";
 
@@ -34,6 +37,8 @@ export function teiList(OrgUnit) {
         // Checks entries against first person
         for (let tei2 = tei1 + 1; tei2 < OrgUnit.length; tei2++){
             var check = OrgUnit[tei2].attributes;
+            var second_id = OrgUnit[tei2].trackedEntityInstance;
+
             var firstCheck = "";
             var lastCheck = "";
 
@@ -53,12 +58,22 @@ export function teiList(OrgUnit) {
             }
 
             if (firstCheck != "" && lastCheck != ""){
-                console.log(lastName + ", " + firstName);
-                console.log(lastCheck + ", " + firstCheck);
-                console.log("-------------------");
+
+                duplicates.push({
+                    displayName: "name", 
+                    value: firstName + " " + lastName,
+                    trackedEntityInstance: first_id
+                });
+
+                duplicates.push({
+                    displayName: "name", 
+                    value: firstCheck + " " + lastCheck,
+                    trackedEntityInstance: second_id
+                });
             }
         }
     }
+    return duplicates;
 }
 
 
@@ -68,11 +83,15 @@ export function teiClinic(first_OU, second_OU) {
         TODO: Should probably return a list of duplicates.
     */
 
+    var duplicates = [];
     // First for loop is for the person to be checked against the second loop
     for (let tei1 = 0; tei1 < first_OU.length; tei1++){
         var entry = first_OU[tei1].attributes;
+        var first_id = first_OU[tei1].trackedEntityInstance;
+
         var firstName = "";
         var lastName = "";
+
 
         for (let attribute = 0; attribute < entry.length; attribute++){
             var displayName = entry[attribute].displayName;
@@ -87,6 +106,8 @@ export function teiClinic(first_OU, second_OU) {
         // Checks entries against first person
         for (let tei2 = 0; tei2 < second_OU.length; tei2++){
             var check = second_OU[tei2].attributes;
+            var second_id = first_OU[tei1].trackedEntityInstance;
+
             var firstCheck = "";
             var lastCheck = "";
 
@@ -106,10 +127,21 @@ export function teiClinic(first_OU, second_OU) {
             }
 
             if (firstCheck != "" && lastCheck != ""){
-                console.log(lastName + ", " + firstName);
-                console.log(lastCheck + ", " + firstCheck);
-                console.log("-------------------");
+
+                duplicates.push({
+                    displayName: "name", 
+                    value: firstName + " " + lastName,
+                    trackedEntityInstance: first_id
+                });
+
+                duplicates.push({
+                    displayName: "name", 
+                    value: firstCheck + " " + lastCheck,
+                    trackedEntityInstance: second_id
+                });
+                
             }
         }
     }
+    return duplicates;
 }

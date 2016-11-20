@@ -86,7 +86,7 @@ class App extends Component {
     loadTEIS() {
         loadTrackedEntityInstances("DiszpKrYNg8")
             .then(teis => {
-                teiList(teis);
+                console.log(teiList(teis));
             })
             .catch(error => {
                 console.log(error);
