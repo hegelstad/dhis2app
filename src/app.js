@@ -5,12 +5,16 @@ import { createStore } from 'redux';
 import dhisApp from './reducers';
 import App from './components/App';
 
-let store = createStore(dhisApp);
+const initialState = {
+    applicationMode: "SINGLETON_MODE"
+}
+
+const store = createStore(dhisApp, initialState);
 
 // Render the App component into the .app element
 render(
     <Provider store={store}>
-        <App /> 
+        <App />
     </Provider>,
     document.querySelector('.app')
 );

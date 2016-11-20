@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setApplicationMode } from '../actions/actions';
+import { setApplicationMode, ApplicationModes } from '../actions/actions';
+import { bindActionCreators } from 'redux';
 // Utils
 import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
 import { sortTree } from '../utils/sortTree.js';
@@ -44,6 +45,7 @@ class App extends Component {
     loadTree() {
         loadOrganisationUnitsTree()
             .then(treeData => {
+                console.log(treeData);
                 sortTree(treeData.organisationUnits); // Sort the tree data to get all regions in the right order.
                 treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
                 treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
@@ -103,9 +105,11 @@ class App extends Component {
 
     // Toggle between singleton and TEI modes
     onToggleButton() {
-        this.setState({
-            isToggled: !this.state.isToggled
-        });
+        if(this.props.applicationMode === "TEI_MODE") {
+            this.props.setApplicationMode("SINGLETON_MODE");
+        } else {
+            this.props.setApplicationMode("TEI_MODE");
+        }
     }
 
     render() {
@@ -149,7 +153,7 @@ class App extends Component {
                     <div className="middle-dividor" />
                     <div className="content-right">
                         <div className="component-wrapper">
-                            {this.state.isToggled
+                            { this.props.applicationMode.applicationMode == "TEI_MODE"
                                 ? <TEIComponent
                                     cursor={this.state.cursor}
                                     programData={this.state.programData}
@@ -164,20 +168,16 @@ class App extends Component {
     }
 }
 
+// Example to show the power of ES6.
+// const mapStateToProps = (state) => {
+//     return { applicationMode: state.applicationMode };
+// }
 const mapStateToProps = ({ applicationMode }) => {
     return { applicationMode };
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        onToggleClick: (currentMode) => {
-            if (currentMode === TEI_MODE) {
-                dispatch(setApplicationMode(SINGLETON_MODE));
-            } else {
-                dispatch(setApplicationMode(TEI_MODE));
-            }
-        }
-    }
+    return bindActionCreators({ setApplicationMode }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

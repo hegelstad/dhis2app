@@ -7,7 +7,7 @@
  * and need CORS support (https://developer.mozilla.org/en-US/docs/Web/HTTP).
  * You obviously should not do this for your production apps.
  */
-const serverUrl = 'https://play.dhis2.org/dev/api';
+const serverUrl = 'https://play.dhis2.org/demo/api';
 const basicAuth = `Basic ${btoa('admin:district')}`;
 
 /**
@@ -39,7 +39,7 @@ export function loadOrganisationUnitsTree() {
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js
-    } 
+    }
 
 export function saveOrganisationUnit(organisationUnit) {
     // POST the payload to the server to save the organisationUnit
