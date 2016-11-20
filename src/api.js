@@ -77,5 +77,13 @@ export function loadPrograms() {
     return fetch(`${serverUrl}//25/programs.json`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
-        .then(({ programs}) => programs);
+        .then(({ programs }) => programs);
+}
+
+// function loading in TEIS based on program and orgUnit.
+export function loadTrackedEntityInstances(orgUnit) {
+    return fetch(`${serverUrl}/25/trackedEntityInstances.json?ou=${orgUnit}&fields=trackedEntityInstance,attributes[value,displayName]`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ trackedEntityInstances }) => trackedEntityInstances);
 }
