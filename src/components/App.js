@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { setApplicationMode } from '../actions/actions';
 // Utils
 import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree } from '../api';
 import { sortTree } from '../utils/sortTree.js';
@@ -107,6 +109,8 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.props.applicationMode);
+
         // If the component state is set to isLoading we hide the app and show a loading message
         if (this.state.isLoadingTree || this.state.isLoadingPrograms) {
             return (
@@ -160,4 +164,20 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = ({ applicationMode }) => {
+    return { applicationMode };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onToggleClick: (currentMode) => {
+            if (currentMode === TEI_MODE) {
+                dispatch(setApplicationMode(SINGLETON_MODE));
+            } else {
+                dispatch(setApplicationMode(TEI_MODE));
+            }
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
