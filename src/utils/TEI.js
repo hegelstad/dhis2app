@@ -14,7 +14,6 @@ export function teiList(OrgUnit) {
         Function finding duplicates within a given org unit.
         TODO: Return the duplicates as a list. 
     */
-    (console.log(OrgUnit))
     var duplicates = [];
     // First for loop is for the person to be checked against the second loop
     for (let tei1 = 0; tei1 < OrgUnit.length; tei1++){

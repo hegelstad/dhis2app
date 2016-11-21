@@ -49,3 +49,28 @@ For singleton events:
  - Select a program
  - Not all TEIs have a unique identifier
  -
+
+
+Fuse.js.io // For sorting on multiple values.
+
+// Columns, TEI COMPONENT. Custom toggle. Incase we need it
+
+render: props =>
+        <span>
+            {`${props.value} ${this.state.data[props.index].checked} `}
+            <input
+                type="checkbox"
+                checked={this.state.data[props.index].checked}
+                onChange={() => { // Binds function to this
+                    let element = this.state.data.slice(props.index, props.index+1);
+                    element[0].checked = !props.row.checked;
+                    this.setState({
+                        data: [
+                            ...this.state.data.slice(0, props.index),
+                            ...element,
+                            ...this.state.data.slice(props.index + 1)
+                        ]
+                    })
+                }}
+            />
+        </span> // Custom cell components!

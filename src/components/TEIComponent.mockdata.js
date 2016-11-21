@@ -1,5 +1,5 @@
 export const mockdata = [{
-    name: '0 Tanner Linsley',
+    name: 'Tanner Linsley',
     age: 26,
     checked: false,
     friend: {
@@ -7,7 +7,7 @@ export const mockdata = [{
         age: 23
     }
 },{
-    name: '1 Banner Dansley',
+    name: 'Banner Dansley',
     age: 19,
     checked: false,
     friend: {
@@ -15,7 +15,7 @@ export const mockdata = [{
         age: 30
     }
 },{
-    name: '2 Nikolai Dude',
+    name: 'Nikolai Dude',
     age: 22,
     checked: false,
     friend: {
@@ -23,7 +23,7 @@ export const mockdata = [{
         age: 25
     }
 },{
-    name: '3 Brad Pitt',
+    name: 'Brad Pitt',
     age: 40,
     checked: true,
     friend: {
@@ -31,7 +31,7 @@ export const mockdata = [{
         age: 30
     }
 },{
-    name: '4 Nikolai Hegelstad',
+    name: 'Nikolai Hegelstad',
     age: 22,
     checked: false,
     friend: {
@@ -39,7 +39,7 @@ export const mockdata = [{
         age: 25
     }
 },{
-    name: '5 Bad Spit',
+    name: 'Bad Spit',
     age: 42,
     checked: true,
     friend: {

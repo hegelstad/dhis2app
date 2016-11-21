@@ -3,7 +3,8 @@ import ReactTable from 'react-table';
 import { mockdata } from './TEIComponent.mockdata';
 import { fakeAsyncCall } from '../utils/TEI';
 import ProgramDropdownList from './ProgramDropdownList';
-import { loadTrackedEntityInstances } from '../api'
+import { loadTrackedEntityInstances } from '../api';
+import AccordionInstance from './Accordion';
 
 class TEIComponent extends Component {
     constructor(...args) {
@@ -16,26 +17,7 @@ class TEIComponent extends Component {
                 },
                 {
                     header: 'Age',
-                    accessor: 'age',
-                    render: props =>
-                        <span>
-                            {`${props.value} ${this.state.data[props.index].checked} `}
-                            <input
-                                type="checkbox"
-                                checked={this.state.data[props.index].checked}
-                                onChange={() => { // Binds function to this
-                                    let element = this.state.data.slice(props.index, props.index+1);
-                                    element[0].checked = !props.row.checked;
-                                    this.setState({
-                                        data: [
-                                            ...this.state.data.slice(0, props.index),
-                                            ...element,
-                                            ...this.state.data.slice(props.index + 1)
-                                        ]
-                                    })
-                                }}
-                            />
-                        </span> // Custom cell components!
+                    accessor: 'age',  
                 },
                 {
                     header: 'Friend Name',
@@ -44,10 +26,10 @@ class TEIComponent extends Component {
                 {
                     header: 'Friend Age',
                     accessor: 'friend.age'
-                }
-            ]
+                },
+            ];        
 
-
+            
         this.state = {
             isComponentHydrating: false,
             data: mockdata,
@@ -96,8 +78,6 @@ class TEIComponent extends Component {
 
     
     
-    //loadTEIS(this.props.cursor.id, this.state.programId);
-
     saveData(data) {
         this.setState({
             isComponentHydrating: false,
@@ -109,9 +89,29 @@ class TEIComponent extends Component {
         if (this.state.isComponentHydrating) {
             return <div className="loading">Loading data...</div>;
         }
+
+         const testData = [
+            {
+                displayName: "name",
+                trackedEntityInstance: "OIH1232jJRU123",
+                value: "Anna Jones",
+                weight: "148.5 kg",
+                height: "156 cm"
+
+            },
+            {
+                displayName: "name",
+                trackedEntityInstance: "Adoihadw9812",
+                value: "Anna Jones"
+            }];
       
         return (
             <div>
+
+                <AccordionInstance
+                    title={testData}
+                />
+
                 <ReactTable
                     data={this.state.data}
                     columns={this.state.columns}
@@ -121,8 +121,8 @@ class TEIComponent extends Component {
                 />
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
-                <div>reversed id: {this.state.id}</div>
                 <br />
+         
                 <ProgramDropdownList
                     title={"Programs"}
                     list={this.props.programData}
