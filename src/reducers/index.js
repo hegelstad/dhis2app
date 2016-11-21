@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import ApplicationModeReducer from './applicationModeReducer';
+import ToggleReducer from './toggleReducer';
+import TreelistReducer from './treelistReducer';
 
-const dhisApp = combineReducers({
-    applicationMode: ApplicationModeReducer
+const reducers = combineReducers({
+    isToggled: ToggleReducer,
+    tree: TreelistReducer
 });
 
-export default dhisApp;
+export default reducers;

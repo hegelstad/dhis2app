@@ -52,21 +52,21 @@ class TEIComponent extends Component {
             isComponentHydrating: false,
             data: mockdata,
             columns: columns,
-            program: "",
-            programId: ""
+            // program: "",
+            // programId: ""
         };
 
-        this.onSelect = this.onSelect.bind(this);
+        // this.onSelect = this.onSelect.bind(this);
     }
 
-    onSelect(event) {
-        console.log(event);
-
-        this.setState({
-            program: this.props.programData[event].displayName,
-            programId: this.props.programData[event].id
-        });
-    }
+    // onSelect(event) {
+    //     console.log(event);
+    //
+    //     this.setState({
+    //         program: this.props.programData[event].displayName,
+    //         programId: this.props.programData[event].id
+    //     });
+    // }
 
     shouldComponentUpdate(nextProps, nextState) {
         return !nextState.isAppHydrating;
@@ -94,8 +94,8 @@ class TEIComponent extends Component {
             });
     }
 
-    
-    
+
+
     //loadTEIS(this.props.cursor.id, this.state.programId);
 
     saveData(data) {
@@ -109,7 +109,7 @@ class TEIComponent extends Component {
         if (this.state.isComponentHydrating) {
             return <div className="loading">Loading data...</div>;
         }
-      
+
         return (
             <div>
                 <ReactTable
@@ -123,7 +123,7 @@ class TEIComponent extends Component {
                 <div>id: {this.props.cursor.id}</div>
                 <div>reversed id: {this.state.id}</div>
                 <br />
-                <ProgramDropdownList
+                {/* <ProgramDropdownList
                     title={"Programs"}
                     list={this.props.programData}
                     i={0}
@@ -134,7 +134,7 @@ class TEIComponent extends Component {
                 <div className="selectedProgram">
                     <div>Program: {this.state.program}</div>
                     <div>Program: {this.state.programId}</div>
-                </div>
+                </div> */}
             </div>
         );
     }

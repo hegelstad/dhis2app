@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { setApplicationMode, ApplicationModes } from '../actions/actions';
-import { bindActionCreators } from 'redux';
+
 // Utils
 import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree, loadTrackedEntityInstances } from '../api';
-import { sortTree } from '../utils/sortTree.js';
-// Treebeard
-import { Treebeard } from 'react-treebeard';
-import style from '../css/treelist-style.js';
-// Components
-import SingletonComponent from './SingletonComponent';
-import TEIComponent from './TEIComponent';
-import ToggleComponent from './ToggleComponent';
-import { teiList } from '../utils/TEI';
 
+// Containers
+import TreelistContainer from '../containers/TreelistContainer';
+import ToggleContainer from '../containers/ToggleContainer';
+import ModeContainer from '../containers/ModeContainer';
+
+import { teiList } from '../utils/TEI';
 
 class App extends Component {
     constructor(props, context) {
@@ -27,55 +22,17 @@ class App extends Component {
             isLoadingPrograms: true,
             isError: false,
             errorMessage: "",
-            treeData: null,
-            programData: null,
-            cursor: null,
-            isToggled: false // defaults to TEI mode. Singleton = false
+            // programData: null,
         };
 
         // Bind the functions that are passed around to the component
-        this.onToggle = this.onToggle.bind(this);
         this.onRetry = this.onRetry.bind(this);
-        this.onToggleButton = this.onToggleButton.bind(this);
+        // this.onToggleButton = this.onToggleButton.bind(this);
     }
 
     componentDidMount() {
-        this.loadTree();
         this.loadProgs();
         this.loadTEIS();
-    }
-
-    loadTree() {
-        loadOrganisationUnitsTree()
-            .then(treeData => {
-                console.log(treeData);
-                sortTree(treeData.organisationUnits); // Sort the tree data to get all regions in the right order.
-                treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
-                // If the first element in array has children, mark the first child as active/selected.
-                if (treeData.organisationUnits[0].children[0]) {
-                    treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
-                    this.setState({
-                        cursor: treeData.organisationUnits[0].children[0] // Set the cursor to the node that was set to active.
-                    });
-                } else { // Else, mark the first element as active to avoid a null error.
-                    treeData.organisationUnits[0].active = true; // Select the first child of the root node to be selected.
-                    this.setState({
-                        cursor: treeData.organisationUnits[0] // Set the cursor to the node that was set to active.
-                    });
-                }
-                this.setState({
-                    isLoadingTree: false,
-                    treeData: treeData.organisationUnits
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({
-                    isLoadingTree: false,
-                    isError: true,
-                    errorMessage: "Fetching data failed - check DHIS CORS  "
-                });
-            });
     }
 
     loadProgs() {
@@ -100,7 +57,7 @@ class App extends Component {
     loadTEIS() {
         loadTrackedEntityInstances("DiszpKrYNg8")
             .then(teis => {
-                console.log(teiList(teis));
+//                console.log(teiList(teis));
             })
             .catch(error => {
                 console.log(error);
@@ -111,15 +68,6 @@ class App extends Component {
                 });
             });
         }
-
-
-    // Treelist toggle function
-    onToggle(node, toggled) {
-        if(this.state.cursor) {this.state.cursor.active = false;}
-        node.active = true;
-        if(node.children){ node.toggled = toggled; }
-        this.setState({ cursor: node });
-    }
 
     // Retry loading
     onRetry() {
@@ -133,24 +81,13 @@ class App extends Component {
         this.loadProgs();
     }
 
-    // Toggle between singleton and TEI modes
-    onToggleButton() {
-        if(this.props.applicationMode === "TEI_MODE") {
-            this.props.setApplicationMode("SINGLETON_MODE");
-        } else {
-            this.props.setApplicationMode("TEI_MODE");
-        }
-    }
-
     render() {
-        console.log(this.props.applicationMode);
-
         // If the component state is set to isLoading we hide the app and show a loading message
-        if (this.state.isLoadingTree || this.state.isLoadingPrograms) {
-            return (
-                <div className="loading">Loading data...</div>
-            );
-        }
+        // if (this.state.isLoadingTree || this.state.isLoadingPrograms) {
+        //     return (
+        //         <div className="loading">Loading data...</div>
+        //     );
+        // }
 
         // If the component state is set to isError we show the current error message
         if (this.state.isError) {
@@ -166,30 +103,19 @@ class App extends Component {
         return (
             <div className="container">
                 <div className="container-top">
-                    <ToggleComponent
-                        isToggled={this.state.isToggled}
-                        onToggleButton={this.onToggleButton} />
+                    <ToggleContainer/>
                 </div>
                 <div className="container-bottom">
                     <div className="content-left">
                         <p>Choose an organisation unit:</p>
                         <div className="treelist">
-                            <Treebeard
-                                style={style}
-                                data={this.state.treeData}
-                                onToggle={this.onToggle} />
+                            <TreelistContainer />
                         </div>
                     </div>
                     <div className="middle-dividor" />
                     <div className="content-right">
                         <div className="component-wrapper">
-                            { this.props.applicationMode.applicationMode == "TEI_MODE"
-                                ? <TEIComponent
-                                    cursor={this.state.cursor}
-                                    programData={this.state.programData}
-                                    />
-                                : <SingletonComponent cursor={this.state.cursor}/>
-                            }
+                            <ModeContainer />
                         </div>
                     </div>
                 </div>
@@ -198,16 +124,4 @@ class App extends Component {
     }
 }
 
-// Example to show the power of ES6.
-// const mapStateToProps = (state) => {
-//     return { applicationMode: state.applicationMode };
-// }
-const mapStateToProps = ({ applicationMode }) => {
-    return { applicationMode };
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ setApplicationMode }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

@@ -10,11 +10,10 @@ function reverseString(s) {
 
 
 export function teiList(OrgUnit) {
-    /* 
+    /*
         Function finding duplicates within a given org unit.
-        TODO: Return the duplicates as a list. 
+        TODO: Return the duplicates as a list.
     */
-    (console.log(OrgUnit))
     var duplicates = [];
     // First for loop is for the person to be checked against the second loop
     for (let tei1 = 0; tei1 < OrgUnit.length; tei1++){
@@ -49,7 +48,7 @@ export function teiList(OrgUnit) {
                     if (firstName === check[checkAttri].value) {
                         firstCheck = check[checkAttri].value;
                     }
-                        
+
                 } else if (checkName === "Last name") {
                     if (lastName === check[checkAttri].value){
                         lastCheck = check[checkAttri].value;
@@ -60,13 +59,13 @@ export function teiList(OrgUnit) {
             if (firstCheck != "" && lastCheck != ""){
 
                 duplicates.push({
-                    displayName: "name", 
+                    displayName: "name",
                     value: firstName + " " + lastName,
                     trackedEntityInstance: first_id
                 });
 
                 duplicates.push({
-                    displayName: "name", 
+                    displayName: "name",
                     value: firstCheck + " " + lastCheck,
                     trackedEntityInstance: second_id
                 });
@@ -78,7 +77,7 @@ export function teiList(OrgUnit) {
 
 
 export function teiClinic(first_OU, second_OU) {
-    /* 
+    /*
         Function checking for duplicates within two clinics, first_OU and second_OU.
         TODO: Should probably return a list of duplicates.
     */
@@ -118,7 +117,7 @@ export function teiClinic(first_OU, second_OU) {
                     if (firstName === check[checkAttri].value) {
                         firstCheck = check[checkAttri].value;
                     }
-                        
+
                 } else if (checkName === "Last name") {
                     if (lastName === check[checkAttri].value){
                         lastCheck = check[checkAttri].value;
@@ -129,17 +128,17 @@ export function teiClinic(first_OU, second_OU) {
             if (firstCheck != "" && lastCheck != ""){
 
                 duplicates.push({
-                    displayName: "name", 
+                    displayName: "name",
                     value: firstName + " " + lastName,
                     trackedEntityInstance: first_id
                 });
 
                 duplicates.push({
-                    displayName: "name", 
+                    displayName: "name",
                     value: firstCheck + " " + lastCheck,
                     trackedEntityInstance: second_id
                 });
-                
+
             }
         }
     }
