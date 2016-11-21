@@ -35,7 +35,7 @@ function onlySuccessResponses(response) {
 
 export function loadOrganisationUnitsTree() {
     // Load all of the organisation units and their children with id and displayName
-    return fetch(`${serverUrl}/24/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
+    return fetch(`${serverUrl}/26/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js

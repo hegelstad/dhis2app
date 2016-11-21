@@ -7,7 +7,7 @@ import { sortTree } from '../utils/sortTree.js';
 
 export const MODE_TOGGLE = 'MODE_TOGGLE';
 export const TREELIST_CURSOR_SET = 'TREELIST_CURSOR_SET';
-export const TREE_DATA_LOAD_AND_SET = 'TREE_DATA_LOAD_AND_SET';
+export const TREELIST_DATA_SET = 'TREELIST_DATA_SET';
 
 
 /*
@@ -30,9 +30,8 @@ export const setTreelistCursor = (cursor) => {
 export const loadAndSetTreeData = () => {
     return dispatch => {
         return loadOrganisationUnitsTree().then(
-            treeData => console.log(treeData)
-            //treeData => dispatch(processTreeDataAndSetValidTreelistCursor(treeData)),
-            // error => console.log("ERROR IN loadAndSetTreeData in actions.js")
+            treeData => dispatch(setTreeData(treeData)),
+            error => console.log(error)
         );
     };
 }
@@ -40,6 +39,7 @@ export const loadAndSetTreeData = () => {
 const processTreeDataAndSetValidTreelistCursor = (treeData) => {
     return dispatch => {
         sortTree(treeData.organisationUnits); // Sort the tree data to get all regions in the right order.
+        dispatch(setTreeData(treeData));
         treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
         // If the first element in array has children, mark the first child as active/selected.
         if (treeData.organisationUnits[0].children[0]) {
@@ -49,13 +49,12 @@ const processTreeDataAndSetValidTreelistCursor = (treeData) => {
             treeData.organisationUnits[0].active = true; // Select the first child of the root node to be selected.
             dispatch(setTreelistCursor(treeData.organisationUnits[0])) // Set the cursor to the node that was set to active.
         }
-        dispatch(setTreeData(treeData))
     }
 }
 
 const setTreeData = (treeData) => {
     return {
-        type: TREE_DATA_LOAD_AND_SET,
+        type: TREELIST_DATA_SET,
         treeData
     };
 }

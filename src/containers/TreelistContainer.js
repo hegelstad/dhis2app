@@ -69,14 +69,12 @@ class TreelistContainer extends Component {
             return <div></div>;
         } else {
             console.log(this.props.treeData);
-            console.log(data);
+            console.log("trying");
             return (
-                <div>
-                    <Treebeard
-                        style={style}
-                        data={data}
-                        onToggle={this.onToggle} />
-                </div>
+                <Treebeard
+                    style={style}
+                    data={this.props.treeData}
+                    onToggle={this.onToggle} />
             );
         }
     }
