@@ -4,6 +4,8 @@ import { setTreelistCursor, loadAndSetTreeData } from '../actions/actions';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
+// React-spinnere
+import Spinner from 'react-spinner';
 
 class TreelistContainer extends Component {
     constructor(props, context) {
@@ -12,13 +14,14 @@ class TreelistContainer extends Component {
         this.state = {
             cursor: null,
         }
-        
+
         this.onToggle = this.onToggle.bind(this);
     }
 
-    componentDidMount () {
+    componentWillMount() {
         this.props.loadAndSetTreeData();
     }
+
 
     // Function required by Treebeard.
     onToggle(node, toggled) {
@@ -28,6 +31,7 @@ class TreelistContainer extends Component {
         this.setState({
             cursor: node
         });
+        // Set the selected cursor in the redux state.
         this.props.setTreelistCursor(node);
     }
 
@@ -43,7 +47,8 @@ class TreelistContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        treeData: state.tree.treeData
+        treeData: state.tree.treeData,
+        treeDataIsLoading: state.tree.treeDataIsLoading
     }
 }
 
