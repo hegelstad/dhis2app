@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { setError, clearError } from '../actions/actions';
 
 // Utils
 import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree, loadTrackedEntityInstances } from '../api';
 
 // Containers
-import TreelistContainer from '../containers/TreelistContainer';
-import ToggleContainer from '../containers/ToggleContainer';
-import ModeContainer from '../containers/ModeContainer';
+import TreelistContainer from './TreelistContainer';
+import ToggleContainer from './ToggleContainer';
+import ModeContainer from './ModeContainer';
 
 import { teiList } from '../utils/TEI';
 
-class App extends Component {
+class AppContainer extends Component {
     constructor(props, context) {
         super(props, context);
 
@@ -18,16 +20,12 @@ class App extends Component {
         // Too keep most of this simple we gather most of the state in the root component
         // We would use Redux as well if so required by the applications constraints, if not it will only slow us down
         this.state = {
-            isLoadingTree: true,
             isLoadingPrograms: true,
-            isError: false,
-            errorMessage: "",
             // programData: null,
         };
 
         // Bind the functions that are passed around to the component
         this.onRetry = this.onRetry.bind(this);
-        // this.onToggleButton = this.onToggleButton.bind(this);
     }
 
     componentDidMount() {
@@ -62,10 +60,6 @@ class App extends Component {
             .catch(error => {
                 console.log(error);
 
-                this.setState({
-                    isError: true,
-                    errorMessage: "Failed to fetch TEIS"
-                });
             });
         }
 
@@ -74,27 +68,17 @@ class App extends Component {
         this.setState({
             isLoadingTree: true,
             isLoadingPrograms: true,
-            isError: false,
-            errorMessage: ""
         });
-        this.loadTree();
         this.loadProgs();
     }
 
     render() {
-        // If the component state is set to isLoading we hide the app and show a loading message
-        // if (this.state.isLoadingTree || this.state.isLoadingPrograms) {
-        //     return (
-        //         <div className="loading">Loading data...</div>
-        //     );
-        // }
-
         // If the component state is set to isError we show the current error message
-        if (this.state.isError) {
+        if (this.props.error) {
             return (
                 <div className="loading">
-                    {this.state.errorMessage}
-                    <button onClick={this.onRetry}>Retry</button>
+                    {this.props.error}
+                    <button onClick={() => this.props.clearError()}>Clear Error</button>
                 </div>
             );
         }
@@ -115,6 +99,7 @@ class App extends Component {
                     <div className="middle-dividor" />
                     <div className="content-right">
                         <div className="component-wrapper">
+                            <button onClick={() => this.props.setError("Test 123")}>Set Error</button>
                             <ModeContainer />
                         </div>
                     </div>
@@ -124,4 +109,10 @@ class App extends Component {
     }
 }
 
-export default App;
+// Shorthand notation.
+export default connect(
+    state => ({
+        error: state.error
+    }),
+    { setError, clearError }
+)(AppContainer);

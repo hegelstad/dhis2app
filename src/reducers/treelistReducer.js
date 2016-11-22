@@ -2,28 +2,7 @@ import { TREELIST_CURSOR_SET, TREELIST_DATA_SET } from '../actions/actions';
 
 const initialState = {
     cursor: {},
-    treeData: {
-        name: 'root',
-        toggled: true,
-        children: [
-            {
-                id: "123",
-                name: "Nikolai",
-                toggled: true,
-                children: [
-                    {
-                        active: true,
-                        id: "1234",
-                        name: "bo"
-                    },
-                    {
-                        id: "12345",
-                        name: "bombali"
-                    }
-                ]
-            }
-        ]
-    }
+    treeData: {}
 }
 
 export default function(state = initialState, action) {
@@ -34,7 +13,7 @@ export default function(state = initialState, action) {
             });
         case TREELIST_DATA_SET:
             return Object.assign({}, state, {
-                treeData: action.treeData
+                treeData: action.treeData.organisationUnits
             });
         default:
             return state

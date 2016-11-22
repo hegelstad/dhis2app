@@ -4,29 +4,28 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import DevTools from './utils/ReduxDevTools';
 import thunk from 'redux-thunk';
-import reducers from './reducers';
-import App from './components/App';
+import rootReducer from './reducers';
+import AppContainer from './containers/AppContainer';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 let store;
 
 if (isProduction) {
-    store = createStore(reducers, applyMiddleware(thunk));
+    store = createStore(rootReducer, applyMiddleware(thunk));
 } else {
     const enhancer = compose(
         applyMiddleware(thunk),
         DevTools.instrument()
     );
-
-    store = createStore(reducers, enhancer);
+    store = createStore(rootReducer, enhancer);
 }
 
 // Render the App component into the .app element
 render(
     <Provider store={store}>
         <div>
-            <App />
+            <AppContainer />
             { !isProduction && <DevTools /> }
         </div>
     </Provider>,

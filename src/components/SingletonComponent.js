@@ -19,7 +19,6 @@ class SingletonComponent extends Component {
             );
         }
     }
-
 }
 
 export default SingletonComponent;
