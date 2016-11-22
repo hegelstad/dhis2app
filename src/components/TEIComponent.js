@@ -5,6 +5,7 @@ import { fakeAsyncCall } from '../utils/TEI';
 import ProgramDropdownList from './ProgramDropdownList';
 import { loadTrackedEntityInstances } from '../api';
 import AccordionInstance from './Accordion';
+import Fuse from 'fuse.js';
 
 class TEIComponent extends Component {
     constructor(...args) {
@@ -18,17 +19,10 @@ class TEIComponent extends Component {
                 {
                     header: 'Age',
                     accessor: 'age',  
-                },
-                {
-                    header: 'Friend Name',
-                    accessor: 'friend.name'
-                },
-                {
-                    header: 'Friend Age',
-                    accessor: 'friend.age'
-                },
+                }
             ];        
 
+        
             
         this.state = {
             isComponentHydrating: false,
@@ -90,7 +84,9 @@ class TEIComponent extends Component {
             return <div className="loading">Loading data...</div>;
         }
 
-         const testData = [
+        //
+
+         const testData = [[
             {
                 displayName: "name",
                 trackedEntityInstance: "OIH1232jJRU123",
@@ -103,22 +99,17 @@ class TEIComponent extends Component {
                 displayName: "name",
                 trackedEntityInstance: "Adoihadw9812",
                 value: "Anna Jones"
-            }];
-      
+            }]];
+        
+
+
         return (
             <div>
 
                 <AccordionInstance
-                    title={testData}
+                    input={testData}
                 />
 
-                <ReactTable
-                    data={this.state.data}
-                    columns={this.state.columns}
-                    minRows={5}
-                    pageSize={5}
-                    pageSizeOptions={[5, 10]} // The available page size options
-                />
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
                 <br />

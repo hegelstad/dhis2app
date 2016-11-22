@@ -9,7 +9,7 @@ import style from '../css/treelist-style.js';
 import SingletonComponent from './SingletonComponent';
 import TEIComponent from './TEIComponent';
 import ToggleComponent from './ToggleComponent';
-import { teiList } from '../utils/TEI';
+import { teiDuplicateFinder } from '../utils/TEI';
 
 
 class App extends Component {
@@ -96,7 +96,7 @@ class App extends Component {
     loadTEIS() {
         loadTrackedEntityInstances("DiszpKrYNg8")
             .then(teis => {
-                console.log(teiList(teis));
+                teiDuplicateFinder(teis);
             })
             .catch(error => {
                 console.log(error);

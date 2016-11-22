@@ -1,26 +1,41 @@
 import React from 'react';
-import { Accordion, Panel } from 'react-bootstrap';
+import { Accordion, Panel, Table, Well } from 'react-bootstrap';
+import ReactTable from 'react-table';
 
 
-const AccordionInstance = ({ title }) => {
-                console.log(title);
+const AccordionInstance = ({ input }) => {
 
-                var items = []
-                var counter = 100;
-                for (let i = 0; i < title.length; i++) {
-                    var inner = []
+    
+    const columns = [
+        {
+            header: 'displayName',
+            accessor: 'displayName'
+        }, 
+        {
+            header: 'Name',
+            accessor: 'value'
+        },
+        {
+            header: "TEI Id",
+            accessor: "trackedEntityInstance"
+        }
+    ]
+    var items= []
+    for (let elem = 0; elem < input.length; elem++) {
 
-                    for (let key in title[i]) {
-                        inner.push(<p key={counter++}> {key}: {(title[i])[key]} </p>);
-                    }
+        items.push(<ReactTable
+                        data={input[elem]}
+                        columns={columns}
+                        minRows={2}
+                        pageSize={5}
+                        pageSizeOptions={[2, 5, 10]} // The available page size options
+                    />)
+    }
 
-                    items.push(<Panel bsStyle="success" header={title[i].value} key={i} eventKey={i}> {inner} </Panel>);
-                }
-
-                return(
-                    <Accordion >
-                        {items}
-                    </Accordion>);
-            }
+    return(
+        <Accordion >
+            <Panel bsStyle="success" header="SE HER NIKOLAI" key={1234} eventKey={1234}> {items} </Panel>
+        </Accordion>);
+}
 
 export default AccordionInstance;
