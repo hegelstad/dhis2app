@@ -53,7 +53,31 @@ For singleton events:
 
 Fuse.js.io // For sorting on multiple values.
 
+// Dropdown component, render.
+// <ProgramDropdownList
+                    title={"Programs"}
+                    list={this.props.programData}
+                    i={0}
+                    onSelect={this.onSelect}
+                />
+                <br />
+                <br />
+                <div className="selectedProgram">
+                    <div>Program: {this.state.program}</div>
+                    <div>Program: {this.state.programId}</div>
+                </div>
+
+
+
 // Columns, TEI COMPONENT. Custom toggle. Incase we need it
+
+ <ReactTable
+                    data={this.state.data}
+                    columns={this.state.columns}
+                    minRows={5}
+                    pageSize={5}
+                    pageSizeOptions={[5, 10]} // The available page size options
+                />
 
 render: props =>
         <span>
