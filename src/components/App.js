@@ -27,7 +27,7 @@ class App extends Component {
             treeData: null,
             programData: null,
             cursor: null,
-            isToggled: false // defaults to TEI mode. Singleton = false
+            isToggled: true // defaults to TEI mode. Singleton = false
         };
 
         // Bind the functions that are passed around to the component
@@ -53,16 +53,21 @@ class App extends Component {
                     this.setState({
                         cursor: treeData.organisationUnits[0].children[0] // Set the cursor to the node that was set to active.
                     });
+
                 } else { // Else, mark the first element as active to avoid a null error.
                     treeData.organisationUnits[0].active = true; // Select the first child of the root node to be selected.
                     this.setState({
                         cursor: treeData.organisationUnits[0] // Set the cursor to the node that was set to active.
                     });
                 }
+
+
                 this.setState({
                     isLoadingTree: false,
                     treeData: treeData.organisationUnits
                 });
+
+
             })
             .catch(error => {
                 console.log(error);
