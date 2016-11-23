@@ -7,7 +7,7 @@
  * and need CORS support (https://developer.mozilla.org/en-US/docs/Web/HTTP).
  * You obviously should not do this for your production apps.
  */
-const serverUrl = 'https://play.dhis2.org/demo/api';
+const serverUrl = 'https://play.dhis2.org/dev/api';
 const basicAuth = `Basic ${btoa('admin:district')}`;
 
 /**
@@ -35,7 +35,7 @@ function onlySuccessResponses(response) {
 
 export function loadOrganisationUnitsTree() {
     // Load all of the organisation units and their children with id and displayName
-    return fetch(`${serverUrl}/24/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
+    return fetch(`${serverUrl}/25/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js

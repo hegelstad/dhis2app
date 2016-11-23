@@ -86,28 +86,12 @@ class TEIComponent extends Component {
 
         //
 
-         const testData = [[
-            {
-                displayName: "name",
-                trackedEntityInstance: "OIH1232jJRU123",
-                value: "Anna Jones",
-                weight: "148.5 kg",
-                height: "156 cm"
-
-            },
-            {
-                displayName: "name",
-                trackedEntityInstance: "Adoihadw9812",
-                value: "Anna Jones"
-            }]];
-        
 
 
         return (
             <div>
-
                 <AccordionInstance
-                    input={testData}
+                    input={mockdata}
                 />
 
                 <div>name: {this.props.cursor.name}</div>

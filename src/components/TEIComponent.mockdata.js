@@ -1,49 +1,68 @@
-export const mockdata = [{
-    name: 'Tanner Linsley',
-    age: 26,
-    checked: false,
-    friend: {
-        name: 'Jason Maurer',
-        age: 23
+export const mockdata = [[
+    {
+        displayName: "name",
+        trackedEntityInstance: "OIH1232jJRU123",
+        value: "Anna Jones",
+        weight: "148.5 kg",
+        height: "156 cm"
+
+    },
+    {
+        displayName: "name",
+        trackedEntityInstance: "Adoihadw9812",
+        value: "Anna Jones"
+    }], [
+    {
+        displayName: "name",
+        trackedEntityInstance: "lul123Yol0",
+        value: "Nikolai Hegelstad",
+        weight: "234.5 kg",
+        height: "123.4 cm"
+
+    },
+    {
+        displayName: "name",
+        trackedEntityInstance: "1337sp34k0v3rl0rd",
+        value: "Niokolia Hglestad"
     }
-},{
-    name: 'Banner Dansley',
-    age: 19,
-    checked: false,
-    friend: {
-        name: 'Jason Mraz',
-        age: 30
+    ], [
+    {
+        displayName: "name",
+        trackedEntityInstance: "ell0e12387ahk",
+        value: "Eirik Berg Nordheim",
+        weight: "Too much",
+        height: "186 cm"
+
+    },
+    {
+        displayName: "name",
+        trackedEntityInstance: "1337907adh34k0v3rl0rd",
+        value: "Eirik Breg Nordheim"
+    },
+    {
+        displayName: "name",
+        trackedEntityInstance: "13jnuihh34k0v3rl0rd",
+        value: "Erik Berg Noreim"
     }
-},{
-    name: 'Nikolai Dude',
-    age: 22,
-    checked: false,
-    friend: {
-        name: 'Erik Nordheim',
-        age: 25
+    ],[
+    {
+        displayName: "name",
+        trackedEntityInstance: "ell0e1ahk",
+        value: "Milena Tosic",
+        weight: "453 kg",
+        height: "101 cm"
+
+    },
+    {
+        displayName: "name",
+        trackedEntityInstance: "13379asdsadaadh34k0v3rl0rd",
+        value: "Millena Tosicc",
+        height: "158 cm"
+    },
+    {
+        displayName: "name",
+        trackedEntityInstance: "2135a34k0v3rl0rd",
+        value: "Muleni Twochick",
+        weight: "10 kg",
     }
-},{
-    name: 'Brad Pitt',
-    age: 40,
-    checked: true,
-    friend: {
-        name: 'Jason Mraz',
-        age: 30
-    }
-},{
-    name: 'Nikolai Hegelstad',
-    age: 22,
-    checked: false,
-    friend: {
-        name: 'Eirik Berg Nordheim',
-        age: 25
-    }
-},{
-    name: 'Bad Spit',
-    age: 42,
-    checked: true,
-    friend: {
-        name: 'Jason Mraz',
-        age: 34
-    }
-}];
+    ]];

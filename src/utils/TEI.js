@@ -8,11 +8,19 @@ export function fakeAsyncCall(s) {
 }
 
 
-
 export function teiDuplicateFinder(OrgUnit) {
     /* 
         Function finding duplicates within a given org unit.
+        Utilizing Fuse.js.
+
+        Solution might not be optimal due to having to search through the data twice,
+        although, the first search limits the scope of the second by so much that the computation
+        cost for the second search is negligible.
     */
+
+    /* First step is to rewrite our JSON structure, to a more easily
+        accessible format. Seems to improve the rate of true-positives. although
+        although it's not optimal.*/
     var newTEIS = []
     for (let tei = 0; tei < OrgUnit.length; tei++) {
         var entry = OrgUnit[tei].attributes;
@@ -33,7 +41,9 @@ export function teiDuplicateFinder(OrgUnit) {
     }
 
 
-   // FUSE.JS IMPLEMENTATION
+   /* FUSE.JS implementation
+    option parameter, decides what keys to search within,
+    threshold etc. */
     var options = {
     shouldSort: true,
     tokenize: true,
@@ -48,7 +58,11 @@ export function teiDuplicateFinder(OrgUnit) {
     ]
     };
 
-    
+    /* Second step iterates through the list of all objects,
+        finds the first and last name and then searches the entire list
+        for duplicates of these. First by the last name, we search the list
+        of surnames for matching first name. */
+
     var duplicates = []
     for (let tei = 0; tei < newTEIS.length; tei++) {
         var entry = newTEIS[tei].attributes;
@@ -66,25 +80,31 @@ export function teiDuplicateFinder(OrgUnit) {
             }
         }
 
-        var fuse = new Fuse(newTEIS, options); // "list" is the item array
-        var output = fuse.search(firstname);
+        var fuse = new Fuse(newTEIS, options);
+        var output = fuse.search(lastname);
         var fuse1 = new Fuse(output, options)
-        var output1 = fuse1.search(lastname);
+        var output1 = fuse1.search(firstname);
 
         if (output1.length > 1){
             duplicates.push(output1)
         }
     }
 
-    console.log(duplicates)
     return duplicates;
 }
+
 
 
 export function teiClinic(first_OU, second_OU) {
     /* 
         Function checking for duplicates within two clinics, first_OU and second_OU.
-        TODO: Should probably return a list of duplicates.
+        This is the manual implementation, not utilizing Fuse.js, currently this function is
+        not being used, but could prove useful if we decide to search for duplicates 
+        by other metrics than the first and last name of the person.
+
+        TODO: If we want to implement this fully, we need a fuzzy matching algorithm,
+            and some further refinement. For our current needs, the above Fuse.js implementation
+            seems to be all we need.
     */
 
     var duplicates = [];

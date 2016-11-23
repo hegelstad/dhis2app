@@ -2,39 +2,60 @@ import React from 'react';
 import { Accordion, Panel, Table, Well } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
+/* Component, accordion with a table. Each accordion displays a table of duplicates.
+    for intance: 
+        - Anna Jones -
+            | name          | id |  Weight..
+            | Anna Joens    |  0 |  ...
+            | Anna Jones    |  1 |  ...     */
 
 const AccordionInstance = ({ input }) => {
 
-    
+    // Columns variable, sets the columns in the table.
+    // TODO: might want to initialize this dynamically.    
     const columns = [
-        {
-            header: 'displayName',
-            accessor: 'displayName'
-        }, 
         {
             header: 'Name',
             accessor: 'value'
         },
         {
-            header: "TEI Id",
-            accessor: "trackedEntityInstance"
+            header: 'Tracked Entity Instance',
+            accessor: 'trackedEntityInstance'
+        },
+        {
+            header: 'Weight',
+            accessor: 'weight'
+        },
+        {
+            header: 'Height',
+            accessor: 'height'
         }
-    ]
-    var items= []
-    for (let elem = 0; elem < input.length; elem++) {
 
-        items.push(<ReactTable
-                        data={input[elem]}
-                        columns={columns}
-                        minRows={2}
-                        pageSize={5}
-                        pageSizeOptions={[2, 5, 10]} // The available page size options
-                    />)
+    ]
+    var panelList = []
+    var colorList = ["info", "success", "warning", "danger"]
+    var c = 0;
+    var counter = 1000
+    
+    for (let inputNum = 0; inputNum < input.length; inputNum++) {
+        var data = input[inputNum];
+       
+        var items = <ReactTable
+            key={counter++}
+            data={data}
+            columns={columns}
+            minRows={2}
+            pageSize={5}
+            pageSizeOptions={[2, 5, 10]}
+            />
+        
+       
+        panelList.push(<Panel bsStyle={colorList[c++]} header={data[0].value} key={counter++} eventKey={counter++}> {items} </Panel>)
     }
 
-    return(
-        <Accordion >
-            <Panel bsStyle="success" header="SE HER NIKOLAI" key={1234} eventKey={1234}> {items} </Panel>
+    return (
+        <Accordion>
+            {panelList}
         </Accordion>);
 }
 
