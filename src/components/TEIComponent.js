@@ -11,23 +11,12 @@ class TEIComponent extends Component {
     constructor(...args) {
         super(...args);
 
-        const columns = [ //columns must be defined before state initialization.
-                {
-                    header: 'Name',
-                    accessor: 'name' // String-based value accessors !
-                },
-                {
-                    header: 'Age',
-                    accessor: 'age',  
-                }
-            ];        
-
-        
+    
+    
             
         this.state = {
             isComponentHydrating: false,
             data: mockdata,
-            columns: columns,
             program: "",
             programId: ""
         };
@@ -86,10 +75,10 @@ class TEIComponent extends Component {
 
         //
 
-
-
         return (
             <div>
+                <h3>Duplicates found</h3>
+                <br />
                 <AccordionInstance
                     input={mockdata}
                 />
@@ -110,6 +99,7 @@ class TEIComponent extends Component {
                     <div>Program: {this.state.program}</div>
                     <div>Program: {this.state.programId}</div>
                 </div>
+                
             </div>
         );
     }
