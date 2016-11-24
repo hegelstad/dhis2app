@@ -3,7 +3,7 @@ import Fuse from 'fuse.js';
 
 export function fakeAsyncCall(s) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(reverseString(s)), 1000);
+        setTimeout(() => resolve(s), 100);
     });
 }
 
@@ -46,17 +46,19 @@ export function teiDuplicateFinder(OrgUnit) {
     threshold etc. */
     var options = {
     shouldSort: true,
-    tokenize: true,
-    matchAllTokens: true,
+    caseSensitve: false,
+    tokenize: false,
     threshold: 0.4,
     location: 0,
     distance: 100,
     maxPatternLength: 32,
     keys: [
         'attributes.Firstname',
-        'attributes.Lastname'
+        'attributes.Lastname',
     ]
     };
+
+    
 
     /* Second step iterates through the list of all objects,
         finds the first and last name and then searches the entire list
@@ -68,6 +70,7 @@ export function teiDuplicateFinder(OrgUnit) {
         var entry = newTEIS[tei].attributes;
         var firstname = "";
         var lastname = "";
+        var gender = "";
         
         for (let atri = 0; atri < entry.length; atri++) {
             var key = entry[atri];
@@ -77,27 +80,28 @@ export function teiDuplicateFinder(OrgUnit) {
 
             } else if (key.Lastname) {
                 lastname = key.Lastname;
-            }
+            } 
         }
 
         var fuse = new Fuse(newTEIS, options);
         var output = fuse.search(lastname);
         var fuse1 = new Fuse(output, options)
         var output1 = fuse1.search(firstname);
+        
 
         if (output1.length > 1){
             duplicates.push(output1)
         }
     }
-
+    console.log(duplicates);
     return duplicates;
 }
 
 
 
-export function teiClinic(first_OU, second_OU) {
+export function teiClinic(OrgUnit) {
     /* 
-        Function checking for duplicates within two clinics, first_OU and second_OU.
+        
         This is the manual implementation, not utilizing Fuse.js, currently this function is
         not being used, but could prove useful if we decide to search for duplicates 
         by other metrics than the first and last name of the person.
@@ -109,12 +113,13 @@ export function teiClinic(first_OU, second_OU) {
 
     var duplicates = [];
     // First for loop is for the person to be checked against the second loop
-    for (let tei1 = 0; tei1 < first_OU.length; tei1++){
-        var entry = first_OU[tei1].attributes;
-        var first_id = first_OU[tei1].trackedEntityInstance;
+    for (let tei1 = 0; tei1 < OrgUnit.length; tei1++){
+        var entry = OrgUnit[tei1].attributes;
+        var first_id = OrgUnit[tei1].trackedEntityInstance;
 
         var firstName = "";
         var lastName = "";
+        var gender = "";
 
 
         for (let attribute = 0; attribute < entry.length; attribute++){
@@ -128,8 +133,8 @@ export function teiClinic(first_OU, second_OU) {
         }
 
         // Checks entries against first person
-        for (let tei2 = 0; tei2 < second_OU.length; tei2++){
-            var check = second_OU[tei2].attributes;
+        for (let tei2 = 0; tei2 < OrgUnit.length; tei2++){
+            var check = OrgUnit[tei2].attributes;
             var second_id = first_OU[tei1].trackedEntityInstance;
 
             var firstCheck = "";
