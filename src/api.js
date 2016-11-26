@@ -35,46 +35,30 @@ function onlySuccessResponses(response) {
 
 export function loadOrganisationUnitsTree() {
     // Load all of the organisation units and their children with id and displayName
-    return fetch(`${serverUrl}/25/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
+    return fetch(`${serverUrl}/26/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js
-    } 
+    }
 
-export function saveOrganisationUnit(organisationUnit) {
-    // POST the payload to the server to save the organisationUnit
-    return fetch(`${serverUrl}/organisationUnits`, Object.assign({}, fetchOptions, { method: 'POST', body: JSON.stringify(organisationUnit) }))
-        .then(onlySuccessResponses)
-        // Parse the json response
-        .then(response => response.json())
-        // Log any errors to the console. (Should probably do some better error handling);
-        .catch(error => console.error(error));
-}
-
-export function deleteOrganisationUnit(organisationUnit) {
-    // Send DELETE request to the server to delete the organisation unit
-    return fetch(
-        `${serverUrl}/organisationUnits/${organisationUnit.id}`,
-        {
-            headers: fetchOptions.headers,
-            method: 'DELETE',
-        }
-    )
-    .then(onlySuccessResponses);
-}
-
-export function loadOrganisationUnits() {
-    // Load the organisation units but only the first level and the do not use paging
-    return fetch(`${serverUrl}/organisationUnits?paging=false&level=1`, fetchOptions)
+export function loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit) {
+    // Load the organisation units but only the first level and does not use paging
+    return fetch(`${serverUrl}/organisationUnits/${organisationUnit}.json?paging=false`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // pick the organisationUnits property from the payload
-        .then(({ organisationUnits }) => organisationUnits);
+        .then(({children}) => {
+            let arrayOfIds = [];
+            for (let key in children) {
+                arrayOfIds.push(children[key].id);
+            }
+            return arrayOfIds;
+        });
 }
 
 
 export function loadPrograms() {
-    return fetch(`${serverUrl}//25/programs.json`, fetchOptions)
+    return fetch(`${serverUrl}/25/programs.json`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         .then(({ programs }) => programs);

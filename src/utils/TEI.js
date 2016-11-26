@@ -1,15 +1,13 @@
-
 import Fuse from 'fuse.js';
 
 export function fakeAsyncCall(s) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(s), 100);
+        setTimeout(() => resolve(s), 3000);
     });
 }
 
-
 export function teiDuplicateFinder(OrgUnit) {
-    /* 
+    /*
         Function finding duplicates within a given org unit.
         Utilizing Fuse.js.
 
@@ -31,7 +29,7 @@ export function teiDuplicateFinder(OrgUnit) {
                 [(entry[attri].displayName).replace(/ /g, '')]: entry[attri].value,
             }
             collection.push(newObj);
-            
+
         }
         newTEIS.push(
             {
@@ -39,7 +37,6 @@ export function teiDuplicateFinder(OrgUnit) {
                 attributes: collection
             });
     }
-
 
    /* FUSE.JS implementation
     option parameter, decides what keys to search within,
@@ -58,8 +55,6 @@ export function teiDuplicateFinder(OrgUnit) {
     ]
     };
 
-    
-
     /* Second step iterates through the list of all objects,
         finds the first and last name and then searches the entire list
         for duplicates of these. First by the last name, we search the list
@@ -71,7 +66,7 @@ export function teiDuplicateFinder(OrgUnit) {
         var firstname = "";
         var lastname = "";
         var gender = "";
-        
+
         for (let atri = 0; atri < entry.length; atri++) {
             var key = entry[atri];
 
@@ -80,16 +75,16 @@ export function teiDuplicateFinder(OrgUnit) {
 
             } else if (key.Lastname) {
                 lastname = key.Lastname;
-            } 
+            }
         }
 
         var fuse = new Fuse(newTEIS, options);
         var output = fuse.search(lastname);
         var fuse1 = new Fuse(output, options)
         var output1 = fuse1.search(firstname);
-        
 
-        if (output1.length > 1){
+
+        if (output1.length > 1) {
             duplicates.push(output1)
         }
     }
@@ -97,13 +92,11 @@ export function teiDuplicateFinder(OrgUnit) {
     return duplicates;
 }
 
-
-
 export function teiClinic(OrgUnit) {
-    /* 
-        
+    /*
+
         This is the manual implementation, not utilizing Fuse.js, currently this function is
-        not being used, but could prove useful if we decide to search for duplicates 
+        not being used, but could prove useful if we decide to search for duplicates
         by other metrics than the first and last name of the person.
 
         TODO: If we want to implement this fully, we need a fuzzy matching algorithm,
@@ -147,7 +140,7 @@ export function teiClinic(OrgUnit) {
                     if (firstName === check[checkAttri].value) {
                         firstCheck = check[checkAttri].value;
                     }
-                        
+
                 } else if (checkName === "Last name") {
                     if (lastName === check[checkAttri].value){
                         lastCheck = check[checkAttri].value;
@@ -158,17 +151,17 @@ export function teiClinic(OrgUnit) {
             if (firstCheck != "" && lastCheck != ""){
 
                 duplicates.push({
-                    displayName: "name", 
+                    displayName: "name",
                     value: firstName + " " + lastName,
                     trackedEntityInstance: first_id
                 });
 
                 duplicates.push({
-                    displayName: "name", 
+                    displayName: "name",
                     value: firstCheck + " " + lastCheck,
                     trackedEntityInstance: second_id
                 });
-                
+
             }
         }
     }

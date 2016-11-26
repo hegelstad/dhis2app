@@ -21,6 +21,14 @@ module.exports = {
         ]
     },
 
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify('production')
+        }
+      })
+    ],
+
     // Settings for webpack-dev-server
     devServer: {
         // Run the dev server on port 8081
