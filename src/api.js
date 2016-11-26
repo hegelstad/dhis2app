@@ -35,7 +35,7 @@ function onlySuccessResponses(response) {
 
 export function loadOrganisationUnitsTree() {
     // Load all of the organisation units and their children with id and displayName
-    return fetch(`${serverUrl}/26/organisationUnits.json?level=1&paging=false&fields=id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name),children[id,displayName~rename(name)]]]`, fetchOptions)
+    return fetch(`${serverUrl}/26/organisationUnits.json?level=1&paging=false&fields=id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js
@@ -47,7 +47,10 @@ export function loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit) 
         .then(onlySuccessResponses)
         .then(response => response.json())
         // pick the organisationUnits property from the payload
-        .then(({children}) => {
+        .then(({id, level, children}) => {
+            if (level === 4) {
+                return [id];
+            }
             let arrayOfIds = [];
             for (let key in children) {
                 arrayOfIds.push(children[key].id);
@@ -56,12 +59,11 @@ export function loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit) 
         });
 }
 
-
-export function loadPrograms() {
-    return fetch(`${serverUrl}/25/programs.json`, fetchOptions)
+export function loadOrganisationUnit(organisationUnit) {
+    // Returns a given organisation unit.
+    return fetch(`${serverUrl}/organisationUnits/${organisationUnit}.json`, fetchOptions)
         .then(onlySuccessResponses)
-        .then(response => response.json())
-        .then(({ programs }) => programs);
+        .then(response => response.json());
 }
 
 // function loading in TEIS based on program and orgUnit.

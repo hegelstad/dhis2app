@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setTreelistCursor, loadAndSetTreeData } from '../actions/actions';
+import { setTreelistCursor,
+         loadAndSetTreeData,
+         setTreeError,
+         clearTreeError,
+         loadAndSetTEIS } from '../actions/actions';
+import { loadOrganisationUnit } from '../api';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
@@ -12,7 +17,7 @@ class TreelistContainer extends Component {
         super(props, context);
 
         this.state = {
-            cursor: null,
+            cursor: null
         }
 
         this.onToggle = this.onToggle.bind(this);
@@ -21,7 +26,6 @@ class TreelistContainer extends Component {
     componentWillMount() {
         this.props.loadAndSetTreeData();
     }
-
 
     // Function required by Treebeard.
     onToggle(node, toggled) {
@@ -33,6 +37,14 @@ class TreelistContainer extends Component {
         });
         // Set the selected cursor in the redux state.
         this.props.setTreelistCursor(node);
+        // Check which level the node is.
+        if(node.level === 3 || node.level === 4) {
+            this.props.loadAndSetTEIS(node.id); // Load data if valid node level.
+            this.props.clearTreeError();
+        } else {
+            console.log("Select a chiefdom or clinic to load data");
+            this.props.setTreeError(); // Set an error if the node level is wrong.
+        }
     }
 
     render() {
@@ -45,14 +57,14 @@ class TreelistContainer extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        treeData: state.tree.treeData,
-        treeDataIsLoading: state.tree.treeDataIsLoading
-    }
-}
-
+// Shorthand notation.
 export default connect(
-    mapStateToProps,
-    { setTreelistCursor, loadAndSetTreeData } // Shorthand notation.
+    state => ({
+        treeData: state.tree.treeData
+    }),
+    { setTreelistCursor,
+      loadAndSetTreeData,
+      setTreeError,
+      clearTreeError,
+      loadAndSetTEIS }
 )(TreelistContainer);

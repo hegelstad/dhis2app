@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-class SingletonComponent extends Component {
+class SingletonContainer extends Component {
     constructor(...args) {
         super(...args);
     }
@@ -21,4 +21,4 @@ class SingletonComponent extends Component {
     }
 }
 
-export default SingletonComponent;
+export default SingletonContainer;

@@ -7,36 +7,10 @@ import TreelistContainer from './TreelistContainer';
 import ToggleContainer from './ToggleContainer';
 import ModeContainer from './ModeContainer';
 
-import { teiList } from '../utils/TEI';
-
 class AppContainer extends Component {
     constructor(props, context) {
         super(props, context);
-
-        // Set some initial state variables that are used within the component
-        // Too keep most of this simple we gather most of the state in the root component
-        // We would use Redux as well if so required by the applications constraints, if not it will only slow us down
-        this.state = {
-            // isLoadingPrograms: true,
-            // programData: null,
-        };
     }
-
-    // loadProgs() {
-    //     loadPrograms()
-    //         .then(programData => {
-    //             this.setState({
-    //                 isLoadingPrograms: false,
-    //                 programData: programData
-    //             });
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //             this.setState({
-    //                 isLoadingPrograms: false,
-    //             });
-    //         });
-    // }
 
     render() {
         // If the component state is set to isError we show the current error message
@@ -61,13 +35,15 @@ class AppContainer extends Component {
                         <div className="treelist">
                             <TreelistContainer />
                         </div>
+                        { this.props.treelistError
+                            ? <p>Please select a chiefdom or clinic to check for duplicates.</p>
+                            : <p></p>
+                        }
                     </div>
                     <div className="middle-dividor" />
                     <div className="content-right">
                         <div className="component-wrapper">
                             <ModeContainer />
-                            <button onClick={() => this.props.loadAndSetTEIS("dGheVylzol6")}>Bargbe</button>
-                            <button onClick={() => this.props.setError("Test 123")}>Set Error</button>
                         </div>
                     </div>
                 </div>
@@ -79,7 +55,8 @@ class AppContainer extends Component {
 // Shorthand notation.
 export default connect(
     state => ({
-        error: state.error
+        error: state.error,
+        treelistError: state.tree.error
     }),
     { setError, clearError, loadAndSetTEIS }
 )(AppContainer);
