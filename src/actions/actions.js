@@ -7,8 +7,9 @@ import { sortTree } from '../utils/sortTree.js';
 
 export const MODE_TOGGLE = 'MODE_TOGGLE';
 export const TREELIST_CURSOR_SET = 'TREELIST_CURSOR_SET';
-export const TREELIST_DATA_FETCHING = 'TREELIST_DATA_FETCHING';
 export const TREELIST_DATA_SET = 'TREELIST_DATA_SET';
+export const TREELIST_ERROR_SET = 'TREELIST_ERROR_SET';
+export const TREELIST_ERROR_CLEAR = 'TREELIST_ERROR_CLEAR';
 export const TEI_DATA_SET = 'TEI_DATA_SET';
 export const ERROR_SET = 'ERROR_SET';
 export const ERROR_CLEAR = 'ERROR_CLEAR';
@@ -30,16 +31,22 @@ export const setTreelistCursor = (cursor) => {
     };
 }
 
-const setTreeDataFetching = () => {
-    return {
-        type: TREELIST_DATA_FETCHING
-    }
-}
-
 const setTreeData = (treeData) => {
     return {
         type: TREELIST_DATA_SET,
         treeData
+    };
+}
+
+export const setTreeError = () => {
+    return {
+        type: TREELIST_ERROR_SET
+    };
+}
+
+export const clearTreeError = () => {
+    return {
+        type: TREELIST_ERROR_CLEAR
     };
 }
 
@@ -103,11 +110,14 @@ export const loadAndSetTEIS = (organisationUnit) => {
 
 export const loadAndSetTreeData = () => {
     return dispatch => {
-        return loadOrganisationUnitsTree().then(
-            treeData => dispatch(processTreeData(treeData)),
-            error => console.log(error)
-        );
-    };
+        return loadOrganisationUnitsTree()
+            .then(treeData => {
+                dispatch(processTreeData(treeData))
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
 }
 
 /*

@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { loadAndSetTEIS } from '../actions/actions';
 import ReactTable from 'react-table';
 import { mockdata } from './TEIContainer.mockdata';
-import { fakeAsyncCall } from '../utils/TEI';
 import AccordionInstance from '../components/Accordion';
 
-class TEIComponent extends Component {
+class TEIContainer extends Component {
     constructor(...args) {
         super(...args);
     }
@@ -17,13 +17,13 @@ class TEIComponent extends Component {
 
         return (
             <div>
-                <h4>Duplicates found:</h4>
+                <p>Duplicates found:</p>
 
                 <AccordionInstance input={mockdata}/>
 
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
-                <br />
+                <br/>
             </div>
         );
     }
@@ -34,5 +34,6 @@ export default connect(
     state => ({
         cursor: state.tree.cursor,
         //data
-    })
-)(TEIComponent);
+    }),
+    { loadAndSetTEIS }
+)(TEIContainer);
