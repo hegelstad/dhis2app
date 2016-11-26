@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SingletonComponent from '../components/SingletonComponent';
-import TEIComponent from '../components/TEIComponent';
+import SingletonContainer from './SingletonContainer';
+import TEIContainer from './TEIContainer';
 
 class ModeContainer extends Component {
     constructor(props, context) {
@@ -12,10 +12,9 @@ class ModeContainer extends Component {
         let currentMode = null;
 
         if (this.props.isToggled) {
-            currentMode = <TEIComponent cursor={this.props.cursor} />;
-            // programData={this.state.programData};
+            currentMode = <TEIContainer/>;
         } else {
-            currentMode = <SingletonComponent cursor={this.props.cursor} />;
+            currentMode = <SingletonContainer/>;
         }
 
         return (
@@ -33,7 +32,6 @@ class ModeContainer extends Component {
 const mapStateToProps = (state) => {
     return {
         isToggled: state.isToggled,
-        cursor: state.tree.cursor
     }
 }
 

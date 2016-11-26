@@ -104,29 +104,19 @@ export const loadAndSetTEIS = (organisationUnit) => {
 export const loadAndSetTreeData = () => {
     return dispatch => {
         return loadOrganisationUnitsTree().then(
-            treeData => dispatch(processTreeDataAndSetValidTreelistCursor(treeData)),
+            treeData => dispatch(processTreeData(treeData)),
             error => console.log(error)
         );
     };
 }
 
 /*
- * This function sorts the treeData, toggles the first node and
- * marks the first children of the first node as active and sets
- * the cursor to the first child of the first node if it exists.
+ * This function sorts the treeData and toggles the first node.
  */
-const processTreeDataAndSetValidTreelistCursor = (treeData) => {
+const processTreeData = (treeData) => {
     return dispatch => {
         sortTree(treeData.organisationUnits); // Sort the tree data to get all regions in the right order.
         treeData.organisationUnits[0].toggled = true; // Toggle the root node to expand the tree.
-        // If the first element in array has children, mark the first child as active/selected.
-        if (treeData.organisationUnits[0].children[0]) {
-            treeData.organisationUnits[0].children[0].active = true; // Select the first child of the root node to be selected.
-            dispatch(setTreelistCursor(treeData.organisationUnits[0].children[0])) // Set the cursor to the node that was set to active.
-        } else { // Else, mark the first element as active to avoid a null error.
-            treeData.organisationUnits[0].active = true; // Select the first child of the root node to be selected.
-            dispatch(setTreelistCursor(treeData.organisationUnits[0])) // Set the cursor to the node that was set to active.
-        }
         dispatch(setTreeData(treeData));
     }
 }

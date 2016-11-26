@@ -65,9 +65,9 @@ class AppContainer extends Component {
                     <div className="middle-dividor" />
                     <div className="content-right">
                         <div className="component-wrapper">
+                            <ModeContainer />
                             <button onClick={() => this.props.loadAndSetTEIS("dGheVylzol6")}>Bargbe</button>
                             <button onClick={() => this.props.setError("Test 123")}>Set Error</button>
-                            <ModeContainer />
                         </div>
                     </div>
                 </div>

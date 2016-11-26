@@ -49,3 +49,52 @@ For singleton events:
  - Select a program
  - Not all TEIs have a unique identifier
  -
+
+
+Fuse.js.io // For sorting on multiple values.
+
+// Dropdown component, render.
+// <ProgramDropdownList
+                    title={"Programs"}
+                    list={this.props.programData}
+                    i={0}
+                    onSelect={this.onSelect}
+                />
+                <br />
+                <br />
+                <div className="selectedProgram">
+                    <div>Program: {this.state.program}</div>
+                    <div>Program: {this.state.programId}</div>
+                </div>
+
+
+
+// Columns, TEI COMPONENT. Custom toggle. Incase we need it
+
+ <ReactTable
+                    data={this.state.data}
+                    columns={this.state.columns}
+                    minRows={5}
+                    pageSize={5}
+                    pageSizeOptions={[5, 10]} // The available page size options
+                />
+
+render: props =>
+        <span>
+            {`${props.value} ${this.state.data[props.index].checked} `}
+            <input
+                type="checkbox"
+                checked={this.state.data[props.index].checked}
+                onChange={() => { // Binds function to this
+                    let element = this.state.data.slice(props.index, props.index+1);
+                    element[0].checked = !props.row.checked;
+                    this.setState({
+                        data: [
+                            ...this.state.data.slice(0, props.index),
+                            ...element,
+                            ...this.state.data.slice(props.index + 1)
+                        ]
+                    })
+                }}
+            />
+        </span> // Custom cell components!
