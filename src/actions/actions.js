@@ -11,6 +11,7 @@ export const TREELIST_DATA_SET = 'TREELIST_DATA_SET';
 export const TREELIST_ERROR_SET = 'TREELIST_ERROR_SET';
 export const TREELIST_ERROR_CLEAR = 'TREELIST_ERROR_CLEAR';
 export const TEI_DATA_SET = 'TEI_DATA_SET';
+export const PROGRAM_DATA_SET = 'PROGRAM_DATA_LOAD';
 export const ERROR_SET = 'ERROR_SET';
 export const ERROR_CLEAR = 'ERROR_CLEAR';
 
@@ -57,6 +58,13 @@ const setTEIData = (TEIData) => {
     }
 }
 
+const setProgramData = (programData) => {
+    return {
+        type: PROGRAM_DATA_SET,
+        programData
+    }
+}
+
 export const setError = (message) => {
     return {
         type: ERROR_SET,
@@ -74,6 +82,17 @@ export const clearError = () => {
 /*
  * Thunks
  */
+export const loadProgramData = () => {
+    return dispatch => {
+        return loadPrograms()
+            .then(programData => {
+                dispatch(setProgramData(programData))
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+}
 
 export const loadAndSetTEIS = (organisationUnit) => {
     return dispatch => {

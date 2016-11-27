@@ -68,8 +68,29 @@ export function loadOrganisationUnit(organisationUnit) {
 
 // function loading in TEIS based on program and orgUnit.
 export function loadTrackedEntityInstances(orgUnit) {
-    return fetch(`${serverUrl}/25/trackedEntityInstances.json?ou=${orgUnit}&fields=trackedEntityInstance,attributes[value,displayName]`, fetchOptions)
+    return fetch(`${serverUrl}/trackedEntityInstances.json?ou=${orgUnit}&fields=trackedEntityInstance,attributes[value,displayName]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         .then(({ trackedEntityInstances }) => trackedEntityInstances);
+}
+
+export function loadLevel(orgUnitID) {
+    return fetch(`${serverUrl}/organisationUnits/${orgUnitID}.json?fields=level`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ level }) => level);
+}
+
+export function loadEvents(orgUnitID, programID, startDate, endDate){
+    return fetch(`${serverUrl}/events.json?orgUnit=${orgUnitID}&program=${programID}&startDate=${startDate}&endDate=${endDate}&fields=event,program,trackedEntityInstance,orgUnit,dataValues[dataElement,value]`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ events }) => events);
+}
+
+export function loadDataElements(){
+    return fetch(`${serverUrl}/dataElements.json?fields=id~rename(value),name~rename(label)&paging=false`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ dataElements }) => dataElements);
 }
