@@ -1,5 +1,6 @@
-import { loadClinicIDArrayFromChiefdomOrganisationUnit, loadPrograms, loadOrganisationUnitsTree, loadTrackedEntityInstances } from '../api';
+import { loadClinicIDArrayFromChiefdomOrganisationUnit, loadPrograms, loadDataElements, loadEvents, loadOrganisationUnitsTree, loadTrackedEntityInstances } from '../api';
 import { sortTree } from '../utils/sortTree.js';
+import { extractSingletons, duplicates } from '../utils/singletons.js';
 
 /*
  * Action types
@@ -12,6 +13,8 @@ export const TREELIST_ERROR_SET = 'TREELIST_ERROR_SET';
 export const TREELIST_ERROR_CLEAR = 'TREELIST_ERROR_CLEAR';
 export const TEI_DATA_SET = 'TEI_DATA_SET';
 export const PROGRAM_DATA_SET = 'PROGRAM_DATA_LOAD';
+export const SINGLETON_DATA_ELEMENTS_SET = 'SINGLETON_DATA_ELEMENTS_SET';
+export const SINGLETON_EVENTS_SET = 'SINGLETON_EVENTS_SET';
 export const ERROR_SET = 'ERROR_SET';
 export const ERROR_CLEAR = 'ERROR_CLEAR';
 
@@ -65,6 +68,20 @@ const setProgramData = (programData) => {
     }
 }
 
+const setSingletonDataElements = (dataElements) => {
+    return {
+        type: SINGLETON_DATA_ELEMENTS_SET,
+        dataElements
+    }
+}
+
+const setSingletonEvents = (singletonEvents) => {
+    return {
+        type: SINGLETON_EVENTS_SET,
+        singletonEvents
+    }
+}
+
 export const setError = (message) => {
     return {
         type: ERROR_SET,
@@ -90,6 +107,31 @@ export const loadProgramData = () => {
             })
             .catch(error => {
                 console.log(error)
+            });
+    }
+}
+
+export const loadSingletonDataElements = () => {
+    return dispatch => {
+        return loadDataElements()
+            .then(dataElements => {
+                dispatch(setSingletonDataElements(dataElements))
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+}
+
+export const loadSingletonEvents = (orgUnitID, programID, startDate, endDate) => {
+    return dispatch => {
+        return loadEvents(orgUnitID, programID, startDate, endDate)
+            .then(events => {
+                let singletons = extractSingletons(dataElements)
+                dispatch(setSingletonEvents(singletons))
+            })
+            .catch(error => {
+                console.log(error);
             });
     }
 }

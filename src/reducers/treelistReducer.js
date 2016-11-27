@@ -1,8 +1,8 @@
 import { TREELIST_CURSOR_SET, TREELIST_DATA_SET, TREELIST_ERROR_SET, TREELIST_ERROR_CLEAR } from '../actions/actions';
 
 const initialState = {
-    cursor: {},
     treeData: {},
+    error: false
 }
 
 export default function(state = initialState, action) {

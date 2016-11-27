@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadProgramData } from '../actions/actions';
+import { loadProgramData, loadSingletonDataElements, loadSingletonEvents } from '../actions/actions';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { loadEvents, loadDataElements } from '../api';
-import { extractSingletons, duplicates } from '../utils/singletons.js';
 import ProgramDropdownList from '../components/ProgramDropdownList';
 import AccordionInstance from '../components/Accordion';
 import { events } from './SingletonContainer.mockdata';
@@ -24,12 +22,11 @@ class SingletonContainer extends Component {
             currentDataElement: "wap68IYzTXr",
         }
         this.onSelect = this.onSelect.bind(this);
-
     }
-// DOESN'T WORK - convert data gets dataElements as null - redux will probably fix this
+
     componentDidMount(){
         this.props.loadProgramData();
-        this.loadDE();
+        this.props.loadSingletonDataElements();
         // this.convertData(events);
     }
 
@@ -41,7 +38,7 @@ class SingletonContainer extends Component {
         return null;
     }
 
-// the "correct" code is commented, because of the null dataElements
+    // the "correct" code is commented, because of the null dataElements
     convertData(singletons){
         for(let i = 0; i < singletons.length; i++){
             var dataValues = singletons[i].dataValues;
@@ -55,31 +52,6 @@ class SingletonContainer extends Component {
                 // console.log(dataElementName, value);
             }
         }
-    }
-
-    loadDE(){
-        loadDataElements()
-            .then(de => {
-                this.setState({
-                    dataElements: de
-                });
-            })
-    }
-
-    loadSingletons(orgUnitID, programID, startDate, endDate){
-        loadEvents(orgUnitID, programID, startDate, endDate)
-            .then(events => {
-                this.setState({
-                    events: extractSingletons(events),
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({
-                    isError: true,
-                    errorMessage: "Failed to fetch events"
-                 });
-            });
     }
 
     formatDate(moment){
@@ -109,58 +81,34 @@ class SingletonContainer extends Component {
         });
     }
 
-    getData(cursor) {
-        // If fakeAsyncCall returns when this component is unmounted, an error is thrown.
-        // Solutions, cancel promise when unmounting, use redux or move state and call to App component.
-        //https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html
-        fakeAsyncCall(cursor.id)
-            .then(data => {
-                this.saveData(data);
-            })
-            .catch(nodata => {
-                this.saveData(nodata);
-            });
-    }
-
-    saveData(data) {
-        this.setState({
-            isComponentHydrating: false,
-            id: data
-        });
-    }
-
-    clicked(){
-        if(this.props.level == 4 && this.state.programId != null){
-            this.loadSingletons(this.props.cursor.id, this.state.programId, this.formatDate(this.state.startDate),
+    clicked() {
+        if(this.props.cursor.level == 4 && this.state.programId != null){
+            this.props.loadSingletonEvents(
+                this.props.cursor.id,
+                this.state.programId,
+                this.formatDate(this.state.startDate),
                 this.formatDate(this.state.endDate));
             this.setState({
                 canRun: true,
             });
             console.log(this.state.canRun);
             console.log(this.state.events);
-            console.log(duplicates(this.state.events));
-
         } else {
             this.setState({
-                canRun: false,
+                canRun: false
             });
         }
-
     }
 
-
     render() {
-       var Button = require('react-button');
-        if (this.props.cursor == null) { // Show a placeholder if the cursor of treebeard is not set
-            return <div className="welcome">placeholder</div>;
+        if (!this.props.cursor) { // Show a placeholder if the cursor of treebeard is not set
+            return <div className="welcome">Please select a clinic in the list to the left to begin.</div>;
         // else if (this.state.dataElements == null){
 
         // }
         } else {
             return (
-
                 <div>
-
                     <div className="welcome">
                         <p>name: {this.props.cursor.name}</p>
                         <p>id: {this.props.cursor.id}</p>
@@ -195,11 +143,11 @@ class SingletonContainer extends Component {
                         />
                     </div>
                     <div>
-                        Level: {this.props.level}
+                        Level: {this.props.cursor.level}
                     </div>
 
                     <div>
-                        <Button onClick={this.clicked.bind(this)} >Find duplicates</Button>
+                        <button onClick={this.clicked.bind(this)}>Find duplicates</button>
                     </div>
                 </div>
 
@@ -208,4 +156,11 @@ class SingletonContainer extends Component {
     }
 }
 
-export default connect(null, { loadProgramData })(SingletonContainer);
+// Shorthand notation.
+export default connect(
+    state => ({
+        cursor: state.tree.cursor,
+        programData: state.programData
+    }),
+    { loadProgramData, loadSingletonDataElements, loadSingletonEvents }
+)(SingletonContainer);

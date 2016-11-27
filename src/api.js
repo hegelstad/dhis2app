@@ -74,6 +74,13 @@ export function loadTrackedEntityInstances(orgUnit) {
         .then(({ trackedEntityInstances }) => trackedEntityInstances);
 }
 
+export function loadPrograms() {
+    return fetch(`${serverUrl}/25/programs.json`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({ programs }) => programs);
+}
+
 export function loadLevel(orgUnitID) {
     return fetch(`${serverUrl}/organisationUnits/${orgUnitID}.json?fields=level`, fetchOptions)
         .then(onlySuccessResponses)

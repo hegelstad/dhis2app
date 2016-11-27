@@ -11,7 +11,7 @@ class TEIContainer extends Component {
     }
 
     render() {
-        if (!mockdata) {
+        if (!mockdata || !this.props.cursor) {
             return <div className="loading">Loading data...</div>;
         }
 
