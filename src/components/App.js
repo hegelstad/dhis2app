@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // Utils
-import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree, loadTrackedEntityInstances } from '../api';
+import { saveOrganisationUnit, loadOrganisationUnits, loadPrograms ,deleteOrganisationUnit, loadOrganisationUnitsTree, loadTrackedEntityInstances, loadLevel } from '../api';
 import { sortTree } from '../utils/sortTree.js';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
@@ -26,6 +26,7 @@ class App extends Component {
             errorMessage: "",
             treeData: null,
             programData: null,
+            level: null,
             cursor: null,
             isToggled: false // defaults to TEI mode. Singleton = false
         };
@@ -38,6 +39,8 @@ class App extends Component {
 
     componentDidMount() {
         this.loadTree();
+
+ //       this.loadOrg("O6uvpzGd5pu");
         this.loadProgs();
         this.loadTEIS();
     }
@@ -74,6 +77,24 @@ class App extends Component {
             });
     }
 
+    loadOrg(orgUnitID){
+        loadLevel(orgUnitID)
+            .then(orgUnit => {
+                    //  console.log(orgUnit);
+                this.setState({
+                    level: orgUnit
+                });
+                // console.log(this.state.level);
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({
+                    isError: true,
+                    errorMessage: "Failed to fetch orgUnit"
+                 });
+            });
+    }
+
     loadProgs() {
         loadPrograms()
             .then(programData => {
@@ -96,7 +117,8 @@ class App extends Component {
     loadTEIS() {
         loadTrackedEntityInstances("DiszpKrYNg8")
             .then(teis => {
-                console.log(teiList(teis));
+  
+//               console.log(teiList(teis));
             })
             .catch(error => {
                 console.log(error);
@@ -115,6 +137,7 @@ class App extends Component {
         node.active = true;
         if(node.children){ node.toggled = toggled; }
         this.setState({ cursor: node });
+        this.loadOrg(this.state.cursor.id);
     }
 
     // Retry loading
@@ -180,7 +203,10 @@ class App extends Component {
                                     cursor={this.state.cursor}
                                     programData={this.state.programData}
                                     />
-                                : <SingletonComponent cursor={this.state.cursor}/>
+                                : <SingletonComponent 
+                                    cursor={this.state.cursor}
+                                    programData={this.state.programData}
+                                    level={this.state.level}/>
                             }
                         </div>
                     </div>
