@@ -1,4 +1,5 @@
-import { ERROR_SET, ERROR_CLEAR } from '../actions/actions';
+import { ERROR_SET,
+         ERROR_CLEAR } from '../actions/actions';
 
 export default function(state = null, action) {
     switch (action.type) {

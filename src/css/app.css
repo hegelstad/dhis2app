@@ -31,7 +31,7 @@ body {
     padding-right: 2em;
     margin: 2em;
     margin-bottom: 10em;
-    min-height: 45em;
+    min-height: 43.05em;
     width: 80em;
     /* flexbox */
     display: flex;
@@ -59,17 +59,16 @@ body {
 .container-bottom {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
     position: relative;
 }
 
 .content-left {
-    width: 18em;
+    width: 17em;
     align-self: stretch;
     margin-right: 2em;
     position: relative;
-    bottom: 2em;
+    bottom: 3em;
 }
 
 .content-right {
@@ -78,57 +77,37 @@ body {
 }
 
 .middle-dividor {
-    height:20em;
+    height:30em;
     width:5px;
-    background-color: #FFFAEC;
+    background-color: #a2c8f9;
 }
 
 .treelist {
     margin-bottom: 1em;
-    height: 31em;
+    height: 30em;
     overflow: auto;
 }
 
 .component-wrapper {
-    width: 50em;
+    width: 52.5em;
 }
 
 .loading {
     padding: 2em;
 }
 
-.form {
-    background-color: #DDD;
-    flex: 1;
-    padding: 3rem;
-}
-
-.form div {
-    display: flex;
-}
-
-.form label {
+.flex-row-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    margin-bottom: 1rem;
-    align-items: center;
+    align-items: flex-start;
+    margin-bottom: 0.5em;
 }
 
-.form span {
-    flex: 1;
+.program-selected {
+    margin-top: 0.5em;
+    margin-left: 1em;
 }
 
-.form input {
-    flex: 2;
-    padding: 1rem;
-    border: 0;
-    font-size: 1rem;
-}
-
-.form button {
-    width: 100%;
-    background-color: orange;
-    border: 0;
-    padding: 1rem;
+.datepicker {
+    margin-right: 0.5em;
 }

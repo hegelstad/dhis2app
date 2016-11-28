@@ -18,10 +18,6 @@ class ToggleContainer extends Component {
     }
 }
 
-// Example to show the power of ES6.
-// const mapStateToProps = (state) => {
-//     return { applicationMode: state.applicationMode };
-// }
 const mapStateToProps = ({isToggled}) => {
     return {
         isToggled
@@ -30,5 +26,5 @@ const mapStateToProps = ({isToggled}) => {
 
 export default connect(
     mapStateToProps,
-    { toggleMode }
+    { toggleMode } // Shorthand notation.
 )(ToggleContainer);

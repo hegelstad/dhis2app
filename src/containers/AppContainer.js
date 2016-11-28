@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setError, clearError, loadAndSetTEIS } from '../actions/actions';
-
+// Actions
+import { setError,
+         clearError,
+         loadAndSetTEIS } from '../actions/actions';
 // Containers
 import TreelistContainer from './TreelistContainer';
 import ToggleContainer from './ToggleContainer';
@@ -35,10 +37,7 @@ class AppContainer extends Component {
                         <div className="treelist">
                             <TreelistContainer />
                         </div>
-                        { this.props.treelistError
-                            ? <p>Please select a chiefdom or clinic to check for duplicates.</p>
-                            : <p></p>
-                        }
+                        { this.props.treelistError }
                     </div>
                     <div className="middle-dividor" />
                     <div className="content-right">
@@ -58,5 +57,7 @@ export default connect(
         error: state.error,
         treelistError: state.tree.error
     }),
-    { setError, clearError, loadAndSetTEIS }
+    { setError,
+      clearError,
+      loadAndSetTEIS }
 )(AppContainer);

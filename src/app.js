@@ -21,7 +21,7 @@ if (isProduction) {
     store = createStore(rootReducer, enhancer);
 }
 
-// Render the App component into the .app element
+// Render the AppContainer into the .app element
 render(
     <Provider store={store}>
         <div>

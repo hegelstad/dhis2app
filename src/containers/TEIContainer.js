@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+// Actions
 import { loadAndSetTEIS } from '../actions/actions';
+// Components
 import ReactTable from 'react-table';
+import AccordionList from '../components/Accordion';
 import { mockdata } from './TEIContainer.mockdata';
-import AccordionInstance from '../components/Accordion';
 
 class TEIContainer extends Component {
     constructor(...args) {
@@ -11,16 +13,14 @@ class TEIContainer extends Component {
     }
 
     render() {
-        if (!mockdata) {
-            return <div className="loading">Loading data...</div>;
+        if (!mockdata || !this.props.cursor) {
+            return <div className="loading">Please select a chiefdom or clinic in the list to the left to begin.</div>;
         }
 
         return (
             <div>
                 <p>Duplicates found:</p>
-
-                <AccordionInstance input={mockdata}/>
-
+                <AccordionList input={mockdata}/>
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
                 <br/>
@@ -29,7 +29,7 @@ class TEIContainer extends Component {
     }
 }
 
-// Shorthand notation
+// Shorthand notation.
 export default connect(
     state => ({
         cursor: state.tree.cursor,
