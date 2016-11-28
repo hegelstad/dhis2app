@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+// Containers
 import SingletonContainer from './SingletonContainer';
 import TEIContainer from './TEIContainer';
 
@@ -9,30 +10,20 @@ class ModeContainer extends Component {
     }
 
     render() {
-        let currentMode = null;
-
-        if (this.props.isToggled) {
-            currentMode = <TEIContainer/>;
-        } else {
-            currentMode = <SingletonContainer/>;
-        }
-
         return (
             <div>
-                { currentMode }
+                { this.props.isToggled // Show singleton (false) or TEI (true) mode.
+                    ? <TEIContainer/>
+                    : <SingletonContainer/>
+                }
             </div>
         );
     }
 }
 
-// Example to show the power of ES6.
-// const mapStateToProps = (state) => {
-//     return { applicationMode: state.applicationMode };
-// }
-const mapStateToProps = (state) => {
-    return {
-        isToggled: state.isToggled,
-    }
-}
-
-export default connect(mapStateToProps)(ModeContainer);
+// Shorthand notation.
+export default connect(
+    state => ({
+        isToggled: state.isToggled
+    })
+)(ModeContainer);

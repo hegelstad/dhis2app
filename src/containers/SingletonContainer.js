@@ -1,35 +1,43 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadProgramData, loadSingletonDataElements, loadSingletonEvents } from '../actions/actions';
+// Actions
+import { loadProgramData,
+         setProgramCursor,
+         loadSingletonDataElements,
+         loadSingletonEvents,
+         setStartDate,
+         setEndDate } from '../actions/actions';
+// Components
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
 import ProgramDropdownList from '../components/ProgramDropdownList';
-import AccordionInstance from '../components/Accordion';
+import AccordionList from '../components/Accordion';
+import moment from 'moment';
 import { events } from './SingletonContainer.mockdata';
 
 class SingletonContainer extends Component {
     constructor(...args) {
         super(...args);
+
         this.state = {
-            program: "",
-            programId: "",
             startDate: moment(),
-            endDate: moment(),
-            events: null,
-            canRun: false,
-            dataElements: null,
-            checkedDataElements: null,
-            currentDataElement: "wap68IYzTXr",
+            endDate: moment()
         }
+
+        this.handleStartDate = this.handleStartDate.bind(this);
+        this.handleEndDate = this.handleEndDate.bind(this);
         this.onSelect = this.onSelect.bind(this);
+        this.submitSearch = this.submitSearch.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.loadProgramData();
         this.props.loadSingletonDataElements();
-        // this.convertData(events);
+        this.props.setStartDate(moment());
+        this.props.setEndDate(moment());
+        // this.convertData(events); move to redux
     }
 
+    //TODO: move this to redux
     findDataElement(dataElements, criteria) {
         for (let i = 0; i < dataElements.length; i++){
             if(dataElements[i].value == criteria)
@@ -38,8 +46,9 @@ class SingletonContainer extends Component {
         return null;
     }
 
+    //TODO: move this to redux
     // the "correct" code is commented, because of the null dataElements
-    convertData(singletons){
+    convertData(singletons) {
         for(let i = 0; i < singletons.length; i++){
             var dataValues = singletons[i].dataValues;
             for(let j = 0; j < dataValues.length; j++){
@@ -54,113 +63,92 @@ class SingletonContainer extends Component {
         }
     }
 
-    formatDate(moment){
-        var date = "";
-        date += moment.get('year') + '-' ;
-        var m = moment.get('month') + 1;
-        date += m + '-' + moment.get('date');
-        return date;
-    }
-
     handleStartDate(date) {
         this.setState({
             startDate: date
         });
+        this.props.setStartDate(date);
     }
 
     handleEndDate(date) {
         this.setState({
             endDate: date
         });
+        this.props.setEndDate(date);
     }
 
     onSelect(event) {
-        this.setState({
-            program: this.props.programData[event].displayName,
-            programId: this.props.programData[event].id
-        });
+        this.props.setProgramCursor(this.props.program.data[event]);
     }
 
-    clicked() {
-        if(this.props.cursor.level == 4 && this.state.programId != null){
-            this.props.loadSingletonEvents(
-                this.props.cursor.id,
-                this.state.programId,
-                this.formatDate(this.state.startDate),
-                this.formatDate(this.state.endDate));
-            this.setState({
-                canRun: true,
-            });
-            console.log(this.state.canRun);
-            console.log(this.state.events);
-        } else {
-            this.setState({
-                canRun: false
-            });
-        }
+    submitSearch() {
+        this.props.loadSingletonEvents( // Load singleton-related data if valid node level.
+            this.props.cursor.id, // id of selected node in the tree.
+            this.props.program.cursor.id, // id of selected program.
+            this.props.startDate, // startdate to include in search.
+            this.props.endDate); // enddate to include in search.
     }
+
 
     render() {
+        let disabledButton = (this.props.program.cursor.displayName === "");
+
         if (!this.props.cursor) { // Show a placeholder if the cursor of treebeard is not set
-            return <div className="welcome">Please select a clinic in the list to the left to begin.</div>;
-        // else if (this.state.dataElements == null){
-
-        // }
+            return <div className="loading">Please select a clinic in the list to the left to begin.</div>;
         } else {
-            return (
-                <div>
-                    <div className="welcome">
-                        <p>name: {this.props.cursor.name}</p>
-                        <p>id: {this.props.cursor.id}</p>
-                   </div>
-
-                    <ProgramDropdownList
-                        title={"Programs"}
-                        list={this.props.programData}
-                        i={0}
-                        onSelect={this.onSelect}
-                    />
-                    <br />
-                    <br />
-                    <div className="selectedProgram">
-                        <div>Program: {this.state.program}</div>
-                        <div>Program: {this.state.programId}</div>
-
-                    </div>
-                    <div className="startDate">
-                        StartDate:
-                        <DatePicker
-                            selected={this.state.startDate}
-                            onChange={this.handleStartDate.bind(this)}
-                        />
-                    </div>
-
-                    <div className="endDate">
-                        EndDate:
-                        <DatePicker
-                            selected={this.state.endDate}
-                            onChange={this.handleEndDate.bind(this)}
-                        />
-                    </div>
+            if (!(this.props.cursor.level === 4)) {
+                return <div className="loading">Please select a clinic in the list to the left to begin.</div>;
+            } else {
+                return (
                     <div>
-                        Level: {this.props.cursor.level}
-                    </div>
+                        <p>Select a program in which you'd like to search for duplicates.</p>
+                        <div className="flex-row-container">
+                            <ProgramDropdownList
+                                title={"Programs"}
+                                list={this.props.program.data}
+                                i={0}
+                                onSelect={this.onSelect} />
+                            <div className="program-selected">Program: {this.props.program.cursor.displayName}</div>
+                        </div>
 
-                    <div>
-                        <button onClick={this.clicked.bind(this)}>Find duplicates</button>
-                    </div>
-                </div>
-
-            );
+                        <div className="flex-row-container">
+                            <div className="datepicker">
+                                StartDate:
+                                <DatePicker
+                                    dateFormat="DD/MM/YYYY"
+                                    selected={this.state.startDate}
+                                    onChange={this.handleStartDate}
+                                />
+                            </div>
+                            <div className="datepicker">
+                                EndDate:
+                                <DatePicker
+                                    dateFormat="DD/MM/YYYY"
+                                    selected={this.state.endDate}
+                                    onChange={this.handleEndDate}
+                                />
+                            </div>
+                            <button onClick={this.submitSearch} disabled={disabledButton}>Submit</button>
+                        </div>
+                    </div>);
+            }
         }
     }
 }
+
 
 // Shorthand notation.
 export default connect(
     state => ({
         cursor: state.tree.cursor,
-        programData: state.programData
+        program: state.program,
+        startDate: state.singleton.startDate,
+        endDate: state.singleton.endDate
     }),
-    { loadProgramData, loadSingletonDataElements, loadSingletonEvents }
+    { loadProgramData,
+      setProgramCursor,
+      loadSingletonDataElements,
+      loadSingletonEvents,
+      setStartDate,
+      setEndDate }
 )(SingletonContainer);

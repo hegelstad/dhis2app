@@ -1,8 +1,12 @@
-import { TREELIST_CURSOR_SET, TREELIST_DATA_SET, TREELIST_ERROR_SET, TREELIST_ERROR_CLEAR } from '../actions/actions';
+import { TREELIST_CURSOR_SET,
+         TREELIST_DATA_SET,
+         TREELIST_ERROR_SET,
+         TREELIST_ERROR_CLEAR } from '../actions/actions';
 
 const initialState = {
+    cursor: null,
     treeData: {},
-    error: false
+    error: null
 }
 
 export default function(state = initialState, action) {
@@ -17,11 +21,11 @@ export default function(state = initialState, action) {
             });
         case TREELIST_ERROR_SET:
             return Object.assign({}, state, {
-                error: true
+                error: action.message
             });
         case TREELIST_ERROR_CLEAR:
             return Object.assign({}, state, {
-                error: false
+                error: null
             });
         default:
             return state

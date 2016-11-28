@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+// Actions
 import { setTreelistCursor,
          loadAndSetTreeData,
          setTreeError,
          clearTreeError,
-         loadAndSetTEIS } from '../actions/actions';
-import { loadOrganisationUnit } from '../api';
+         loadAndSetTEIS,
+         loadSingletonEvents } from '../actions/actions';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
-// React-spinnere
-import Spinner from 'react-spinner';
 
 class TreelistContainer extends Component {
     constructor(props, context) {
@@ -23,27 +22,38 @@ class TreelistContainer extends Component {
         this.onToggle = this.onToggle.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.loadAndSetTreeData();
     }
 
-    // Function required by Treebeard.
+    // Function ran when you select any node in the tree.
     onToggle(node, toggled) {
         if(this.state.cursor) {this.state.cursor.active = false;}
         node.active = true;
         if(node.children){ node.toggled = toggled; }
         this.setState({
             cursor: node
-        });
+        }); // ^Treebeard-logic.
+
         // Set the selected cursor in the redux state.
         this.props.setTreelistCursor(node);
-        // Check which level the node is.
+
+        // Check which level the node is before loading data.
         if(node.level === 3 || node.level === 4) {
-            this.props.loadAndSetTEIS(node.id); // Load data if valid node level.
-            this.props.clearTreeError();
+            this.props.loadAndSetTEIS(node.id); // Load TEI-related data if valid node level.
+            this.props.clearTreeError(); // Clear the error text.
         } else {
-            console.log("Select a chiefdom or clinic to load data");
-            this.props.setTreeError(); // Set an error if the node level is wrong.
+            console.log("Select a chiefdom or clinic to load data.");
+            this.props.setTreeError("Please select a chiefdom or clinic to check for duplicates."); // Set an error if the node level is wrong.
+        }
+
+        if(!this.props.currentMode) { // If current mode equals to singleton mode.
+            if(node.level === 4) { // If a clinic is being selected.
+                this.props.clearTreeError(); // Clear the error text if right level is selected.
+            } else {
+                console.log("Select a clinic to load data.");
+                this.props.setTreeError("Please select a clinic to check for duplicates.");
+            }
         }
     }
 
@@ -60,7 +70,11 @@ class TreelistContainer extends Component {
 // Shorthand notation.
 export default connect(
     state => ({
-        treeData: state.tree.treeData
+        treeData: state.tree.treeData,
+        currentMode: state.isToggled,
+        cursor: state.tree.cursor,
+        program: state.program,
+        singleton: state.singleton
     }),
     { setTreelistCursor,
       loadAndSetTreeData,

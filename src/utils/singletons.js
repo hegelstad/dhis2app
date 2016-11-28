@@ -1,5 +1,10 @@
-
-// import { FuzzySet } from '../utils/fuzzyset.js'
+export const formatDate = (moment) => {
+    let date = "";
+    date += moment.get('year') + '-' ;
+    let m = moment.get('month') + 1;
+    date += m + '-' + moment.get('date');
+    return date;
+}
 
 export function extractSingletons(events) {
     var singletons = [];
@@ -89,7 +94,7 @@ function equalSingletons(singleton1, singleton2){
                     if(dataValues1[i].value == dataValues2[j].value)
                         counter++;
                     // else
-                    //     break; 
+                    //     break;
             }
         }
         if(counter/dataValues1.length > 0.5)
@@ -119,4 +124,3 @@ export function duplicates(singletons){
     }
     return duplicates;
 }
-
