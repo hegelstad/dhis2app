@@ -9,30 +9,12 @@ import ReactTable from 'react-table';
             | Anna Joens    |  0 |  ...
             | Anna Jones    |  1 |  ...     */
 
-export default function AccordionInstance({ input }) {
+export default function AccordionInstance({ input, columns}) {
 
    /* Functions takes a nested list as input, returns an accordion objects with
         panels for each of the sublists (sets of duplicates).
         TODO: Need to change columns when we get the real data.*/
-    const columns = [
-        {
-            header: 'Name',
-            accessor: 'value'
-        },
-        {
-            header: 'Tracked Entity Instance',
-            accessor: 'trackedEntityInstance'
-        },
-        {
-            header: 'Weight',
-            accessor: 'weight'
-        },
-        {
-            header: 'Height',
-            accessor: 'height'
-        }
-
-    ]
+    
     var panelList = []
     var colorList = ["info", "success", "warning", "danger"] // Just because we can #gaypride
     var c = 0;
