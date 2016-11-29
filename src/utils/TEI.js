@@ -23,19 +23,16 @@ export function teiDuplicateFinder(OrgUnit) {
     for (let tei = 0; tei < OrgUnit.length; tei++) {
         var entry = OrgUnit[tei].attributes;
 
-        var collection = []
-        for (let attri = 0; attri < entry.length; attri ++){
-            let newObj = {
-                [(entry[attri].displayName).replace(/ /g, '')]: entry[attri].value,
-            }
-            collection.push(newObj);
+        var collection = {
+                trackedEntityInstance: OrgUnit[tei].trackedEntityInstance}
 
+        for (let attri = 0; attri < entry.length; attri ++){
+            var val = (entry[attri].displayName).replace(/ /g, '');
+            collection[val] = entry[attri].value
+            
         }
         newTEIS.push(
-            {
-                trackedEntityInstance: OrgUnit[tei].trackedEntityInstance,
-                attributes: collection
-            });
+            collection);
     }
 
    /* FUSE.JS implementation
@@ -50,8 +47,8 @@ export function teiDuplicateFinder(OrgUnit) {
     distance: 100,
     maxPatternLength: 32,
     keys: [
-        'attributes.Firstname',
-        'attributes.Lastname',
+        'Firstname',
+        'Lastname',
     ]
     };
 
@@ -62,21 +59,19 @@ export function teiDuplicateFinder(OrgUnit) {
 
     var duplicates = []
     for (let tei = 0; tei < newTEIS.length; tei++) {
-        var entry = newTEIS[tei].attributes;
+        var entry = newTEIS[tei];
         var firstname = "";
         var lastname = "";
         var gender = "";
 
-        for (let atri = 0; atri < entry.length; atri++) {
-            var key = entry[atri];
+        if (entry.Firstname) {
+            firstname = entry.Firstname;
+        } 
 
-            if (key.Firstname) {
-                firstname = key.Firstname;
-
-            } else if (key.Lastname) {
-                lastname = key.Lastname;
-            }
+        if (entry.Lastname) {
+            lastname = entry.Lastname;
         }
+
 
         var fuse = new Fuse(newTEIS, options);
         var output = fuse.search(lastname);

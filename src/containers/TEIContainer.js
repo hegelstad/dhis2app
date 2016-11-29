@@ -6,17 +6,26 @@ import { loadAndSetTEIS } from '../actions/actions';
 import ReactTable from 'react-table';
 import AccordionList from '../components/Accordion';
 import { mockdata } from './TEIContainer.mockdata';
+import { teiDuplicateFinder } from '../utils/TEI';
 
 class TEIContainer extends Component {
     constructor(...args) {
         super(...args);
+
     }
 
+
+
     render() {
+        console.log(this.props.TeiData);
         const columns = [
             {
-                header: 'Name',
-                accessor: 'value'
+                header: 'First name',
+                accessor: 'Firstname'
+            },
+            {
+                header: "Last name",
+                accessor: 'Lastname'
             },
             {
                 header: 'Tracked Entity Instance',
@@ -24,11 +33,11 @@ class TEIContainer extends Component {
             },
             {
                 header: 'Weight',
-                accessor: 'weight'
+                accessor: 'Weightinkg'
             },
             {
                 header: 'Height',
-                accessor: 'height'
+                accessor: 'Heightincm'
             },
             {
                 header: 'Duplicate?',
@@ -45,28 +54,31 @@ class TEIContainer extends Component {
             }
         ]
 
-        if (!mockdata || !this.props.cursor) {
+        if (this.props.TeiData.length == 0 || !this.props.cursor) {
             return <div className="loading">Please select a chiefdom or clinic in the list to the left to begin.</div>;
-        }
-
+        } else{
+            var test = teiDuplicateFinder(this.props.TeiData);
         return (
             <div>
                 <p>Duplicates found:</p>
-                <AccordionList input={mockdata}
+                <AccordionList input={test}
                                 columns={columns}/>
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
                 <br/>
             </div>
         );
+        }
+
     }
 }
 
 // Shorthand notation.
 export default connect(
+       
     state => ({
         cursor: state.tree.cursor,
-        //data
+        TeiData: state.tei
     }),
     { loadAndSetTEIS }
 )(TEIContainer);
