@@ -1,5 +1,5 @@
-    import React from 'react';
-import { Accordion, Panel, Table, Well, Button } from 'react-bootstrap';
+import React from 'react';
+import { Accordion, Panel, Table, Button } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
 /* Component, accordion with a table. Each accordion displays a table of duplicates.
@@ -34,11 +34,20 @@ export default function AccordionInstance({ input, columns}) {
             />
 
 
-        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small">{len}</Button> {data[0].value}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small">{len}</Button> {data[0].Firstname + " " +data[0].Lastname}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
     }
 
-    return (
+    if (panelList.length < 1){
+        return (
+             <Accordion>
+                <Panel bsStyle={colorList[0]} header="No Duplicates Found!" key={counter++} eventKey={counter++}> </Panel>
+             </Accordion>
+        )
+    } else {
+        return (
         <Accordion>
             {panelList}
         </Accordion>);
+    }
+    
 }
