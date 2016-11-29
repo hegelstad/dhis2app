@@ -13,6 +13,38 @@ class TEIContainer extends Component {
     }
 
     render() {
+        const columns = [
+            {
+                header: 'Name',
+                accessor: 'value'
+            },
+            {
+                header: 'Tracked Entity Instance',
+                accessor: 'trackedEntityInstance'
+            },
+            {
+                header: 'Weight',
+                accessor: 'weight'
+            },
+            {
+                header: 'Height',
+                accessor: 'height'
+            },
+            {
+                header: 'Duplicate?',
+                render: props =>
+                        <span>
+                            <input
+                                type="checkbox"
+                                //checked={this.state.data[props.index].checked}
+                                onChange={() => { // Binds function to this
+                                    }
+                                }
+                            />
+                        </span>
+            }
+        ]
+
         if (!mockdata || !this.props.cursor) {
             return <div className="loading">Please select a chiefdom or clinic in the list to the left to begin.</div>;
         }
@@ -20,7 +52,8 @@ class TEIContainer extends Component {
         return (
             <div>
                 <p>Duplicates found:</p>
-                <AccordionList input={mockdata}/>
+                <AccordionList input={mockdata}
+                                columns={columns}/>
                 <div>name: {this.props.cursor.name}</div>
                 <div>id: {this.props.cursor.id}</div>
                 <br/>
