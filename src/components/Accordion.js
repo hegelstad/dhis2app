@@ -37,8 +37,17 @@ export default function AccordionInstance({ input, columns}) {
         panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small">{len}</Button> {data[0].Firstname + " " +data[0].Lastname}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
     }
 
-    return (
+    if (panelList.length < 1){
+        return (
+             <Accordion>
+                <Panel bsStyle={colorList[0]} header="No Duplicates Found!" key={counter++} eventKey={counter++}> </Panel>
+             </Accordion>
+        )
+    } else {
+        return (
         <Accordion>
             {panelList}
         </Accordion>);
+    }
+    
 }

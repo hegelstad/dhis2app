@@ -32,7 +32,7 @@ body {
     margin: 2em;
     margin-bottom: 10em;
     min-height: 43.05em;
-    width: 80em;
+    width: 100em;
     /* flexbox */
     display: flex;
     flex-direction: column;

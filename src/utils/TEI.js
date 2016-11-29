@@ -6,7 +6,7 @@ export function fakeAsyncCall(s) {
     });
 }
 
-export function teiDuplicateFinder(OrgUnit) {
+export function teiDuplicateFinder(OrgUnit, boolSwitch) {
     /*
         Function finding duplicates within a given org unit.
         Utilizing Fuse.js.
@@ -40,15 +40,14 @@ export function teiDuplicateFinder(OrgUnit) {
     threshold etc. */
     var options = {
     shouldSort: true,
-    caseSensitve: false,
-    tokenize: false,
+    caseSensitve: true,
+    tokenize: true,
     threshold: 0.4,
     location: 0,
-    distance: 100,
-    maxPatternLength: 32,
+    distance: 5,
+    maxPatternLength: 5,
     keys: [
-        'Firstname',
-        'Lastname',
+        'Lastname', 'Firstname' 
     ]
     };
 
@@ -62,7 +61,6 @@ export function teiDuplicateFinder(OrgUnit) {
         var entry = newTEIS[tei];
         var firstname = "";
         var lastname = "";
-        var gender = "";
 
         if (entry.Firstname) {
             firstname = entry.Firstname;
@@ -75,90 +73,59 @@ export function teiDuplicateFinder(OrgUnit) {
 
         var fuse = new Fuse(newTEIS, options);
         var output = fuse.search(lastname);
-        var fuse1 = new Fuse(output, options)
+        var fuse1 = new Fuse(output, options);
         var output1 = fuse1.search(firstname);
+       
 
 
         if (output1.length > 1) {
             duplicates.push(output1)
         }
     }
-    console.log(duplicates);
-    return duplicates;
+
+    if (boolSwitch){
+        return thoroughSearch(duplicates);
+    } else {
+        return duplicates;
+    }
+
+    
 }
 
-export function teiClinic(OrgUnit) {
-    /*
+function thoroughSearch(duplicates) {
 
-        This is the manual implementation, not utilizing Fuse.js, currently this function is
-        not being used, but could prove useful if we decide to search for duplicates
-        by other metrics than the first and last name of the person.
+    var baseOptions = {
+    caseSensitve: false,
+    threshold: 0.3,
+    location: 0,
+    distance: 15,
+    maxPatternLength: 25,
+    };
 
-        TODO: If we want to implement this fully, we need a fuzzy matching algorithm,
-            and some further refinement. For our current needs, the above Fuse.js implementation
-            seems to be all we need.
-    */
+    const keys =  ['Maidenname', 'Nationalidentifier', 'TBnumber'];
 
-    var duplicates = [];
-    // First for loop is for the person to be checked against the second loop
-    for (let tei1 = 0; tei1 < OrgUnit.length; tei1++){
-        var entry = OrgUnit[tei1].attributes;
-        var first_id = OrgUnit[tei1].trackedEntityInstance;
+    var trueDuplicates = [];
+    for (let key = 0; key < keys.length; key++){
 
-        var firstName = "";
-        var lastName = "";
-        var gender = "";
-
-
-        for (let attribute = 0; attribute < entry.length; attribute++){
-            var displayName = entry[attribute].displayName;
-
-            if (displayName === "First name") {
-                firstName = entry[attribute].value;
-            } else if (displayName === "Last name") {
-                lastName = entry[attribute].value;
-            }
-        }
-
-        // Checks entries against first person
-        for (let tei2 = 0; tei2 < OrgUnit.length; tei2++){
-            var check = OrgUnit[tei2].attributes;
-            var second_id = first_OU[tei1].trackedEntityInstance;
-
-            var firstCheck = "";
-            var lastCheck = "";
-
-            for (let checkAttri = 0; checkAttri < check.length; checkAttri++){
-                var checkName = check[checkAttri].displayName;
-
-                if (checkName === "First name") {
-                    if (firstName === check[checkAttri].value) {
-                        firstCheck = check[checkAttri].value;
+        for (let i = 0; i < duplicates.length; i++) {     
+            var set = duplicates[i];
+            baseOptions.keys = [keys[key]];
+            var fuse3 = new Fuse(set, baseOptions);
+            var output;
+            
+            for (let j = 0; j < set.length; j++ ) {
+                var tei = set[j]
+                if (tei[keys[key]]) {
+                    output = fuse3.search(tei[keys[key]]);
+                    if (output.length > 1) {
+                        trueDuplicates.push(output);
+                        break;
                     }
-
-                } else if (checkName === "Last name") {
-                    if (lastName === check[checkAttri].value){
-                        lastCheck = check[checkAttri].value;
-                    }
+                    
                 }
-            }
-
-            if (firstCheck != "" && lastCheck != ""){
-
-                duplicates.push({
-                    displayName: "name",
-                    value: firstName + " " + lastName,
-                    trackedEntityInstance: first_id
-                });
-
-                duplicates.push({
-                    displayName: "name",
-                    value: firstCheck + " " + lastCheck,
-                    trackedEntityInstance: second_id
-                });
-
             }
         }
     }
-    return duplicates;
+    return trueDuplicates
+    
 }
