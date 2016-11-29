@@ -1,6 +1,6 @@
 export const formatDate = (moment) => {
     let date = "";
-    date += moment.get('year') + '-' ;
+    date += moment.get('year') + '-';
     let m = moment.get('month') + 1;
     date += m + '-' + moment.get('date');
     return date;
@@ -8,8 +8,8 @@ export const formatDate = (moment) => {
 
 export function extractSingletons(events) {
     var singletons = [];
-    for (let i=0;  i < events.length; i++){
-        if(events[i].trackedEntityInstance == null)
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].trackedEntityInstance == null)
             singletons.push(events[i]);
     }
     return singletons;
@@ -83,35 +83,74 @@ export function extractSingletons(events) {
 //     // return a.get("1");
 // }
 
-function equalSingletons(singleton1, singleton2){
-    var dataValues1 = singleton1.dataValues;
-    var dataValues2 = singleton2.dataValues;
-    var counter = 0;
-    if (dataValues1.length == dataValues2.length){
-        for (let i = 0; i < dataValues1.length; i++){
-            for (let j = 0; j < dataValues2.length; j++){
-                if(dataValues1[i].dataElement == dataValues2[j].dataElement)
-                    if(dataValues1[i].value == dataValues2[j].value)
-                        counter++;
+function equalSingletons(singleton1, singleton2) {
+    if (singleton1.program == singleton2.program) {
+        var dataValues1 = singleton1.dataValues;
+        var dataValues2 = singleton2.dataValues;
+        var counter = 0;
+        if (dataValues1.length == dataValues2.length) {
+            for (let i = 0; i < dataValues1.length; i++) {
+                for (let j = 0; j < dataValues2.length; j++) {
+                    if (dataValues1[i].dataElement == dataValues2[j].dataElement)
+                        if (dataValues1[i].value == dataValues2[j].value) {
+                            counter++;
+                        }
+
                     // else
                     //     break;
+                }
             }
-        }
-        if(counter/dataValues1.length > 0.5)
-            return true;
+            // someone erased all the duplicates, the condition is to be edited
+            if (counter  > 2)
+                return true;
+        } else
+            return false;
     } else
         return false;
 }
 
-export function duplicates(singletons){
+
+function findDataElement(dataElements, criteria) {
+    for (let i = 0; i < dataElements.length; i++) {
+        if (dataElements[i].value == criteria)
+            return dataElements[i].label;
+    }
+    return null;
+}
+
+export function convertSingleton(singleton, dataElements){
+    var newData = '{ "event": ' + String(singleton.event) + ', ';  
+    var DV = singleton.dataValues;
+    for (let i = 0; i < DV.length; i++){
+        newData += String(findDataElement(dataElements, DV[i].dataElement)) + ": " + String(DV[i].value) + ', ';
+    }   
+    newData += '}'
+    //problem:
+    var json = JSON.stringify(newData);
+    json = JSON.parse(json);
+    return json;
+}
+
+export function convertData(singletons, dataElements) {
+    var newSingletons = '{ "events": [';
+    for (let i = 0; i < singletons.length; i++) {
+       newSingletons += convertSingleton(singletons[i], dataElements) + ', ';
+    }
+    newSingletons += ']}';
+    var json = JSON.stringify(newSingletons);
+    console.log(JSON.parse(json));
+}
+
+export function duplicates(singletons, dataElements) {
+    // console.log(singletons);
     var duplicates = [];
     var marked = new Array(singletons.length).fill(0);
-    for (let i = 0; i < singletons.length; i++){
+    for (let i = 0; i < singletons.length; i++) {
         var dupes = [];
         dupes.push(singletons[i]);
-        for (let j = i + 1; j < singletons.length; j++){
-            if (marked[j] == 0){
-                if(equalSingletons(singletons[i], singletons[j])){
+        for (let j = i + 1; j < singletons.length; j++) {
+            if (marked[j] == 0) {
+                if (equalSingletons(singletons[i], singletons[j])) {
                     marked[i] = 1;
                     marked[j] = 1;
                     dupes.push(singletons[j]);
@@ -122,5 +161,12 @@ export function duplicates(singletons){
         if (dupes.length >= 2)
             duplicates.push(dupes);
     }
-    return duplicates;
+    var convertedDuplicates = [];
+    for (let i = 0; i < duplicates.length; i++){
+    //     console.log('dupl length', duplicates.length);
+    //     console.log('dupl[0]', duplicates[0].length);
+        convertedDuplicates.push(convertData(duplicates[i], dataElements));
+        }
+    console.log(convertedDuplicates);
+    return convertedDuplicates;
 }
