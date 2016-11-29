@@ -1,4 +1,4 @@
-import React from 'react';
+    import React from 'react';
 import { Accordion, Panel, Table, Well, Button } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
@@ -52,7 +52,7 @@ export default function AccordionInstance({ input }) {
             />
 
 
-        panelList.push(<Panel bsStyle={colorList[c++]} header={<span><Button bsSize="small">{len}</Button> {data[0].value}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small">{len}</Button> {data[0].value}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
     }
 
     return (
