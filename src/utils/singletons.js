@@ -119,11 +119,12 @@ function findDataElement(dataElements, criteria) {
 }
 
 export function convertSingleton(singleton, dataElements){
-    var newData = '{ "event": ' + String(singleton.event) + ', ';  
+    var newData = '{ "event": "' + String(singleton.event) + '", ';
     var DV = singleton.dataValues;
     for (let i = 0; i < DV.length; i++){
-        newData += String(findDataElement(dataElements, DV[i].dataElement)) + ": " + String(DV[i].value) + ', ';
-    }   
+        newData += '"' + String(findDataElement(dataElements, DV[i].dataElement)) + '": "' + String(DV[i].value) + '", ';
+    }
+    newData = newData.replace(/,\s*$/, "") //remove last comma.
     newData += '}'
     //problem:
     var json = JSON.stringify(newData);
@@ -136,6 +137,7 @@ export function convertData(singletons, dataElements) {
     for (let i = 0; i < singletons.length; i++) {
        newSingletons += convertSingleton(singletons[i], dataElements) + ', ';
     }
+    newSingletons = newSingletons.replace(/,\s*$/, "") //remove last comma.
     newSingletons += ']}';
     var json = JSON.stringify(newSingletons);
     console.log(JSON.parse(json));
