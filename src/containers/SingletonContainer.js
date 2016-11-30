@@ -45,9 +45,7 @@ class SingletonContainer extends Component {
     }
 
     showAccordion() {
-        this.setState({
-            showAccordion: true,
-        });
+        this.state.showAccordion = true;
     }
 
     handleStartDate(date) {
@@ -69,7 +67,21 @@ class SingletonContainer extends Component {
     }
 
     submitSearch() {
-        var singleton = [
+
+        
+        this.props.loadSingletonEvents( // Load singleton-related data if valid node level.
+            this.props.cursor.id, // id of selected node in the tree.
+            this.props.program.cursor.id, // id of selected program.
+            this.props.startDate, // startdate to include in search.
+            this.props.endDate); // enddate to include in search.
+
+        this.showAccordion();
+        // console.log(duplicates(singletons, this.props.dataElements));
+    }
+
+
+    render() {
+        var singletons = [
             {
                 orgUnit: "EJoI3HArJ2W",
                 program: "eBAyeGv0exc",
@@ -149,29 +161,11 @@ class SingletonContainer extends Component {
                     }
                 ]
             }
-        ]
-
-
-        this.props.loadSingletonEvents( // Load singleton-related data if valid node level.
-            this.props.cursor.id, // id of selected node in the tree.
-            this.props.program.cursor.id, // id of selected program.
-            this.props.startDate, // startdate to include in search.
-            this.props.endDate); // enddate to include in search.
-        // console.log(this.props.events);
-        // console.log("dupl:", duplicates(this.props.events, this.props.dataElements));
-        // console.log(singleton);
-        // console.log(convertData(singleton, this.props.dataElements));
-        // var s = [{ name: "raul", age: "22", gender: "Male" }, { name: "raul", age: "22", mama: "Male" }]
-        // makeColumns(s);
-        // console.log(duplicates(this.props.events, this.props.dataElements));
-        // duplicates(this.props.events, this.props.dataElements);
-        this.showAccordion();
-    }
-
-
-    render() {
+        ];
         let disabledButton = (this.props.program.cursor.displayName === "");
-
+        console.log(duplicates(singletons, this.props.dataElements));
+        console.log(makeColumns(duplicates(singletons, this.props.dataElements)[0]));
+        // console.log(this.state.showAccordion);
         if (!this.props.cursor) { // Show a placeholder if the cursor of treebeard is not set
             return <div className="loading">Please select a clinic in the list to the left to begin.</div>;
         } else {
@@ -204,8 +198,8 @@ class SingletonContainer extends Component {
                             <div>
                                 <br />
                                 <AccordionList
-                                    input={duplicates(this.props.events, this.props.dataElements)}
-                                    columns={makeColumns(duplicates(this.props.events, this.props.dataElements)[0])}
+                                    input={duplicates(singletons, this.props.dataElements)}
+                                    columns={makeColumns(duplicates(singletons, this.props.dataElements)[0])}
                                     />
                             </div>
                             :

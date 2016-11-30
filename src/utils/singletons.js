@@ -122,7 +122,7 @@ function convertSingleton(singleton, dataElements){
     var newData = '{ "event": "' + String(singleton.event) + '", ';
     var DV = singleton.dataValues;
     for (let i = 0; i < DV.length; i++){
-        newData += '"' + String(findDataElement(dataElements, DV[i].dataElement)) + '": "' + String(DV[i].value) + '", ';
+        newData += '"' + String(findDataElement(dataElements, DV[i].dataElement)).replace(/ /g, '') + '": "' + String(DV[i].value) + '", ';
     }
     newData = newData.replace(/,\s*$/, "") //remove last comma.
     newData += '}';
@@ -152,7 +152,7 @@ export function getKeysFromDuplicateSet(duplicateSet){
 
 export function makeColumns(duplicateSet){
     var keysSet = getKeysFromDuplicateSet(duplicateSet);
-    console.log(keysSet);
+    // console.log(keysSet);
     var columns = [];
     for (let i = 0; i < keysSet.length; i++){
         var h = keysSet[i];
@@ -163,7 +163,8 @@ export function makeColumns(duplicateSet){
         }
         columns.push(newColumn);
     }
-    console.log(columns);
+    // console.log(columns);
+    return columns;
 }
 
 export function duplicates(singletons, dataElements) {
@@ -192,8 +193,8 @@ export function duplicates(singletons, dataElements) {
         convertedDuplicates.push(convertedDup);
         makeColumns(convertedDup);
     }
-    console.log(duplicates);
-    console.log(convertedDuplicates);
+    // console.log(duplicates);
+    // console.log(convertedDuplicates);
 
     return convertedDuplicates;
 }
