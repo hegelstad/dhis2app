@@ -164,7 +164,8 @@ class SingletonContainer extends Component {
         // var s = [{ name: "raul", age: "22", gender: "Male" }, { name: "raul", age: "22", mama: "Male" }]
         // makeColumns(s);
         // console.log(duplicates(this.props.events, this.props.dataElements));
-        duplicates(this.props.events, this.props.dataElements);
+        // duplicates(this.props.events, this.props.dataElements);
+        this.showAccordion();
     }
 
 
@@ -198,6 +199,25 @@ class SingletonContainer extends Component {
                             </div>
                             <button onClick={this.submitSearch}>Submit</button>
                         </div>
+                        {this.state.showAccordion
+                            ?
+                            <div>
+                                <br />
+                                <AccordionList
+                                    input={duplicates(this.props.events, this.props.dataElements)}
+                                    columns={makeColumns(duplicates(this.props.events, this.props.dataElements)[0])}
+                                    />
+                            </div>
+                            :
+                            <div>
+                                <br />
+                                <p> Basic search: matches first and last names with a moderate threshold. </p>
+                                <p> Deep search: will search within the matches of a basic search for matches of more advanced attributes: National Identifier,
+                                TB number and Maiden name.</p>
+                                <p> Deep search is highly likely to find true duplicates</p>
+                            </div>
+                        }
+
                     </div>);
             }
         }
