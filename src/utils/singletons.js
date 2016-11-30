@@ -118,30 +118,52 @@ function findDataElement(dataElements, criteria) {
     return null;
 }
 
-export function convertSingleton(singleton, dataElements){
-    console.log(singleton, dataElements);
+function convertSingleton(singleton, dataElements){
     var newData = '{ "event": "' + String(singleton.event) + '", ';
     var DV = singleton.dataValues;
     for (let i = 0; i < DV.length; i++){
         newData += '"' + String(findDataElement(dataElements, DV[i].dataElement)) + '": "' + String(DV[i].value) + '", ';
     }
     newData = newData.replace(/,\s*$/, "") //remove last comma.
-    newData += '}'
-    //problem:
- //   var json = JSON.stringify(newData);
-    var json = JSON.parse(json);
-    return json;
+    newData += '}';
+    return newData;
 }
 
-export function convertData(singletons, dataElements) {
-    var newSingletons = '{ "events": [';
+function convertData(singletons, dataElements) {
+    var newSingletons = '[';
     for (let i = 0; i < singletons.length; i++) {
        newSingletons += convertSingleton(singletons[i], dataElements) + ', ';
     }
     newSingletons = newSingletons.replace(/,\s*$/, "") //remove last comma.
-    newSingletons += ']}';
-//    var json = JSON.stringify(newSingletons);
-    console.log(JSON.parse(newSingletons));
+    newSingletons += ']';
+    return JSON.parse(newSingletons);
+}
+
+export function getKeysFromDuplicateSet(duplicateSet){
+    var keysSet = [];
+    for (let i = 0; i < duplicateSet.length; i++){
+        var singleton = duplicateSet[i];
+        for (var key in singleton)
+            if(!keysSet.includes(key))
+                keysSet.push(key);
+    }
+    return keysSet;
+}
+
+export function makeColumns(duplicateSet){
+    var keysSet = getKeysFromDuplicateSet(duplicateSet);
+    console.log(keysSet);
+    var columns = [];
+    for (let i = 0; i < keysSet.length; i++){
+        var h = keysSet[i];
+        var a = keysSet[i].replace(/\s+/g, '');
+        var newColumn = {
+            header: h,
+            accessor: a
+        }
+        columns.push(newColumn);
+    }
+    console.log(columns);
 }
 
 export function duplicates(singletons, dataElements) {
@@ -166,10 +188,12 @@ export function duplicates(singletons, dataElements) {
     }
     var convertedDuplicates = [];
     for (let i = 0; i < duplicates.length; i++){
-    //     console.log('dupl length', duplicates.length);
-    //     console.log('dupl[0]', duplicates[0].length);
-        convertedDuplicates.push(convertData(duplicates[i], dataElements));
-        }
+        var convertedDup = convertData(duplicates[i], dataElements);
+        convertedDuplicates.push(convertedDup);
+        makeColumns(convertedDup);
+    }
+    console.log(duplicates);
     console.log(convertedDuplicates);
+
     return convertedDuplicates;
 }

@@ -15,7 +15,7 @@ import ProgramDropdownList from '../components/ProgramDropdownList';
 import AccordionList from '../components/Accordion';
 import moment from 'moment';
 import { events } from './SingletonContainer.mockdata';
-import { duplicates, convertData, convertSingleton } from '../utils/singletons.js';
+import { duplicates, getKeysFromDuplicateSet, makeColumns } from '../utils/singletons.js';
 import { Columns } from '../components/Columns';
 import { mockdata } from './SingletonContainer.mockdata';
 
@@ -69,7 +69,7 @@ class SingletonContainer extends Component {
     }
 
     submitSearch() {
-        var singleton =  
+        var singleton = [
             {
                 orgUnit: "EJoI3HArJ2W",
                 program: "eBAyeGv0exc",
@@ -108,7 +108,49 @@ class SingletonContainer extends Component {
                         value: "169"
                     }
                 ]
-            };
+            },
+            {
+                orgUnit: "EJoI3HArJ2W",
+                program: "eBAyeGv0exc",
+                event: "ElVmKFFwggz",
+                dataValues: [
+                    {
+                        dataElement: "vV9UWAZohSf",
+                        value: "86"
+                        // height: 86
+                    },
+                    {
+                        dataElement: "K6uUAvq500H",
+                        value: "A000"
+                    },
+                    {
+                        dataElement: "fWIAEtYVEGk",
+                        value: "MODABSC"
+                    },
+                    {
+                        dataElement: "msodh3rEMJa",
+                        value: "2014-11-24"
+                    },
+                    {
+                        dataElement: "eMyVanycQSC",
+                        value: "2014-11-03"
+                    },
+                    {
+                        dataElement: "oZg33kd9taw",
+                        value: "Male"
+                    },
+                    {
+                        dataElement: "qrur9Dvnyt5",
+                        value: "23"
+                    },
+                    {
+                        dataElement: "GieVkTxp4HH",
+                        value: "169"
+                    }
+                ]
+            }
+        ]
+
 
         this.props.loadSingletonEvents( // Load singleton-related data if valid node level.
             this.props.cursor.id, // id of selected node in the tree.
@@ -117,10 +159,12 @@ class SingletonContainer extends Component {
             this.props.endDate); // enddate to include in search.
         // console.log(this.props.events);
         // console.log("dupl:", duplicates(this.props.events, this.props.dataElements));
-        console.log(singleton);
-        convertSingleton(singleton, this.props.dataElements);
-
-
+        // console.log(singleton);
+        // console.log(convertData(singleton, this.props.dataElements));
+        // var s = [{ name: "raul", age: "22", gender: "Male" }, { name: "raul", age: "22", mama: "Male" }]
+        // makeColumns(s);
+        // console.log(duplicates(this.props.events, this.props.dataElements));
+        duplicates(this.props.events, this.props.dataElements);
     }
 
 
