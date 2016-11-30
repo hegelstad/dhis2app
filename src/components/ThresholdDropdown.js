@@ -1,13 +1,13 @@
 import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
-
-const BUTTONS = ['Default', 'Primary', 'Success', 'Info', 'Warning', 'Danger'];
+/* Function for displaying a simple DropdownButton for the threshold
+    values the basic search function will utilize.*/
 
 export default function ThresholdDropdown({ onSelect }) {
     var items = []
     for (let i = 0; i < 7; i++) {
-        items.push(<MenuItem eventKey={i/10} key={i+666}>{i/10}</MenuItem>)
+        items.push(<MenuItem eventKey={i/10.0} key={i+666}>{i/10}</MenuItem>)
     }
 
     return (

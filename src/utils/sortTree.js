@@ -4,7 +4,10 @@ export function sortTree(array) {
     }
 }
 
-// Recursively sort each array of children
+/* Recursive function for sorting nested objects with children.
+    used to sort our tree list displaying countries / chiefdoms / clinics 
+    */
+
 function sortChildren(node) {
     if (node.children) {
         for (var i = 0; i < node.children.length; i++) {

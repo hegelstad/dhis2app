@@ -12,11 +12,12 @@ import ReactTable from 'react-table';
 const AccordionList = ({ input, columns }) => {
 
    /* Functions takes a nested list as input, returns an accordion objects with
-        panels for each of the sublists (sets of duplicates).
-        TODO: Need to change columns when we get the real data.*/
+        panels for each of the sublists (sets of duplicates). If the input is empty, it
+        will return an empty accordion with the title "No Duplicates Found!".
+        */
 
     var panelList = []
-    var colorList = ["info", "success", "warning", "danger"]
+    var colorList = ["info", "success", "warning", "danger"] // multiple react-bootstrap default colors/themes.
     var c = 0;
     var counter = 1000
 
@@ -24,13 +25,14 @@ const AccordionList = ({ input, columns }) => {
         var data = input[inputNum];
         var len = data.length;
 
+        /* Here we're adding the react-table inside each accordion.*/
         var items = <ReactTable
             key={counter++}
             data={data}
             columns={columns}
             minRows={2}
             pageSize={5}
-            pageSizeOptions={[5, 10]}
+            pageSizeOptions={[5, 10, 20]}
             />
 
 
