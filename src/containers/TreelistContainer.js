@@ -5,8 +5,7 @@ import { setTreelistCursor,
          loadAndSetTreeData,
          setTreeError,
          clearTreeError,
-         loadAndSetTEIS,
-         loadSingletonEvents } from '../actions/actions';
+         removeDuplicates } from '../actions/actions';
 // Treebeard
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
@@ -38,9 +37,11 @@ class TreelistContainer extends Component {
         // Set the selected cursor in the redux state.
         this.props.setTreelistCursor(node);
 
-        // Check which level the node is before loading data.
+        // Removes currently loaded duplicates.
+        this.props.removeDuplicates();
+
+        // Check which level is selected to inform user of pre-requisites.
         if(node.level === 3 || node.level === 4) {
-            this.props.loadAndSetTEIS(node.id); // Load TEI-related data if valid node level.
             this.props.clearTreeError(); // Clear the error text.
         } else {
             console.log("Select a chiefdom or clinic to load data.");
@@ -80,5 +81,5 @@ export default connect(
       loadAndSetTreeData,
       setTreeError,
       clearTreeError,
-      loadAndSetTEIS }
+      removeDuplicates }
 )(TreelistContainer);

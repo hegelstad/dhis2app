@@ -6,7 +6,7 @@ export function fakeAsyncCall(s) {
     });
 }
 
-export function teiDuplicateFinder(OrgUnit, boolSwitch) {
+export function teiDuplicateFinder(boolSwitch, OrgUnit) {
     /*
         Function finding duplicates within a given org unit.
         Utilizing Fuse.js.
@@ -29,10 +29,9 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
         for (let attri = 0; attri < entry.length; attri ++){
             var val = (entry[attri].displayName).replace(/ /g, '');
             collection[val] = entry[attri].value
-            
+
         }
-        newTEIS.push(
-            collection);
+        newTEIS.push(collection);
     }
 
    /* FUSE.JS implementation
@@ -47,8 +46,8 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
     distance: 5,
     maxPatternLength: 5,
     keys: [
-        'Lastname', 'Firstname' 
-    ]
+        'Lastname',
+        'Firstname']
     };
 
     /* Second step iterates through the list of all objects,
@@ -64,32 +63,28 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
 
         if (entry.Firstname) {
             firstname = entry.Firstname;
-        } 
+        }
 
         if (entry.Lastname) {
             lastname = entry.Lastname;
         }
 
-
         var fuse = new Fuse(newTEIS, options);
         var output = fuse.search(lastname);
         var fuse1 = new Fuse(output, options);
         var output1 = fuse1.search(firstname);
-       
-
 
         if (output1.length > 1) {
             duplicates.push(output1)
         }
     }
 
-    if (boolSwitch){
+    if (boolSwitch === "Deep"){
         return thoroughSearch(duplicates);
     } else {
         return duplicates;
     }
 
-    
 }
 
 function thoroughSearch(duplicates) {
@@ -107,12 +102,12 @@ function thoroughSearch(duplicates) {
     var trueDuplicates = [];
     for (let key = 0; key < keys.length; key++){
 
-        for (let i = 0; i < duplicates.length; i++) {     
+        for (let i = 0; i < duplicates.length; i++) {
             var set = duplicates[i];
             baseOptions.keys = [keys[key]];
             var fuse3 = new Fuse(set, baseOptions);
             var output;
-            
+
             for (let j = 0; j < set.length; j++ ) {
                 var tei = set[j]
                 if (tei[keys[key]]) {
@@ -121,11 +116,10 @@ function thoroughSearch(duplicates) {
                         trueDuplicates.push(output);
                         break;
                     }
-                    
+
                 }
             }
         }
     }
     return trueDuplicates
-    
 }

@@ -8,6 +8,8 @@ import { loadClinicIDArrayFromChiefdomOrganisationUnit,
 // Utilities
 import { sortTree } from '../utils/sortTree.js';
 import { formatDate, extractSingletons, duplicates } from '../utils/singletons.js';
+import { teiDuplicateFinder } from '../utils/TEI';
+
 
 /*
  * Action types
@@ -20,7 +22,9 @@ export const TREELIST_DATA_SET = 'TREELIST_DATA_SET';
 export const TREELIST_ERROR_SET = 'TREELIST_ERROR_SET';
 export const TREELIST_ERROR_CLEAR = 'TREELIST_ERROR_CLEAR';
 
-export const TEI_DATA_SET = 'TEI_DATA_SET';
+export const TEI_DUPLICATE_DATA_SET = 'TEI_DUPLICATE_DATA_SET';
+export const TEI_DUPLICATE_DATA_REMOVE = 'TEI_DUPLICATE_DATA_REMOVE';
+export const TEI_DUPLICATE_SEARCHING = 'TEI_DUPLICATE_SEARCHING';
 
 export const PROGRAM_DATA_SET = 'PROGRAM_DATA_LOAD';
 export const PROGRAM_CURSOR_SET = 'PROGRAM_CURSOR_SET';
@@ -71,10 +75,22 @@ export const clearTreeError = () => {
     };
 }
 
-const setTEIData = (TEIData) => {
+const setDuplicates = (duplicates) => {
     return {
-        type: TEI_DATA_SET,
-        TEIData
+        type: TEI_DUPLICATE_DATA_SET,
+        duplicates
+    }
+}
+
+export const removeDuplicates = () => {
+    return {
+        type: TEI_DUPLICATE_DATA_REMOVE
+    }
+}
+
+export const setDuplicatesAreLoading = () => {
+    return {
+        type: TEI_DUPLICATE_SEARCHING
     }
 }
 
@@ -121,7 +137,6 @@ export const setEndDate = (endDate) => {
         endDate
     }
 }
-
 
 export const setError = (message) => {
     return {
@@ -178,8 +193,9 @@ export const loadSingletonEvents = (orgUnitID, programID, startDate, endDate) =>
     }
 }
 
-export const loadAndSetTEIS = (organisationUnit) => {
+export const performSearch = (modus, organisationUnit) => {
     return dispatch => {
+        dispatch(setDuplicatesAreLoading()) // set searching to true.
         return loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit)
             .then(arrayOfClinicIds => {
                 console.log(`Loading TEIS from these Ids: [${arrayOfClinicIds}].`);
@@ -200,8 +216,11 @@ export const loadAndSetTEIS = (organisationUnit) => {
                 // Makes sure each promise is resolved before continuing.
                 let results = Promise.all(promises);
 
-                // When (ALL) the results are in, dispatch the data.
-                results.then(() => dispatch(setTEIData(resultArray)));
+                // When (ALL) the results are in, perform the search.
+                results.then(results => {
+                    let duplicates = teiDuplicateFinder(modus, resultArray)
+                    dispatch(setDuplicates(duplicates))
+                });
             })
             .catch(error => {
                 dispatch(setError("Loading TEIS failed."))

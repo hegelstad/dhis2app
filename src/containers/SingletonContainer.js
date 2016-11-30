@@ -7,12 +7,11 @@ import {
     loadSingletonDataElements,
     loadSingletonEvents,
     setStartDate,
-    setEndDate
-} from '../actions/actions';
+    setEndDate } from '../actions/actions';
 // Components
 import DatePicker from 'react-datepicker';
 import ProgramDropdownList from '../components/ProgramDropdownList';
-import AccordionList from '../components/Accordion';
+import AccordionList from '../components/AccordionList';
 import moment from 'moment';
 import { events } from './SingletonContainer.mockdata';
 import { duplicates, getKeysFromDuplicateSet, makeColumns } from '../utils/singletons.js';
@@ -26,7 +25,7 @@ class SingletonContainer extends Component {
         this.state = {
             startDate: moment().subtract(5, 'years'),
             endDate: moment(),
-            showAccordion: false,
+            showAccordion: false
         }
 
         this.handleStartDate = this.handleStartDate.bind(this);
@@ -181,7 +180,7 @@ class SingletonContainer extends Component {
                 return (
                     <div>
                         <div className="flex-row-container">
-                            <div className="datepicker">
+                            <div className="margin-right">
                                 StartDate:
                                 <DatePicker
                                     dateFormat="DD/MM/YYYY"
@@ -189,7 +188,7 @@ class SingletonContainer extends Component {
                                     onChange={this.handleStartDate}
                                     />
                             </div>
-                            <div className="datepicker">
+                            <div className="margin-right">
                                 EndDate:
                                 <DatePicker
                                     dateFormat="DD/MM/YYYY"
