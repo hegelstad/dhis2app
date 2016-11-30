@@ -10,7 +10,7 @@ import { loadProgramData,
 // Components
 import DatePicker from 'react-datepicker';
 import ProgramDropdownList from '../components/ProgramDropdownList';
-import AccordionList from '../components/Accordion';
+import AccordionList from '../components/AccordionList';
 import moment from 'moment';
 import { events } from './SingletonContainer.mockdata';
 
@@ -112,7 +112,7 @@ class SingletonContainer extends Component {
                         </div>
 
                         <div className="flex-row-container">
-                            <div className="datepicker">
+                            <div className="margin-right">
                                 StartDate:
                                 <DatePicker
                                     dateFormat="DD/MM/YYYY"
@@ -120,7 +120,7 @@ class SingletonContainer extends Component {
                                     onChange={this.handleStartDate}
                                 />
                             </div>
-                            <div className="datepicker">
+                            <div className="margin-right">
                                 EndDate:
                                 <DatePicker
                                     dateFormat="DD/MM/YYYY"

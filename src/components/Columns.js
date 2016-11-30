@@ -1,6 +1,16 @@
 import React from 'react';
 
-export const Columns = [
+export const columns = [
+            {
+                header: 'Duplicate?',
+                render: props =>
+                        <span>
+                            <input
+                                type="checkbox"
+                                onChange={() => { }} // Binds function to this
+                            />
+                        </span>
+            },
             {
                 header: 'First name',
                 accessor: 'Firstname'
@@ -24,7 +34,7 @@ export const Columns = [
             {
                 header: 'Maiden name',
                 accessor: 'Mothermaidenname'
-            }, 
+            },
             {
                 header: 'Phone number',
                 accessor: 'Phonenumber'
@@ -44,18 +54,5 @@ export const Columns = [
             {
                 header: 'TB number',
                 accessor: 'TBnumber'
-            },
-            {
-                header: 'Duplicate?',
-                render: props =>
-                        <span>
-                            <input
-                                type="checkbox"
-                                onChange={() => { // Binds function to this
-                                    }
-                                }
-                            />
-                        </span>
             }
         ]
-     
