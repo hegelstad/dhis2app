@@ -57,13 +57,12 @@ class SingletonContainer extends Component {
     onSelect(event) {
         this.props.setProgramCursor(this.props.program.data[event]);
     }
-// by clicking on the button extract duplicates and show them
+    // by clicking on the button extract duplicates and show them
     submitSearch() {
         this.props.loadSingletonEvents( // Load singleton-related data if valid node level.
             this.props.cursor.id, // id of selected node in the tree.
             this.props.startDate, // startdate to include in search.
             this.props.endDate); // enddate to include in search.
-
         this.showAccordion();
     }
 

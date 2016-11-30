@@ -180,9 +180,9 @@ export const loadSingletonDataElements = () => {
     }
 }
 
-export const loadSingletonEvents = (orgUnitID, programID, startDate, endDate) => {
+export const loadSingletonEvents = (orgUnitID, startDate, endDate) => {
     return dispatch => {
-        return loadEvents(orgUnitID, programID, startDate, endDate)
+        return loadEvents(orgUnitID, startDate, endDate)
             .then(events => {
                 let singletons = extractSingletons(events)
                 dispatch(setSingletonEvents(singletons))
