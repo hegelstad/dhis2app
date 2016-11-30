@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 export const columns = [
             {
@@ -7,7 +8,7 @@ export const columns = [
                         <span>
                             <input
                                 type="checkbox"
-                                onChange={() => { }} // Binds function to this
+                                onChange={(val) => {console.log(val)}} // Binds function to this
                             />
                         </span>
             },

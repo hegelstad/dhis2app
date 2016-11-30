@@ -16,7 +16,7 @@ const AccordionList = ({ input, columns }) => {
         TODO: Need to change columns when we get the real data.*/
 
     var panelList = []
-    var colorList = ["info", "success", "warning", "danger"] // Just because we can #gaypride
+    var colorList = ["info", "success", "warning", "danger"]
     var c = 0;
     var counter = 1000
 
