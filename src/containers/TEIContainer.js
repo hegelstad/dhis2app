@@ -14,6 +14,10 @@ import { mockdata } from './TEIContainer.mockdata';
 class TEIContainer extends Component {
     constructor(...args) {
         super(...args);
+
+        this.state = {
+            Threshold: 0.4 // Seems to be a sweet spot. Good default.
+        };
     }
 
     render() {
@@ -24,11 +28,13 @@ class TEIContainer extends Component {
         } else {
             return (
                 <div>
-                    <div><ThresholdDropdown onSelect={() => this.props} /> <br/></div>
                     <div className="flex-row-container">
-                        <Button bsStyle="warning" disabled={this.props.searching} onClick={() => this.props.performSearch("Basic", this.props.cursor.id)} className="margin-right">Basic Search</Button>
-                        <Button bsStyle="danger" disabled={this.props.searching} onClick={() => this.props.performSearch("Deep", this.props.cursor.id)}>Deep Search</Button>
+                        <Button bsStyle="warning" disabled={this.props.searching} onClick={() => this.props.performSearch("Basic", this.props.cursor.id, this.state.Threshold)} className="margin-right">Basic Search</Button>
+                        <Button bsStyle="danger" disabled={this.props.searching} onClick={() => this.props.performSearch("Deep", this.props.cursor.id, this.state.Threshold)}>Deep Search</Button>
                         <div className="current-region-selected">Current region: {this.props.cursor.name}</div>
+                    </div>
+                    <div>
+                        <ThresholdDropdown onSelect={(val) => this.state.Threshold = val} /> {this.state.Threshold}
                     </div>
                     { this.props.searching ? <div>Searching...</div> : <br/>}
                     { this.props.duplicates // Show accordionList with duplicates when there are duplicates.
@@ -36,12 +42,19 @@ class TEIContainer extends Component {
                               input={this.props.duplicates}
                               columns={columns}
                           />
+                          <br/>
                           <div><Button bsStyle="info" >Export</Button></div></div>
                         : <div>
+                              <h3>Welcome to the TEI duplicate finder!</h3>
+                              <p><b>Basic search</b>: matches tracked entity instances based on their first- and last name.</p>
+                              <p><b>Deep search</b>: will search within the matches of a basic search for matches of more advanced attributes: National Identifier, 
+                              TB number and Maiden name. Deep search is highly likely to find true duplicates if there are any.</p>
+                              <br/>
+                              <p><b>Threshold</b>: Adjusts the threshold for the <b>basic</b> search. 0 is a perfect match, 1 matches with everything.</p>
                               <br />
-                              <p>Basic search: matches first and last names with a moderate threshold.</p>
-                              <p>Deep search: will search within the matches of a basic search for matches of more advanced attributes: National Identifier, TB number and Maiden name.</p>
-                              <p>Deep search is highly likely to find true duplicates.</p>
+                              <br />
+                              <p>Please take some time to identify the matches you believe to be true duplicates and mark them in the table provided.
+                                When you are finished, press the <b>export</b> button to export the TEIS to a json file. </p>
                           </div>
                     }
                    

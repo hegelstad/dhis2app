@@ -193,7 +193,7 @@ export const loadSingletonEvents = (orgUnitID, programID, startDate, endDate) =>
     }
 }
 
-export const performSearch = (modus, organisationUnit) => {
+export const performSearch = (modus, organisationUnit, threshold) => {
     return dispatch => {
         dispatch(setDuplicatesAreLoading()) // set searching to true.
         return loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit)
@@ -218,7 +218,7 @@ export const performSearch = (modus, organisationUnit) => {
 
                 // When (ALL) the results are in, perform the search.
                 results.then(results => {
-                    let duplicates = teiDuplicateFinder(modus, resultArray)
+                    let duplicates = teiDuplicateFinder(modus, resultArray, threshold)
                     dispatch(setDuplicates(duplicates))
                 });
             })

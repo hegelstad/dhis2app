@@ -6,7 +6,7 @@ export function fakeAsyncCall(s) {
     });
 }
 
-export function teiDuplicateFinder(boolSwitch, OrgUnit) {
+export function teiDuplicateFinder(boolSwitch, OrgUnit, threshold) {
     /*
         Function finding duplicates within a given org unit.
         Utilizing Fuse.js.
@@ -41,7 +41,6 @@ export function teiDuplicateFinder(boolSwitch, OrgUnit) {
     shouldSort: true,
     caseSensitve: true,
     tokenize: true,
-    threshold: 0.4,
     location: 0,
     distance: 5,
     maxPatternLength: 5,
@@ -49,6 +48,8 @@ export function teiDuplicateFinder(boolSwitch, OrgUnit) {
         'Lastname',
         'Firstname']
     };
+
+    options.threshold = threshold;
 
     /* Second step iterates through the list of all objects,
         finds the first and last name and then searches the entire list
