@@ -122,6 +122,7 @@ export const setEndDate = (endDate) => {
     }
 }
 
+
 export const setError = (message) => {
     return {
         type: ERROR_SET,

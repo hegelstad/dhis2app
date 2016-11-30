@@ -35,7 +35,7 @@ function onlySuccessResponses(response) {
 
 export function loadOrganisationUnitsTree() {
     // Load all of the organisation units and their children with id and displayName
-    return fetch(`${serverUrl}/26/organisationUnits.json?level=1&paging=false&fields=id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name)]]]`, fetchOptions)
+    return fetch(`${serverUrl}/organisationUnits.json?level=1&paging=false&fields=id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // Error handling is done in App.js
@@ -89,7 +89,7 @@ export function loadLevel(orgUnitID) {
 }
 
 export function loadEvents(orgUnitID, programID, startDate, endDate){
-    return fetch(`${serverUrl}/events.json?orgUnit=${orgUnitID}&program=${programID}&startDate=${startDate}&endDate=${endDate}&fields=event,program,trackedEntityInstance,orgUnit,dataValues[dataElement,value]`, fetchOptions)
+    return fetch(`${serverUrl}/events.json?orgUnit=${orgUnitID}&startDate=${startDate}&endDate=${endDate}&fields=event,program,trackedEntityInstance,orgUnit,dataValues[dataElement,value]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         .then(({ events }) => events);
