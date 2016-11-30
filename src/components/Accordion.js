@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Panel, Table, Well, Button } from 'react-bootstrap';
+import { Accordion, Panel, Table, Button } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
 /* Component, accordion with a table. Each accordion displays a table of duplicates.
@@ -9,30 +9,12 @@ import ReactTable from 'react-table';
             | Anna Joens    |  0 |  ...
             | Anna Jones    |  1 |  ...     */
 
-export default function AccordionInstance({ input }) {
+export default function AccordionInstance({ input, columns}) {
 
    /* Functions takes a nested list as input, returns an accordion objects with
         panels for each of the sublists (sets of duplicates).
         TODO: Need to change columns when we get the real data.*/
-    const columns = [
-        {
-            header: 'Name',
-            accessor: 'value'
-        },
-        {
-            header: 'Tracked Entity Instance',
-            accessor: 'trackedEntityInstance'
-        },
-        {
-            header: 'Weight',
-            accessor: 'weight'
-        },
-        {
-            header: 'Height',
-            accessor: 'height'
-        }
-
-    ]
+    
     var panelList = []
     var colorList = ["info", "success", "warning", "danger"] // Just because we can #gaypride
     var c = 0;
@@ -52,11 +34,20 @@ export default function AccordionInstance({ input }) {
             />
 
 
-        panelList.push(<Panel bsStyle={colorList[c++]} header={<span><Button bsSize="small">{len}</Button> {data[0].value}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small">{len}</Button> {data[0].Firstname + " " +data[0].Lastname}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
     }
 
-    return (
+    if (panelList.length < 1){
+        return (
+             <Accordion>
+                <Panel bsStyle={colorList[0]} header="No Duplicates Found!" key={counter++} eventKey={counter++}> </Panel>
+             </Accordion>
+        )
+    } else {
+        return (
         <Accordion>
             {panelList}
         </Accordion>);
+    }
+    
 }
