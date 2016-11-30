@@ -119,6 +119,7 @@ function findDataElement(dataElements, criteria) {
 }
 
 export function convertSingleton(singleton, dataElements){
+    console.log(singleton, dataElements);
     var newData = '{ "event": "' + String(singleton.event) + '", ';
     var DV = singleton.dataValues;
     for (let i = 0; i < DV.length; i++){
@@ -127,8 +128,8 @@ export function convertSingleton(singleton, dataElements){
     newData = newData.replace(/,\s*$/, "") //remove last comma.
     newData += '}'
     //problem:
-    var json = JSON.stringify(newData);
-    json = JSON.parse(json);
+ //   var json = JSON.stringify(newData);
+    var json = JSON.parse(json);
     return json;
 }
 
@@ -139,8 +140,8 @@ export function convertData(singletons, dataElements) {
     }
     newSingletons = newSingletons.replace(/,\s*$/, "") //remove last comma.
     newSingletons += ']}';
-    var json = JSON.stringify(newSingletons);
-    console.log(JSON.parse(json));
+//    var json = JSON.stringify(newSingletons);
+    console.log(JSON.parse(newSingletons));
 }
 
 export function duplicates(singletons, dataElements) {
