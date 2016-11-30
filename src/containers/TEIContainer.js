@@ -5,9 +5,11 @@ import { performSearch } from '../actions/actions';
 // Components
 import ReactTable from 'react-table';
 import AccordionList from '../components/AccordionList';
+import ThresholdDropdown from '../components/ThresholdDropdown';
 import { Button } from 'react-bootstrap';
 import { columns } from '../components/Columns';
 import { mockdata } from './TEIContainer.mockdata';
+
 
 class TEIContainer extends Component {
     constructor(...args) {
@@ -22,6 +24,7 @@ class TEIContainer extends Component {
         } else {
             return (
                 <div>
+                    <div><ThresholdDropdown onSelect={() => this.props} /> <br/></div>
                     <div className="flex-row-container">
                         <Button bsStyle="warning" disabled={this.props.searching} onClick={() => this.props.performSearch("Basic", this.props.cursor.id)} className="margin-right">Basic Search</Button>
                         <Button bsStyle="danger" disabled={this.props.searching} onClick={() => this.props.performSearch("Deep", this.props.cursor.id)}>Deep Search</Button>
@@ -29,10 +32,11 @@ class TEIContainer extends Component {
                     </div>
                     { this.props.searching ? <div>Searching...</div> : <br/>}
                     { this.props.duplicates // Show accordionList with duplicates when there are duplicates.
-                        ? <AccordionList
+                        ? <div><AccordionList
                               input={this.props.duplicates}
                               columns={columns}
                           />
+                          <div><Button bsStyle="info" >Export</Button></div></div>
                         : <div>
                               <br />
                               <p>Basic search: matches first and last names with a moderate threshold.</p>
@@ -40,6 +44,7 @@ class TEIContainer extends Component {
                               <p>Deep search is highly likely to find true duplicates.</p>
                           </div>
                     }
+                   
                 </div>
             );
         }
