@@ -9,14 +9,15 @@ import ReactTable from 'react-table';
             | Anna Joens    |  0 |  ...
             | Anna Jones    |  1 |  ...     */
 
-export default function AccordionInstance({ input, columns}) {
+const AccordionList = ({ input, columns }) => {
 
    /* Functions takes a nested list as input, returns an accordion objects with
-        panels for each of the sublists (sets of duplicates).
-        TODO: Need to change columns when we get the real data.*/
-    
+        panels for each of the sublists (sets of duplicates). If the input is empty, it
+        will return an empty accordion with the title "No Duplicates Found!".
+        */
+
     var panelList = []
-    var colorList = ["info", "success", "warning", "danger"] // Just because we can #gaypride
+    var colorList = ["info", "success", "warning", "danger"] // multiple react-bootstrap default colors/themes.
     var c = 0;
     var counter = 1000
 
@@ -24,17 +25,18 @@ export default function AccordionInstance({ input, columns}) {
         var data = input[inputNum];
         var len = data.length;
 
+        /* Here we're adding the react-table inside each accordion.*/
         var items = <ReactTable
             key={counter++}
             data={data}
             columns={columns}
             minRows={2}
             pageSize={5}
-            pageSizeOptions={[2, 5, 10]}
+            pageSizeOptions={[5, 10, 20]}
             />
 
 
-        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small">{len}</Button> {data[0].Firstname + " " +data[0].Lastname}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small" className="margin-right">{len}</Button>{`${data[0].Firstname} ${data[0].Lastname}`}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
     }
 
     if (panelList.length < 1){
@@ -49,5 +51,6 @@ export default function AccordionInstance({ input, columns}) {
             {panelList}
         </Accordion>);
     }
-    
 }
+
+export default AccordionList;

@@ -1,12 +1,13 @@
 import Fuse from 'fuse.js';
 
+// Might be redundant now with redux:
 export function fakeAsyncCall(s) {
     return new Promise((resolve, reject) => {
         setTimeout(() => resolve(s), 3000);
     });
 }
 
-export function teiDuplicateFinder(OrgUnit, boolSwitch) {
+export function teiDuplicateFinder(boolSwitch, OrgUnit, threshold) {
     /*
         Function finding duplicates within a given org unit.
         Utilizing Fuse.js.
@@ -16,9 +17,9 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
         cost for the second search is negligible.
     */
 
-    /* First step is to rewrite our JSON structure, to a more easily
-        accessible format. Seems to improve the rate of true-positives. although
-        although it's not optimal.*/
+    /* First step is to rewrite our JSON structure, 
+        for easier access by multiple components later on*/
+        
     var newTEIS = []
     for (let tei = 0; tei < OrgUnit.length; tei++) {
         var entry = OrgUnit[tei].attributes;
@@ -29,10 +30,9 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
         for (let attri = 0; attri < entry.length; attri ++){
             var val = (entry[attri].displayName).replace(/ /g, '');
             collection[val] = entry[attri].value
-            
+
         }
-        newTEIS.push(
-            collection);
+        newTEIS.push(collection);
     }
 
    /* FUSE.JS implementation
@@ -42,14 +42,15 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
     shouldSort: true,
     caseSensitve: true,
     tokenize: true,
-    threshold: 0.4,
     location: 0,
     distance: 5,
     maxPatternLength: 5,
     keys: [
-        'Lastname', 'Firstname' 
-    ]
+        'Lastname',
+        'Firstname']
     };
+
+    options.threshold = threshold;
 
     /* Second step iterates through the list of all objects,
         finds the first and last name and then searches the entire list
@@ -64,35 +65,36 @@ export function teiDuplicateFinder(OrgUnit, boolSwitch) {
 
         if (entry.Firstname) {
             firstname = entry.Firstname;
-        } 
+        }
 
         if (entry.Lastname) {
             lastname = entry.Lastname;
         }
 
-
         var fuse = new Fuse(newTEIS, options);
         var output = fuse.search(lastname);
         var fuse1 = new Fuse(output, options);
         var output1 = fuse1.search(firstname);
-       
-
 
         if (output1.length > 1) {
             duplicates.push(output1)
         }
     }
 
-    if (boolSwitch){
+    if (boolSwitch === "Deep"){
         return thoroughSearch(duplicates);
     } else {
         return duplicates;
     }
 
-    
 }
 
 function thoroughSearch(duplicates) {
+    /* The thoroughSearch is called on the results of the basic search performed
+        in the function teiDuplicateFinder (above). it searches with a strict
+        threshold of 0.3 on the attributes: Maidenname, Nationalidentifier and TBnumber.
+        Properties we consider to be stable in the sense that they are less prone to error
+        than other attributes and are "strong" identifiers of a person. */
 
     var baseOptions = {
     caseSensitve: false,
@@ -107,12 +109,12 @@ function thoroughSearch(duplicates) {
     var trueDuplicates = [];
     for (let key = 0; key < keys.length; key++){
 
-        for (let i = 0; i < duplicates.length; i++) {     
+        for (let i = 0; i < duplicates.length; i++) {
             var set = duplicates[i];
             baseOptions.keys = [keys[key]];
             var fuse3 = new Fuse(set, baseOptions);
             var output;
-            
+
             for (let j = 0; j < set.length; j++ ) {
                 var tei = set[j]
                 if (tei[keys[key]]) {
@@ -121,11 +123,10 @@ function thoroughSearch(duplicates) {
                         trueDuplicates.push(output);
                         break;
                     }
-                    
+
                 }
             }
         }
     }
     return trueDuplicates
-    
 }
