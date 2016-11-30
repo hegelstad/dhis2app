@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js';
 
+// Might be redundant now with redux:
 export function fakeAsyncCall(s) {
     return new Promise((resolve, reject) => {
         setTimeout(() => resolve(s), 3000);
@@ -16,9 +17,9 @@ export function teiDuplicateFinder(boolSwitch, OrgUnit, threshold) {
         cost for the second search is negligible.
     */
 
-    /* First step is to rewrite our JSON structure, to a more easily
-        accessible format. Seems to improve the rate of true-positives. although
-        although it's not optimal.*/
+    /* First step is to rewrite our JSON structure, 
+        for easier access by multiple components later on*/
+        
     var newTEIS = []
     for (let tei = 0; tei < OrgUnit.length; tei++) {
         var entry = OrgUnit[tei].attributes;
@@ -89,6 +90,11 @@ export function teiDuplicateFinder(boolSwitch, OrgUnit, threshold) {
 }
 
 function thoroughSearch(duplicates) {
+    /* The thoroughSearch is called on the results of the basic search performed
+        in the function teiDuplicateFinder (above). it searches with a strict
+        threshold of 0.3 on the attributes: Maidenname, Nationalidentifier and TBnumber.
+        Properties we consider to be stable in the sense that they are less prone to error
+        than other attributes and are "strong" identifiers of a person. */
 
     var baseOptions = {
     caseSensitve: false,

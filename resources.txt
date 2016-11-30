@@ -1,8 +1,11 @@
 Modules we are using:
 
-React Treebeard:        https://github.com/alexcurtis/react-treebeard
-React Table:            https://github.com/tannerlinsley/react-table
-React Bootstrap Toggle: https://github.com/arnthor3/react-bootstrap-toggle
+React Treebeard:            https://github.com/alexcurtis/react-treebeard
+React Table:                https://github.com/tannerlinsley/react-table
+React Bootstrap Toggle:     https://github.com/arnthor3/react-bootstrap-toggle
+React-bootstrap (multiple): https://react-bootstrap.github.io
+Fusejs                      https://fusejs.io
+
 
 Useful api calls:
 
@@ -13,12 +16,6 @@ new: https://play.dhis2.org/dev/api/24/organisationUnits/ImspTQPwCqd.json?fields
 Difference: solved the tree problem more efficiently. Back end supported renaming of fields.
 
 
-Todo important:
-
-
-Todo later:
-Notify the user which level they are operating on.
-Sorting the tree.
 
 DHIS WEB API CALLS:
 
@@ -44,14 +41,10 @@ For singleton events:
  - Limit scope of this mode to clinics.
  - filter by Period
 
- For Tracked Entity Instances:
-
- - Select a program
- - Not all TEIs have a unique identifier
- -
 
 
-Fuse.js.io // For sorting on multiple values.
+Components we've moved or removed, keeping some of the source code in the case we need to 
+use them later on for some reason:
 
 // Dropdown component, render.
 // <ProgramDropdownList
@@ -70,14 +63,6 @@ Fuse.js.io // For sorting on multiple values.
 
 
 // Columns, TEI COMPONENT. Custom toggle. Incase we need it
-
- <ReactTable
-                    data={this.state.data}
-                    columns={this.state.columns}
-                    minRows={5}
-                    pageSize={5}
-                    pageSizeOptions={[5, 10]} // The available page size options
-                />
 
 render: props =>
         <span>

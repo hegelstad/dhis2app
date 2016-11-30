@@ -10,6 +10,10 @@ import { setTreelistCursor,
 import { Treebeard } from 'react-treebeard';
 import style from '../css/treelist-style.js';
 
+
+
+/* Container for the treelist displaying the countries/counties/chiefdoms etc.*/
+
 class TreelistContainer extends Component {
     constructor(props, context) {
         super(props, context);
