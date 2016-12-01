@@ -5,7 +5,7 @@ import { performSearch } from '../actions/actions';
 // Components
 import ReactTable from 'react-table';
 import AccordionList from '../components/AccordionList';
-import ThresholdDropdown from '../components/ThresholdDropdown';
+import Slider from 'react-input-range';
 import { Button } from 'react-bootstrap';
 import { columns } from '../components/Columns';
 import { mockdata } from './TEIContainer.mockdata';
@@ -16,7 +16,7 @@ class TEIContainer extends Component {
         super(...args);
 
         this.state = {
-            Threshold: 0.4 // Seems to be a sweet spot. Good default.
+            threshold: 0.4 // Seems to be a sweet spot. Good default.
         };
     }
 
@@ -29,12 +29,19 @@ class TEIContainer extends Component {
             return (
                 <div>
                     <div className="flex-row-container">
-                        <Button bsStyle="warning" disabled={this.props.searching} onClick={() => this.props.performSearch("Basic", this.props.cursor.id, this.state.Threshold)} className="margin-right">Basic Search</Button>
-                        <Button bsStyle="danger" disabled={this.props.searching} onClick={() => this.props.performSearch("Deep", this.props.cursor.id, this.state.Threshold)}>Deep Search</Button>
-                        <div className="current-region-selected">Current region: {this.props.cursor.name}</div>
-                    </div>
-                    <div>
-                        <ThresholdDropdown onSelect={(val) => this.state.Threshold = val} /> {this.state.Threshold}
+                        <Button bsStyle="warning" disabled={this.props.searching} onClick={() => this.props.performSearch("Basic", this.props.cursor.id, this.state.threshold)} className="margin-right">Basic Search</Button>
+                        <Button bsStyle="danger" disabled={this.props.searching} onClick={() => this.props.performSearch("Deep", this.props.cursor.id, this.state.threshold)}>Deep Search</Button>
+                        <div className="current-region-selected">Threshold: </div>
+                        <div className="current-region-selected slider">
+                            <Slider
+                                minValue={0}
+                                maxValue={1}
+                                step={0.1}
+                                value={this.state.threshold}
+                                onChange={(component, value) => this.setState({threshold: Math.round(value * 10)/10})}
+                            />
+                        </div>
+                        <div className="current-region-selected">Region: {this.props.cursor.name}</div>
                     </div>
                     { this.props.searching ? <div>Searching...</div> : <br/>}
                     { this.props.duplicates // Show accordionList with duplicates when there are duplicates.
@@ -47,7 +54,7 @@ class TEIContainer extends Component {
                         : <div>
                               <h3>Welcome to the TEI duplicate finder!</h3>
                               <p><b>Basic search</b>: matches tracked entity instances based on their first- and last name.</p>
-                              <p><b>Deep search</b>: will search within the matches of a basic search for matches of more advanced attributes: National Identifier, 
+                              <p><b>Deep search</b>: will search within the matches of a basic search for matches of more advanced attributes: National Identifier,
                               TB number and Maiden name. Deep search is highly likely to find true duplicates if there are any.</p>
                               <br/>
                               <p><b>Threshold</b>: Adjusts the threshold for the <b>basic</b> search. 0 is a perfect match, 1 matches with everything.</p>
@@ -57,7 +64,7 @@ class TEIContainer extends Component {
                                 When you are finished, press the <b>export</b> button to export the TEIS to a json file. </p>
                           </div>
                     }
-                   
+
                 </div>
             );
         }

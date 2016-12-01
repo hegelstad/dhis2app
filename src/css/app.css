@@ -113,3 +113,7 @@ body {
 .panel-group {
     margin-bottom: 0em;
 }
+
+.slider {
+    width: 10em;
+}
