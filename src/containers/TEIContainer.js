@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // Actions
-import { performSearch } from '../actions/actions';
+import { performSearch,
+         exportDuplicates } from '../actions/actions';
 // Components
 import ReactTable from 'react-table';
 import AccordionList from '../components/AccordionList';
@@ -35,7 +36,7 @@ class TEIContainer extends Component {
                         <div className="current-region-selected slider">
                             <Slider
                                 minValue={0}
-                                maxValue={1}
+                                maxValue={0.6}
                                 step={0.1}
                                 value={this.state.threshold}
                                 onChange={(component, value) => this.setState({threshold: Math.round(value * 10)/10})}
@@ -45,12 +46,13 @@ class TEIContainer extends Component {
                     </div>
                     { this.props.searching ? <div>Searching...</div> : <br/>}
                     { this.props.duplicates // Show accordionList with duplicates when there are duplicates.
-                        ? <div><AccordionList
+                        ? <div>
+                            <AccordionList
                               input={this.props.duplicates}
-                              columns={columns}
-                          />
-                          <br/>
-                          <div><Button bsStyle="info" >Export</Button></div></div>
+                              columns={columns}/>
+                            <br/>
+                            <Button bsStyle="info" onClick={this.props.exportDuplicates}>Export</Button>
+                          </div>
                         : <div>
                               <h3>Welcome to the TEI duplicate finder!</h3>
                               <p><b>Basic search</b>: matches tracked entity instances based on their first- and last name.</p>
@@ -78,5 +80,5 @@ export default connect(
         searching: state.tei.searching,
         duplicates: state.tei.duplicates
     }),
-    { performSearch }
+    { performSearch, exportDuplicates }
 )(TEIContainer);
