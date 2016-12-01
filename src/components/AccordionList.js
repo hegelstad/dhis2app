@@ -23,21 +23,32 @@ const AccordionList = ({ input, columns }) => {
     var c = 0;
     var counter = 1000
 
-    for (let inputNum = 0; inputNum < input.length; inputNum++) {
+    for (let inputNum = 0, nColumns = 0; inputNum < input.length; inputNum++) {
         var data = input[inputNum];
         var len = data.length;
+        var col = columns[nColumns]; // for multiple different columns
 
         /* Here we're adding the react-table inside each accordion.*/
         var items = <ReactTable
             key={counter++}
             data={data}
-            columns={columns}
+            columns={col}
             minRows={2}
             pageSize={5}
             pageSizeOptions={[5, 10, 20]}
             />
 
-        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small" className="margin-right">{len}</Button>{`${data[0].Firstname} ${data[0].Lastname}`}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        /* Titles of each panel, if singleton event we need a predefined name. */
+        var name = `${data[0].Firstname} ${data[0].Lastname}`
+
+        if (name == "undefined undefined") {
+            name = 'Singleton set #' + c++;
+        }
+
+        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small" className="margin-right">{len}</Button>{name}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        if (nColumns != columns.length - 1) {
+            nColumns++;
+        }
     }
 
     if (panelList.length < 1){

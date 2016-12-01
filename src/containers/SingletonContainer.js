@@ -2,21 +2,16 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // Actions
 import {
-    loadProgramData,
-    setProgramCursor,
     loadSingletonDataElements,
     loadSingletonEvents,
     setStartDate,
-    setEndDate } from '../actions/actions';
+    setEndDate
+} from '../actions/actions';
 // Components
 import DatePicker from 'react-datepicker';
-import ProgramDropdownList from '../components/ProgramDropdownList';
 import AccordionList from '../components/AccordionList';
 import moment from 'moment';
-import { events } from './SingletonContainer.mockdata';
-import { duplicates, getKeysFromDuplicateSet, makeColumns } from '../utils/singletons.js';
-import { Columns } from '../components/Columns';
-import { mockdata } from './SingletonContainer.mockdata';
+import { duplicates, makeColumns } from '../utils/singletons.js';
 
 class SingletonContainer extends Component {
     constructor(...args) {
@@ -36,17 +31,13 @@ class SingletonContainer extends Component {
     }
 
     componentDidMount() {
-        this.props.loadProgramData();
         this.props.loadSingletonDataElements();
         this.props.setStartDate(moment().subtract(5, 'years'));
         this.props.setEndDate(moment());
-        // this.convertData(events); move to redux
     }
 
     showAccordion() {
-        this.setState({
-            showAccordion: true,
-        });
+        this.state.showAccordion = true;
     }
 
     handleStartDate(date) {
@@ -66,111 +57,17 @@ class SingletonContainer extends Component {
     onSelect(event) {
         this.props.setProgramCursor(this.props.program.data[event]);
     }
-
+    // by clicking on the button extract duplicates and show them
     submitSearch() {
-        var singleton = [
-            {
-                orgUnit: "EJoI3HArJ2W",
-                program: "eBAyeGv0exc",
-                event: "FnbbxhVchAM",
-                dataValues: [
-                    {
-                        dataElement: "vV9UWAZohSf",
-                        value: "86"
-                    },
-                    {
-                        dataElement: "K6uUAvq500H",
-                        value: "A000"
-                    },
-                    {
-                        dataElement: "fWIAEtYVEGk",
-                        value: "MODABSC"
-                    },
-                    {
-                        dataElement: "msodh3rEMJa",
-                        value: "2014-11-24"
-                    },
-                    {
-                        dataElement: "eMyVanycQSC",
-                        value: "2014-11-03"
-                    },
-                    {
-                        dataElement: "oZg33kd9taw",
-                        value: "Male"
-                    },
-                    {
-                        dataElement: "qrur9Dvnyt5",
-                        value: "23"
-                    },
-                    {
-                        dataElement: "GieVkTxp4HH",
-                        value: "169"
-                    }
-                ]
-            },
-            {
-                orgUnit: "EJoI3HArJ2W",
-                program: "eBAyeGv0exc",
-                event: "ElVmKFFwggz",
-                dataValues: [
-                    {
-                        dataElement: "vV9UWAZohSf",
-                        value: "86"
-                        // height: 86
-                    },
-                    {
-                        dataElement: "K6uUAvq500H",
-                        value: "A000"
-                    },
-                    {
-                        dataElement: "fWIAEtYVEGk",
-                        value: "MODABSC"
-                    },
-                    {
-                        dataElement: "msodh3rEMJa",
-                        value: "2014-11-24"
-                    },
-                    {
-                        dataElement: "eMyVanycQSC",
-                        value: "2014-11-03"
-                    },
-                    {
-                        dataElement: "oZg33kd9taw",
-                        value: "Male"
-                    },
-                    {
-                        dataElement: "qrur9Dvnyt5",
-                        value: "23"
-                    },
-                    {
-                        dataElement: "GieVkTxp4HH",
-                        value: "169"
-                    }
-                ]
-            }
-        ]
-
-
         this.props.loadSingletonEvents( // Load singleton-related data if valid node level.
             this.props.cursor.id, // id of selected node in the tree.
-            this.props.program.cursor.id, // id of selected program.
             this.props.startDate, // startdate to include in search.
             this.props.endDate); // enddate to include in search.
-        // console.log(this.props.events);
-        // console.log("dupl:", duplicates(this.props.events, this.props.dataElements));
-        // console.log(singleton);
-        // console.log(convertData(singleton, this.props.dataElements));
-        // var s = [{ name: "raul", age: "22", gender: "Male" }, { name: "raul", age: "22", mama: "Male" }]
-        // makeColumns(s);
-        // console.log(duplicates(this.props.events, this.props.dataElements));
-        // duplicates(this.props.events, this.props.dataElements);
         this.showAccordion();
     }
 
 
     render() {
-        let disabledButton = (this.props.program.cursor.displayName === "");
-
         if (!this.props.cursor) { // Show a placeholder if the cursor of treebeard is not set
             return <div className="loading">Please select a clinic in the list to the left to begin.</div>;
         } else {
@@ -204,16 +101,14 @@ class SingletonContainer extends Component {
                                 <br />
                                 <AccordionList
                                     input={duplicates(this.props.events, this.props.dataElements)}
-                                    columns={makeColumns(duplicates(this.props.events, this.props.dataElements)[0])}
+                                    columns={makeColumns(duplicates(this.props.events, this.props.dataElements))}
                                     />
                             </div>
                             :
                             <div>
                                 <br />
-                                <p> Basic search: matches first and last names with a moderate threshold. </p>
-                                <p> Deep search: will search within the matches of a basic search for matches of more advanced attributes: National Identifier,
-                                TB number and Maiden name.</p>
-                                <p> Deep search is highly likely to find true duplicates</p>
+                                <p> Select start and end date. </p>
+
                             </div>
                         }
 
@@ -228,15 +123,12 @@ class SingletonContainer extends Component {
 export default connect(
     state => ({
         cursor: state.tree.cursor,
-        program: state.program,
         startDate: state.singleton.startDate,
         endDate: state.singleton.endDate,
         dataElements: state.singleton.dataElements,
         events: state.singleton.events,
     }),
     {
-        loadProgramData,
-        setProgramCursor,
         loadSingletonDataElements,
         loadSingletonEvents,
         setStartDate,

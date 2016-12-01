@@ -88,7 +88,7 @@ export function loadLevel(orgUnitID) {
         .then(({ level }) => level);
 }
 
-export function loadEvents(orgUnitID, programID, startDate, endDate){
+export function loadEvents(orgUnitID, startDate, endDate){
     return fetch(`${serverUrl}/events.json?orgUnit=${orgUnitID}&startDate=${startDate}&endDate=${endDate}&fields=event,program,trackedEntityInstance,orgUnit,dataValues[dataElement,value]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())

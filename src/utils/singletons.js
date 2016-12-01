@@ -1,3 +1,6 @@
+import React from 'react';
+
+// convert format date to a format which is useful for api calls
 export const formatDate = (moment) => {
     let date = "";
     date += moment.get('year') + '-';
@@ -6,6 +9,8 @@ export const formatDate = (moment) => {
     return date;
 }
 
+// since there is no api call for fetching ONLY singletons, load all events, and remove the ones
+// without trackedEntityInstance
 export function extractSingletons(events) {
     var singletons = [];
     for (let i = 0; i < events.length; i++) {
@@ -15,75 +20,10 @@ export function extractSingletons(events) {
     return singletons;
 }
 
-// export function checkForDuplicates(duplicates, threshold, singleton){
-//     console.log(duplicates, singleton);
-//     if(duplicates.length == 0)
-//         return 0;
-//     var a = FuzzySet([], true, 0);
-//     for (let i = 0; i < duplicates.length; i++){
-//         console.log("adding ", duplicates[i]);
-//         a.add(duplicates[i]);
-//     }
-//     if (a.get(singleton) == null)
-//         return 0;
-//     if (a.get(singleton)[0][0] >= threshold)
-//         return 1;
-//     else
-//         return 0;
-// }
-
-// export function extractDataValues(duplicateSet, dataElement){
-//     var arrayDV = [];
-//     for (let i=0; i < duplicateSet.length; i++){
-//         var sDV = duplicateSet[i].dataValues;
-//         for (let j = 0; j < sDV.length; j++){
-//             if(sDV[j].dataElement == dataElement){
-//                 arrayDV.push(sDV[j].value);
-//             }
-//         }
-//     }
-//     return arrayDV;
-// }
-
-// export function duplicates(singletons, threshold, dataElement){
-//     var duplicates = [];
-//     var duplicatesValues = [];
-//     var retValue;
-//     var r = [];
-//     var setOfDuplicates = [];
-//     var singletonDV;
-//     for (let i=0; i < singletons.length; i++){
-//         singletonDV = singletons[i].dataValues;
-//         console.log("i: ", i);
-//         console.log(singletons[i]);
-//         for (let j = 0; j < singletonDV.length; j++)
-//             if (singletonDV[j].dataElement == dataElement){
-//                 var found = false;
-//                 for (let k = 0; k < duplicates.length; k++){
-//                     if (checkForDuplicates(extractDataValues(duplicates[k], dataElement), threshold, singletonDV[j].value)){
-//                         found = true;
-//                         console.log("found duplicate");
-//                         duplicates[k].push(singletons[i]);
-//                         break;
-//                     }
-//                 }
-//                 if(found == false){
-//                     console.log("didn't find duplicate");
-//                     duplicates.push([singletons[i]]);
-//                 }
-//                 console.log(duplicates);
-//             }
-
-//     };
-//    return duplicates;
-// //     console.log(checkForDuplicates(['11'],0.6,"13"));
-// //     return checkForDuplicates(['11'],0.6,"13");
-//     // var a = FuzzySet(['0'], true, 0);
-//     // console.log(a.get("0"));
-//     // return a.get("1");
-// }
-
+// compares two singleton events. we assume the events are duplicates if they are EXACTLY the same, and they are 
+// enrolled in the same program
 function equalSingletons(singleton1, singleton2) {
+    //console.log(singleton1);
     if (singleton1.program == singleton2.program) {
         var dataValues1 = singleton1.dataValues;
         var dataValues2 = singleton2.dataValues;
@@ -96,12 +36,9 @@ function equalSingletons(singleton1, singleton2) {
                             counter++;
                         }
 
-                    // else
-                    //     break;
                 }
             }
-            // someone erased all the duplicates, the condition is to be edited
-            if (counter  > 2)
+            if (counter == dataValues1.length)
                 return true;
         } else
             return false;
@@ -109,7 +46,7 @@ function equalSingletons(singleton1, singleton2) {
         return false;
 }
 
-
+// find the name of the dataElement, only to use that after to replace the id of the dataElement
 function findDataElement(dataElements, criteria) {
     for (let i = 0; i < dataElements.length; i++) {
         if (dataElements[i].value == criteria)
@@ -118,43 +55,57 @@ function findDataElement(dataElements, criteria) {
     return null;
 }
 
-function convertSingleton(singleton, dataElements){
+// convert singleton event to display event id, and data elements using their actual name (instead of their ids)
+function convertSingleton(singleton, dataElements) {
     var newData = '{ "event": "' + String(singleton.event) + '", ';
     var DV = singleton.dataValues;
-    for (let i = 0; i < DV.length; i++){
-        newData += '"' + String(findDataElement(dataElements, DV[i].dataElement)) + '": "' + String(DV[i].value) + '", ';
+    for (let i = 0; i < DV.length; i++) {
+        newData += '"' + String(findDataElement(dataElements, DV[i].dataElement)).replace(/ /g, '') + '": "' + String(DV[i].value) + '", ';
     }
     newData = newData.replace(/,\s*$/, "") //remove last comma.
     newData += '}';
     return newData;
 }
 
+// convert set of singletons
 function convertData(singletons, dataElements) {
     var newSingletons = '[';
     for (let i = 0; i < singletons.length; i++) {
-       newSingletons += convertSingleton(singletons[i], dataElements) + ', ';
+        newSingletons += convertSingleton(singletons[i], dataElements) + ', ';
     }
     newSingletons = newSingletons.replace(/,\s*$/, "") //remove last comma.
     newSingletons += ']';
     return JSON.parse(newSingletons);
 }
 
-export function getKeysFromDuplicateSet(duplicateSet){
+// extract the keys from data, to be able to show singletons using AccordionList
+function getKeysFromDuplicateSet(duplicateSet) {
     var keysSet = [];
-    for (let i = 0; i < duplicateSet.length; i++){
+    for (let i = 0; i < duplicateSet.length; i++) {
         var singleton = duplicateSet[i];
         for (var key in singleton)
-            if(!keysSet.includes(key))
+            if (!keysSet.includes(key))
                 keysSet.push(key);
     }
     return keysSet;
 }
 
-export function makeColumns(duplicateSet){
+// creating columns for Accordion (for React Table actually)
+function makeColumnsfromSet(duplicateSet) {
     var keysSet = getKeysFromDuplicateSet(duplicateSet);
-    console.log(keysSet);
     var columns = [];
-    for (let i = 0; i < keysSet.length; i++){
+    var dupl = {
+        header: 'Duplicate?',
+        render: props =>
+            <span>
+                <input
+                    type="checkbox"
+                    onChange={(val) => { console.log(val) } } // Binds function to this
+                    />
+            </span>
+    };
+    columns.push(dupl);
+    for (let i = 0; i < keysSet.length; i++) {
         var h = keysSet[i];
         var a = keysSet[i].replace(/\s+/g, '');
         var newColumn = {
@@ -163,9 +114,17 @@ export function makeColumns(duplicateSet){
         }
         columns.push(newColumn);
     }
-    console.log(columns);
+    return columns;
 }
 
+export function makeColumns(duplicates) {
+    var columns = [];
+    for (let i = 0; i < duplicates.length; i++)
+        columns.push(makeColumnsfromSet(duplicates[i]));
+    return columns;
+}
+
+// find duplicates within one clinic
 export function duplicates(singletons, dataElements) {
     // console.log(singletons);
     var duplicates = [];
@@ -187,13 +146,10 @@ export function duplicates(singletons, dataElements) {
             duplicates.push(dupes);
     }
     var convertedDuplicates = [];
-    for (let i = 0; i < duplicates.length; i++){
+    for (let i = 0; i < duplicates.length; i++) {
         var convertedDup = convertData(duplicates[i], dataElements);
         convertedDuplicates.push(convertedDup);
         makeColumns(convertedDup);
     }
-    console.log(duplicates);
-    console.log(convertedDuplicates);
-
     return convertedDuplicates;
 }

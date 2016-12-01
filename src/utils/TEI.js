@@ -43,11 +43,12 @@ export function teiDuplicateFinder(boolSwitch, OrgUnit, threshold) {
     caseSensitve: true,
     tokenize: true,
     location: 0,
-    distance: 5,
-    maxPatternLength: 5,
+    distance: 20,
+    maxPatternLength: 32,
     keys: [
         'Lastname',
-        'Firstname']
+        'Firstname',
+        ]
     };
 
     options.threshold = threshold;
@@ -98,10 +99,10 @@ function thoroughSearch(duplicates) {
 
     var baseOptions = {
     caseSensitve: false,
-    threshold: 0.3,
+    threshold: 0.2,
     location: 0,
-    distance: 15,
-    maxPatternLength: 25,
+    distance: 100,
+    maxPatternLength: 32,
     };
 
     const keys =  ['Maidenname', 'Nationalidentifier', 'TBnumber'];
