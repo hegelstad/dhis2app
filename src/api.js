@@ -17,8 +17,22 @@ const fetchOptions = {
     method: 'GET',
     headers: {
         Authorization: basicAuth,
-        'Content-Type': 'application/json',
-    },
+        'Content-Type': 'application/json'
+    }
+};
+
+/**
+ * Returns a post object with the body set to the parameter data.
+ */
+const postOptions = (data) => {
+    return {
+        method: 'POST',
+        headers: {
+            Authorization: basicAuth,
+            'Content-Type': 'application/json',
+            body: data
+        }
+    }
 };
 
 /**
@@ -33,14 +47,64 @@ function onlySuccessResponses(response) {
     return Promise.reject(response);
 }
 
+/**
+ * Doesn't work, documentation doesn't cover adding namespaces.
+ */
+const makeNamespaceIfNotExists = (namespace, key) => {
+    return fetch(`${serverUrl}/26/dataStore/${namespace}`, fetchOptions)
+        .then(response => response.json())
+        .then(response => {
+            if(response.httpStatusCode === 404) {
+                console.log("Namespace doesn't exist. Adding namespace and key.");
+                const data = {
+                    "foo":"bar"
+                }
+                return fetch(`${serverUrl}/26/dataStore/${namespace}/${key}`, postOptions(data))
+                    .then(response => response.json())
+                    .then(response => console.log(response));
+            }
+        });
+}
+
+/**
+ * Function that takes an array of dataSets and maps them to a function that
+ * uploads each set one by one to the dataStore.
+ */
+export function postDuplicateSets(dataSets) {
+    makeNamespaceIfNotExists("CleanUpCrew", "duplicates");
+    return;
+    // Mapping function
+    let mapItemToPromise = (set) => {
+        return fetch(`${serverUrl}/26/dataStore/"CleanUpCrew"/${set.id}`, postOptions(set.data))
+            .then(onlySuccessResponses)
+            .then(response => response.json())
+            .then(console.log(response))
+        };
+
+    // Create a promise for each item in the array.
+    let promises = dataSets.map(mapItemToPromise);
+
+    // Makes sure each promise is resolved before continuing.
+    let results = Promise.all(promises);
+
+    // When (ALL) the results are in, log a notification.
+    results.then(console.log("finished"));
+}
+
+/**
+ * Loads the organisation units as a tree structure from the server.
+ * The server renames som values to fit with the Treebard component.
+ */
 export function loadOrganisationUnitsTree() {
     // Load all of the organisation units and their children with id and displayName
     return fetch(`${serverUrl}/organisationUnits.json?level=1&paging=false&fields=id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name),children[id,level,displayName~rename(name)]]]`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
-        // Error handling is done in App.js
-    }
+}
 
+/**
+ * Loads an array of ids of clinics from a chiefdom org.
+ */
 export function loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit) {
     // Load the organisation units but only the first level and does not use paging
     return fetch(`${serverUrl}/organisationUnits/${organisationUnit}.json?paging=false`, fetchOptions)
@@ -59,6 +123,9 @@ export function loadClinicIDArrayFromChiefdomOrganisationUnit(organisationUnit) 
         });
 }
 
+/**
+ * Loads a single given organisation unit.
+ */
 export function loadOrganisationUnit(organisationUnit) {
     // Returns a given organisation unit.
     return fetch(`${serverUrl}/organisationUnits/${organisationUnit}.json`, fetchOptions)
@@ -66,7 +133,9 @@ export function loadOrganisationUnit(organisationUnit) {
         .then(response => response.json());
 }
 
-// function loading in TEIS based on program and orgUnit.
+/**
+ * Loads a organisation unit's tracked entity instances.
+ */
 export function loadTrackedEntityInstances(orgUnit) {
     return fetch(`${serverUrl}/trackedEntityInstances.json?ou=${orgUnit}&fields=trackedEntityInstance,attributes[value,displayName]`, fetchOptions)
         .then(onlySuccessResponses)
@@ -74,6 +143,9 @@ export function loadTrackedEntityInstances(orgUnit) {
         .then(({ trackedEntityInstances }) => trackedEntityInstances);
 }
 
+/**
+ * Loads all programs.
+ */
 export function loadPrograms() {
     return fetch(`${serverUrl}/25/programs.json`, fetchOptions)
         .then(onlySuccessResponses)
@@ -81,13 +153,9 @@ export function loadPrograms() {
         .then(({ programs }) => programs);
 }
 
-export function loadLevel(orgUnitID) {
-    return fetch(`${serverUrl}/organisationUnits/${orgUnitID}.json?fields=level`, fetchOptions)
-        .then(onlySuccessResponses)
-        .then(response => response.json())
-        .then(({ level }) => level);
-}
-
+/**
+ * Loads events from a given organisationUnit within a time frame.
+ */
 export function loadEvents(orgUnitID, startDate, endDate){
     return fetch(`${serverUrl}/events.json?orgUnit=${orgUnitID}&startDate=${startDate}&endDate=${endDate}&fields=event,program,trackedEntityInstance,orgUnit,dataValues[dataElement,value]`, fetchOptions)
         .then(onlySuccessResponses)
@@ -95,6 +163,9 @@ export function loadEvents(orgUnitID, startDate, endDate){
         .then(({ events }) => events);
 }
 
+/**
+ * Loads data elements.
+ */
 export function loadDataElements(){
     return fetch(`${serverUrl}/dataElements.json?fields=id~rename(value),name~rename(label)&paging=false`, fetchOptions)
         .then(onlySuccessResponses)

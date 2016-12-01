@@ -4,7 +4,8 @@ import { loadClinicIDArrayFromChiefdomOrganisationUnit,
          loadDataElements,
          loadEvents,
          loadOrganisationUnitsTree,
-         loadTrackedEntityInstances } from '../api';
+         loadTrackedEntityInstances,
+         postDuplicateSets } from '../api';
 // Utilities
 import { sortTree } from '../utils/sortTree.js';
 import { formatDate, extractSingletons, duplicates } from '../utils/singletons.js';
@@ -240,5 +241,13 @@ export const loadAndSetTreeData = () => {
             .catch(error => {
                 console.log(error)
             });
+    }
+}
+
+export const exportDuplicates = (dataSets) => {
+    return dispatch => {
+        return postDuplicateSets(dataSets)
+            .then(response => console.log("Exported"))
+            .catch(error => console.log(error));
     }
 }

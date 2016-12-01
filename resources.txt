@@ -41,26 +41,8 @@ For singleton events:
  - Limit scope of this mode to clinics.
  - filter by Period
 
-
-
-Components we've moved or removed, keeping some of the source code in the case we need to 
+Components we've moved or removed, keeping some of the source code in the case we need to
 use them later on for some reason:
-
-// Dropdown component, render.
-// <ProgramDropdownList
-                    title={"Programs"}
-                    list={this.props.programData}
-                    i={0}
-                    onSelect={this.onSelect}
-                />
-                <br />
-                <br />
-                <div className="selectedProgram">
-                    <div>Program: {this.state.program}</div>
-                    <div>Program: {this.state.programId}</div>
-                </div>
-
-
 
 // Columns, TEI COMPONENT. Custom toggle. Incase we need it
 
