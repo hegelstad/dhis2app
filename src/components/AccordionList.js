@@ -1,5 +1,8 @@
 import React from 'react';
-import { Accordion, Panel, Table, Button } from 'react-bootstrap';
+import { Accordion,
+         Panel,
+         Table,
+         Button } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
 /* Component, accordion with a table. Each accordion displays a table of duplicates.
@@ -13,8 +16,7 @@ const AccordionList = ({ input, columns }) => {
 
    /* Functions takes a nested list as input, returns an accordion objects with
         panels for each of the sublists (sets of duplicates). If the input is empty, it
-        will return an empty accordion with the title "No Duplicates Found!".
-        */
+        will return an empty accordion with the title "No Duplicates Found!". */
 
     var panelList = []
     var colorList = ["info", "success", "warning", "danger"] // multiple react-bootstrap default colors/themes.
@@ -35,7 +37,7 @@ const AccordionList = ({ input, columns }) => {
             pageSize={5}
             pageSizeOptions={[5, 10, 20]}
             />
-        
+
         /* Titles of each panel, if singleton event we need a predefined name. */
         var name = `${data[0].Firstname} ${data[0].Lastname}`
 
@@ -44,8 +46,9 @@ const AccordionList = ({ input, columns }) => {
         }
 
         panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small" className="margin-right">{len}</Button>{name}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
-        if (nColumns != columns.length - 1)
+        if (nColumns != columns.length - 1) {
             nColumns++;
+        }
     }
 
     if (panelList.length < 1){
@@ -53,12 +56,13 @@ const AccordionList = ({ input, columns }) => {
              <Accordion>
                 <Panel bsStyle={colorList[0]} header="No Duplicates Found!" key={counter++} eventKey={counter++}> </Panel>
              </Accordion>
-        )
+        );
     } else {
         return (
-        <Accordion>
-            {panelList}
-        </Accordion>);
+            <Accordion>
+                {panelList}
+            </Accordion>
+        );
     }
 }
 

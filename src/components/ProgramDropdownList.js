@@ -2,7 +2,6 @@ import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 /* A simple drop down list component of all the programs. */
-
 const ProgramDropdownList = ({title, list, i, onSelect}) => {
 
     var items = [];

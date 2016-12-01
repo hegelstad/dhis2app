@@ -63,6 +63,7 @@ body {
 .content-left {
     width: 17em;
     align-self: stretch;
+    height: 34em;
     margin-right: 2em;
     position: relative;
     bottom: 3em;
@@ -81,7 +82,7 @@ body {
 
 .treelist {
     margin-bottom: 1em;
-    height: 30em;
+    height: 31em;
     overflow: auto;
 }
 
