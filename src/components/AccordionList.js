@@ -35,9 +35,15 @@ const AccordionList = ({ input, columns }) => {
             pageSize={5}
             pageSizeOptions={[5, 10, 20]}
             />
+        
+        /* Titles of each panel, if singleton event we need a predefined name. */
+        var name = `${data[0].Firstname} ${data[0].Lastname}`
 
+        if (name == "undefined undefined") {
+            name = 'Singleton set #' + c++;
+        }
 
-        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small" className="margin-right">{len}</Button>{`${data[0].Firstname} ${data[0].Lastname}`}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
+        panelList.push(<Panel bsStyle={colorList[0]} header={<span><Button bsSize="small" className="margin-right">{len}</Button>{name}</span>} key={counter++} eventKey={counter++}> {items} </Panel>)
         if (nColumns != columns.length - 1)
             nColumns++;
     }
