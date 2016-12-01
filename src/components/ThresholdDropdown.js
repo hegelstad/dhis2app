@@ -6,7 +6,7 @@ import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 export default function ThresholdDropdown({ onSelect }) {
     var items = []
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 11; i++) {
         items.push(<MenuItem eventKey={i/10.0} key={i+666}>{i/10}</MenuItem>)
     }
 

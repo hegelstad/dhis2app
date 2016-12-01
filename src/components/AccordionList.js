@@ -24,9 +24,8 @@ const AccordionList = ({ input, columns }) => {
     for (let inputNum = 0, nColumns = 0; inputNum < input.length; inputNum++) {
         var data = input[inputNum];
         var len = data.length;
+        var col = columns[nColumns]; // for multiple different columns
 
-        console.log(data, len);
-        var col = columns[nColumns];
         /* Here we're adding the react-table inside each accordion.*/
         var items = <ReactTable
             key={counter++}

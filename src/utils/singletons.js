@@ -23,7 +23,7 @@ export function extractSingletons(events) {
 // compares two singleton events. we assume the events are duplicates if they are EXACTLY the same, and they are 
 // enrolled in the same program
 function equalSingletons(singleton1, singleton2) {
-    console.log(singleton1);
+    //console.log(singleton1);
     if (singleton1.program == singleton2.program) {
         var dataValues1 = singleton1.dataValues;
         var dataValues2 = singleton2.dataValues;
